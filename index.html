@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preflight Risk Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2; --paper-2:#FFFFFF; --ink:#16212B; --ink-2:#4A5862; --line:#C9D1D8;
+  --chart:#1F5F8B; --chart-soft:#DCE8F1;
+  --low:#2E7D4F; --low-soft:#DCEFE3; --mod:#B9770E; --mod-soft:#FBEAC7; --high:#B3261E; --high-soft:#F8D9D6;
+  --big3:#CF2F30;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --paper:#161C22; --paper-2:#1F262E; --ink:#E6EBEF; --ink-2:#A3AEB8; --line:#36414B;
+  --chart:#6FB1E0; --chart-soft:#243543;
+  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark; --paper:#161C22; --paper-2:#1F262E; --ink:#E6EBEF; --ink-2:#A3AEB8; --line:#36414B;
+  --chart:#6FB1E0; --chart-soft:#243543;
+  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45;padding-bottom:112px}
+h1,h2,h3,.cond{font-family:"Barlow Semi Condensed","Barlow",system-ui,sans-serif;margin:0}
+main{max-width:640px;margin:0 auto;padding:16px 16px 24px}
+
+header{border-bottom:3px solid var(--ink);padding:12px 0 14px;margin-bottom:8px}
+header h1{font-size:34px;font-weight:700;line-height:1;letter-spacing:-.01em}
+header p{margin:6px 0 0;color:var(--ink-2);font-size:15px;max-width:60ch}
+
+.flight{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 8px}
+.flight label{display:block;font-size:13px;color:var(--ink-2);margin-bottom:4px}
+.flight input{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper-2);color:var(--ink);text-transform:uppercase}
+.flight input[type=datetime-local]{text-transform:none}
+.flight .wide{grid-column:1/-1}
+.ff{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px}
+.ff a{text-decoration:none;display:inline-block}
+.ff a[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.ff span{font-size:13px;color:var(--ink-2)}
+
+.wx{margin-top:14px;border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:12px}
+.wx h2{font-size:20px;font-weight:600}
+.wx p{margin:4px 0 10px;font-size:14px;color:var(--ink-2)}
+.wx textarea{width:100%;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);resize:vertical;text-transform:uppercase}
+.wx-row{display:flex;gap:10px;align-items:flex-end;margin-top:10px}
+.wx-row label{display:block;font-size:13px;color:var(--ink-2);margin-bottom:4px}
+.wx-row input{width:90px;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);text-transform:uppercase}
+.wxout{margin-top:12px;font-size:14px;border-top:1px solid var(--line);padding-top:10px}
+.wxout .lead{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:18px}
+.wxout .lead.low{color:var(--low)} .wxout .lead.mod{color:var(--mod)} .wxout .lead.high{color:var(--high)}
+.wxout ul{margin:6px 0 0;padding-left:18px} .wxout li{margin:3px 0}
+.wxout .err{color:var(--high)}
+section.cat{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
+.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.cat-head h2{font-size:22px;font-weight:600;line-height:1.1}
+.cat-head h2 small{display:block;font-family:"Barlow",sans-serif;font-weight:500;font-size:13px;color:var(--big3);margin-top:2px}
+.cat-score{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:18px;white-space:nowrap;padding:3px 9px;border-radius:4px;background:var(--low-soft);color:var(--low)}
+.cat-score.mod{background:var(--mod-soft);color:var(--mod)}
+.cat-score.high{background:var(--high-soft);color:var(--high)}
+
+fieldset{border:0;padding:0;margin:14px 0 0}
+legend{font-weight:600;font-size:16px;padding:0;margin-bottom:6px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;cursor:pointer}
+.opt input{margin:0;width:18px;height:18px;accent-color:var(--chart);flex:none}
+.opt span{flex:1;font-size:15px}
+.opt b{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:15px;color:var(--ink-2);min-width:2.2em;text-align:right}
+.opt:has(input:checked){border-color:var(--chart);background:var(--chart-soft)}
+.opt:has(input:checked) b{color:var(--ink)}
+.opt:focus-within{outline:2px solid var(--chart);outline-offset:1px}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper-2);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.bar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.gauge{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:40px;line-height:1;min-width:2.2ch;color:var(--low)}
+.gauge-wrap{display:flex;align-items:baseline;gap:4px}
+.gauge-wrap small{color:var(--ink-2);font-size:14px}
+.level{flex:1}
+.level .name{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:20px;line-height:1.1;color:var(--low)}
+.level .why{font-size:13px;color:var(--ink-2);line-height:1.25}
+.lv-mod .gauge,.lv-mod .name{color:var(--mod)} .lv-high .gauge,.lv-high .name{color:var(--high)}
+.btn{font:inherit;font-weight:600;font-size:15px;padding:10px 16px;border-radius:4px;border:0;background:var(--ink);color:var(--paper);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+
+#result{display:none;margin-top:26px;border:2px solid var(--line);border-radius:6px;background:var(--paper-2);padding:16px}
+#result.show{display:block}
+#result h2{font-size:26px;font-weight:700}
+.verdict{display:flex;gap:14px;align-items:center;margin:8px 0 14px}
+.verdict .big{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:64px;line-height:1}
+.verdict p{margin:0;font-size:15px}
+.rows{display:grid;gap:8px;margin:10px 0}
+.row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:15px}
+.row .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.row .fill{height:100%;background:var(--low);transition:width .25s}
+.row .fill.mod{background:var(--mod)} .row .fill.high{background:var(--high)}
+.row .n{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;color:var(--ink-2)}
+.mit{margin:14px 0 0;padding:0 0 0 18px}
+.mit li{margin:5px 0;font-size:15px}
+.note{font-size:13px;color:var(--ink-2);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+@media (max-width:420px){ header h1{font-size:30px} .bar-in{gap:10px} .btn{padding:10px 12px} }
+@media print{ .bar,.actions{display:none} body{padding-bottom:0;background:#fff;color:#000} #result{display:block} }
+@media (prefers-reduced-motion:reduce){ .row .fill{transition:none} }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Preflight Risk Assessment</h1>
+  <p>Score the flight before you commit to it. Seven categories, 100 points. The Big Three — pilot experience, weather, and human factors — carry the most weight because they show up most often in fatal GA accidents.</p>
+</header>
+
+<div class="flight">
+  <div><label for="dep">Departure</label><input id="dep" placeholder="KZPH" maxlength="4"></div>
+  <div><label for="dest">Destination</label><input id="dest" placeholder="KGNV" maxlength="4"></div>
+  <div><label for="acft">Aircraft</label><input id="acft" placeholder="N12345 C172"></div>
+  <div><label for="when">Departure time</label><input id="when" type="datetime-local"></div>
+  <div class="wide ff"><a id="ffbtn" class="btn ghost" href="#" target="_blank" rel="noopener" aria-disabled="true">Open route in ForeFlight</a><button id="ffcopy" class="btn ghost" type="button" hidden>Copy ForeFlight link</button><span id="ffhint">Enter departure and destination first.</span></div>
+</div>
+
+<section class="wx">
+  <h2>Weather from your briefing</h2>
+  <p id="wxhelp">Enter your departure airport above, then text <b id="wxcmd">MT ____ PT</b> to 358782 and paste the reply here. Decoded plain text or raw code both work. The form reads the observation and the forecast period covering your departure time, then sets the weather questions for you.</p>
+  <textarea id="wxraw" rows="5" placeholder="Paste the decoded text (Terminal Forecast for your airport, ...) or the raw METAR/TAF code" spellcheck="false"></textarea>
+  <div class="wx-row">
+    <div><label for="rwy">Runway in use</label><input id="rwy" placeholder="09" maxlength="3"></div>
+    <button class="btn" type="button" onclick="parseWx()">Read weather</button>
+  </div>
+  <div id="wxout" class="wxout" hidden></div>
+</section>
+
+<form id="frat"></form>
+
+<div id="result" aria-live="polite">
+  <h2>Result</h2>
+  <div class="verdict"><div class="big" id="rBig">0</div><div><div class="name cond" id="rName" style="font-size:22px;font-weight:600">Low risk</div><p id="rWhy"></p></div></div>
+  <div class="rows" id="rRows"></div>
+  <h3 class="cond" style="font-size:18px;font-weight:600;margin-top:16px">What would bring the score down</h3>
+  <ul class="mit" id="rMit"></ul>
+  <p class="note">This form makes risk visible so you can talk it through — with an instructor, a safety pilot, or yourself. It does not approve or prevent a flight. Cross-check weather against official briefings before departure.</p>
+  <div class="actions"><button class="btn ghost" type="button" onclick="window.print()">Print</button><button class="btn ghost" type="button" onclick="resetAll()">Start over</button></div>
+</div>
+</main>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="gauge-wrap"><div class="gauge" id="gTotal">0</div><small>/100</small></div>
+    <div class="level"><div class="name" id="gName">Low risk</div><div class="why" id="gWhy">Answer the questions to build your score.</div></div>
+    <button class="btn" type="button" onclick="showResult()">See breakdown</button>
+  </div>
+</div>
+
+<script>
+const CATS = [
+ {id:'pilot', name:'Pilot experience', max:20, big3:true, qs:[
+   {id:'tt', q:'Total flight time', type:'radio', opts:[['More than 500 hours',0],['100 to 500 hours',3],['Under 100 hours',6,'Fly with an instructor or experienced safety pilot until your total time builds.']]},
+   {id:'tit', q:'Time in this aircraft type', type:'radio', opts:[['More than 100 hours',0],['25 to 100 hours',2],['Under 25 hours',4,'Review the POH emergency procedures and V-speeds for this type before engine start.']]},
+   {id:'ldg', q:'Landings in the last 90 days', type:'radio', opts:[['More than 10',0],['3 to 10',2],['Fewer than 3',5,'Not current for passengers — fly a few patterns solo or with a CFI first.']]},
+   {id:'last', q:'Days since your last flight', type:'radio', opts:[['Under 14 days',0],['14 to 30 days',1],['More than 30 days',3,'Rusty: brief the departure and arrival in detail, and expect to be slower on radios and checklists.']]},
+   {id:'ifr', q:'If this flight could go IFR: are you instrument current and proficient?', type:'radio', opts:[['Yes, or the flight is strictly VFR',0],['No',2,'Do not plan on an IFR out — set hard VFR minimums and a turnback plan.']]},
+ ]},
+ {id:'wx', name:'Weather', max:15, big3:true, qs:[
+   {id:'cat', q:'Worst flight category along the route (METAR/TAF)', type:'radio', opts:[['VFR — ceiling above 3,000 ft and visibility over 5 sm',0],['Marginal VFR',6,'Marginal VFR is where inadvertent IMC happens. Delay, or set a firm turnback trigger before you launch.'],['IFR or worse',9,'IFR conditions on a VFR flight is a no-go. Wait for improvement.']]},
+   {id:'xw', q:'Crosswind component at departure or destination', type:'radio', opts:[['Under 10 kt',0],['10 to 15 kt',2,'Brief the crosswind technique and go-around criteria.'],['Over 15 kt',4,'Near or above demonstrated crosswind for most trainers. Pick a different runway or airport, or wait.']]},
+   {id:'conv', q:'Thunderstorms, turbulence, or icing forecast along the route', type:'radio', opts:[['No',0],['Yes',2,'Plan the route and timing around convective activity, and set a diversion plan.']]},
+ ]},
+ {id:'human', name:'Human factors', max:20, big3:true, qs:[
+   {id:'sleep', q:'Sleep in the last 24 hours', type:'radio', opts:[['7 hours or more',0],['6 to 7 hours',2],['Under 6 hours',5,'Fatigue degrades judgment before you feel it. Shorten or postpone the flight.']]},
+   {id:'ill', q:'Illness or symptoms today (cold, congestion, nausea)', type:'radio', opts:[['None',0],['Yes',4,'Congestion plus altitude is a bad mix. Ground yourself until you are clear.']]},
+   {id:'med', q:'Medication in the last 24 hours (including over-the-counter)', type:'radio', opts:[['None',0],['Yes',3,'Check the FAA medication guidance for wait times before flying.']]},
+   {id:'stress', q:'Significant personal, work, or financial stress right now', type:'radio', opts:[['No',0],['Yes',3,'Stress competes for attention. Keep the mission simple and brief a backup plan.']]},
+   {id:'alc', q:'Alcohol within 8 hours, or any hangover effects', type:'radio', opts:[['No',0],['Yes',5,'Hard no-go under 14 CFR 91.17.']]},
+ ]},
+ {id:'acft', name:'Aircraft', max:15, qs:[
+   {id:'fam', q:'Familiarity with this specific airplane and its avionics', type:'radio', opts:[['Flown it recently',0],['Flown the type but not this airplane',2],['New type or new avionics',4,'Spend extra time on the panel setup and the checklist flow before taxi.']]},
+   {id:'sqk', q:'Open squawks or inoperative equipment', type:'radio', opts:[['None',0],['Yes',4,'Confirm 91.213 allows the flight with the inop item and brief how it changes the mission.']]},
+   {id:'mx', q:'First flight after maintenance', type:'radio', opts:[['No',0],['Yes',3,'Do a thorough preflight and a longer run-up; plan a local check before heading out.']]},
+   {id:'fuel', q:'Fuel reserve at destination', type:'radio', opts:[['More than 1 hour',0],['45 minutes to 1 hour',2],['Under 45 minutes',4,'Below a comfortable reserve. Add a fuel stop.']]},
+ ]},
+ {id:'mission', name:'Mission complexity', max:15, qs:[
+   {id:'type', q:'Type of flight', type:'radio', opts:[['Local or pattern work',0],['Cross-country in VMC',5,'Brief checkpoints, fuel, and diversions along the route.'],['Cross-country in IMC',9,'IFR cross-country: brief alternates, minimums, and the approach you expect.']]},
+   {id:'legs', q:'Multiple legs or more than 3 hours of flying today', type:'radio', opts:[['No',0],['Yes',3,'Build in a real break between legs and re-check weather before each one.']]},
+   {id:'pax', q:'Passengers who are new to small airplanes', type:'radio', opts:[['No passengers, or experienced ones',0],['Yes',3,'Give a sterile-cockpit briefing and set expectations about turning around.']]},
+ ]},
+ {id:'pressure', name:'External pressure', max:5, qs:[
+   {id:'oblig', q:'Do you feel obligated to complete this flight?', type:'radio', opts:[['No',0],['Yes',2,'Name the pressure out loud. Decide now what would make you cancel, before you are in the airplane.']]},
+   {id:'time', q:'Hard arrival deadline', type:'radio', opts:[['No',0],['Yes',2,'Have a backup way to get there, so the airplane is not the only option.']]},
+   {id:'expect', q:'Passengers or others expecting you to fly', type:'radio', opts:[['No',0],['Yes',1,'Tell them in advance that weather or fatigue can cancel the flight.']]},
+ ]},
+ {id:'terrain', name:'Terrain and airport', max:10, qs:[
+   {id:'apt', q:'Unfamiliar departure or destination airport', type:'radio', opts:[['No',0],['Yes',3,'Study the airport diagram, pattern altitude, and local procedures before you go.']]},
+   {id:'night', q:'Night flight', type:'radio', opts:[['No',0],['Yes',3,'Confirm night currency, lighting, and a route over lit terrain where possible.']]},
+   {id:'remote', q:'Mountainous, remote, or over-water segments', type:'radio', opts:[['No',0],['Yes',2,'Plan forced-landing options along the route and file a flight plan.']]},
+   {id:'rwy', q:'Short, soft, or obstructed runway (under 3,000 ft or obstacles on approach)', type:'radio', opts:[['No',0],['Yes',2,'Run the takeoff and landing performance numbers with a safety margin.']]},
+ ]},
+];
+
+const form = document.getElementById('frat');
+CATS.forEach(c => {
+  const s = document.createElement('section'); s.className='cat'; s.id='cat-'+c.id;
+  s.innerHTML = `<div class="cat-head"><h2>${c.name}${c.big3?'<small>Big Three risk driver</small>':''}</h2><div class="cat-score" id="cs-${c.id}">0 / ${c.max}</div></div>`;
+  c.qs.forEach(q => {
+    const f = document.createElement('fieldset');
+    f.innerHTML = `<legend>${q.q}</legend><div class="opts">` + q.opts.map((o,i)=>
+      `<label class="opt"><input type="radio" name="${c.id}_${q.id}" value="${o[1]}" data-i="${i}" ${i===0?'checked':''}><span>${o[0]}</span><b>${o[1]>0?'+'+o[1]:'0'}</b></label>`).join('') + `</div>`;
+    s.appendChild(f);
+  });
+  form.appendChild(s);
+});
+
+function catLevel(pts,max){ const r=pts/max; return r>=.55?'high':r>=.25?'mod':'low'; }
+function levelName(l){ return l==='high'?'High risk':l==='mod'?'Moderate risk':'Low risk'; }
+
+function score(){
+  let total=0, modOrWorse=0, cats=[], mits=[];
+  CATS.forEach(c=>{
+    let pts=0;
+    c.qs.forEach(q=>{
+      const sel=form.querySelector(`input[name="${c.id}_${q.id}"]:checked`);
+      if(!sel) return;
+      const o=q.opts[+sel.dataset.i]; pts+=o[1];
+      if(o[2]) mits.push(o[2]);
+    });
+    const lv=catLevel(pts,c.max);
+    if(lv!=='low') modOrWorse++;
+    total+=pts; cats.push({...c,pts,lv});
+    const el=document.getElementById('cs-'+c.id); el.textContent=`${pts} / ${c.max}`; el.className='cat-score '+lv;
+  });
+  let lv = total>=30?'high':total>=13?'mod':'low';
+  let why = lv==='high'?'Score of 30 or more.':lv==='mod'?'Score between 13 and 29.':'Score under 13.';
+  if(modOrWorse>=3 && lv!=='high'){
+    lv = lv==='mod'?'high':'mod';
+    why = `${modOrWorse} categories rated moderate or higher — risk compounds, so the overall level is raised one step.`;
+  }
+  if(total===0) why='No elevated factors identified.';
+  return {total,lv,why,cats,mits};
+}
+
+function render(){
+  const r=score();
+  document.getElementById('gTotal').textContent=r.total;
+  document.getElementById('gName').textContent=levelName(r.lv);
+  document.getElementById('gWhy').textContent=r.why;
+  document.getElementById('bar').className='bar lv-'+r.lv;
+  // result panel
+  document.getElementById('rBig').textContent=r.total;
+  document.getElementById('rBig').style.color=`var(--${r.lv})`;
+  document.getElementById('rName').textContent=levelName(r.lv);
+  document.getElementById('rName').style.color=`var(--${r.lv})`;
+  document.getElementById('rWhy').textContent=r.why + (r.lv==='high'?' Talk this flight through with someone before you go, or change what you can and re-score.':r.lv==='mod'?' Decide now which factors you can reduce, and what would make you turn back.':' Normal caution applies — still brief your diversion options.');
+  document.getElementById('rRows').innerHTML=r.cats.map(c=>`<div class="row"><span>${c.name}${c.big3?' <span style="color:var(--big3);font-size:12px">Big 3</span>':''}</span><span class="n">${c.pts} / ${c.max}</span><div class="track"><div class="fill ${c.lv}" style="width:${Math.round(c.pts/c.max*100)}%"></div></div></div>`).join('');
+  document.getElementById('rMit').innerHTML=r.mits.length?r.mits.map(m=>`<li>${m}</li>`).join(''):'<li>Nothing flagged. Keep the plan simple and the minimums firm.</li>';
+  save();
+}
+function showResult(){ render(); const el=document.getElementById('result'); el.classList.add('show'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+function resetAll(){ form.reset(); ['dep','dest','acft','when'].forEach(i=>document.getElementById(i).value=''); document.getElementById('result').classList.remove('show'); render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+// ForeFlight deep link: route + tail number + Zulu ETD
+function ffLink(){
+  const dep=document.getElementById('dep').value.trim().toUpperCase();
+  const dest=document.getElementById('dest').value.trim().toUpperCase();
+  const acft=document.getElementById('acft').value.trim().toUpperCase();
+  const whenVal=document.getElementById('when').value;
+  const a=document.getElementById('ffbtn'), h=document.getElementById('ffhint');
+  if(!dep||!dest){ a.setAttribute('aria-disabled','true'); a.href='#'; h.textContent='Enter departure and destination first.'; return; }
+  const parts=[dep,dest];
+  const tail=(acft.match(/\bN[0-9][0-9A-Z]{1,5}\b/)||[])[0]; if(tail) parts.push(tail);
+  if(whenVal){ const d=new Date(whenVal); const p=n=>String(n).padStart(2,'0'); parts.push(`${d.getUTCFullYear()}${p(d.getUTCMonth()+1)}${p(d.getUTCDate())}T${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:00Z`); }
+  const url='foreflightmobile://maps/search?q='+parts.join('+');
+  a.href=url; a.dataset.url=url;
+  a.removeAttribute('aria-disabled');
+  document.getElementById('ffcopy').hidden=false;
+  h.textContent=`Loads ${dep} → ${dest}${tail?' with '+tail:''}${whenVal?' and your ETD':''} on the Maps view.`;
+}
+document.getElementById('ffbtn').addEventListener('click',e=>{
+  const a=e.currentTarget, url=a.dataset.url; if(!url) return;
+  e.preventDefault();
+  let left=false; const mark=()=>{left=true};
+  document.addEventListener('visibilitychange',mark,{once:true}); window.addEventListener('pagehide',mark,{once:true}); window.addEventListener('blur',mark,{once:true});
+  try{ window.location.href=url; }catch(err){}
+  setTimeout(()=>{ if(!left){ try{ window.open(url,'_blank'); }catch(err){} } },300);
+  setTimeout(()=>{ if(!left) document.getElementById('ffhint').textContent='ForeFlight did not open from here — this viewer may block app links. Tap Copy ForeFlight link and paste it into Safari, or open this page in Safari from the share menu and try again.'; },1800);
+});
+document.getElementById('ffcopy').addEventListener('click',async()=>{
+  const url=document.getElementById('ffbtn').dataset.url; if(!url) return;
+  const h=document.getElementById('ffhint');
+  try{ await navigator.clipboard.writeText(url); h.textContent='Link copied. Paste it into Safari’s address bar or a note, then tap it.'; }
+  catch(err){ h.textContent='Copy this link: '+url; }
+});
+
+function wxCmd(){
+  const dep=document.getElementById('dep').value.trim().toUpperCase();
+  const cmd=document.getElementById('wxcmd'), help=document.getElementById('wxhelp');
+  if(dep){ cmd.textContent=`MT ${dep} PT`; help.firstChild.textContent='Text '; }
+  else { cmd.textContent='MT ____ PT'; help.firstChild.textContent='Enter your departure airport above, then text '; }
+}
+function save(){ try{ const d={f:{},i:{}}; form.querySelectorAll('input:checked').forEach(x=>d.f[x.name]=x.dataset.i); ['dep','dest','acft','when'].forEach(i=>d.i[i]=document.getElementById(i).value); localStorage.setItem('frat-last',JSON.stringify(d)); }catch(e){} }
+function load(){ try{ const d=JSON.parse(localStorage.getItem('frat-last')); if(!d) return; Object.entries(d.f||{}).forEach(([n,i])=>{ const x=form.querySelector(`input[name="${n}"][data-i="${i}"]`); if(x) x.checked=true; }); Object.entries(d.i||{}).forEach(([k,v])=>{ const el=document.getElementById(k); if(el) el.value=v; }); }catch(e){} }
+
+// ---- Weather parsing: raw METAR/TAF code or plain-English decoded text ----
+const MONTHS={JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
+function emptyG(){ return {windDir:null,windSpd:null,gust:null,vis:null,ceiling:null,wx:[]}; }
+
+// Raw code groups (tokens)
+function parseGroups(tokens){
+  const g=emptyG();
+  for(let i=0;i<tokens.length;i++){
+    const t=tokens[i]; let m;
+    if((m=t.match(/^(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT$/))){ g.windDir=m[1]==='VRB'?'VRB':+m[1]; g.windSpd=+m[2]; g.gust=m[3]?+m[3]:null; continue; }
+    if(t==='CAVOK'){ g.vis=10; continue; }
+    if((m=t.match(/^P(\d+)SM$/))){ g.vis=+m[1]+0.01; continue; }
+    if((m=t.match(/^M?(\d+)\/(\d+)SM$/))){ const base=(tokens[i-1]&&/^\d$/.test(tokens[i-1]))?+tokens[i-1]:0; g.vis=base+(+m[1])/(+m[2]); continue; }
+    if((m=t.match(/^(\d+)SM$/))){ g.vis=+m[1]; continue; }
+    if((m=t.match(/^(BKN|OVC)(\d{3})/))){ const h=+m[2]*100; if(g.ceiling===null||h<g.ceiling) g.ceiling=h; continue; }
+    if((m=t.match(/^VV(\d{3})$/))){ const h=+m[1]*100; if(g.ceiling===null||h<g.ceiling) g.ceiling=h; continue; }
+    if(/^[+-]?(VC)?(TS|FZ|SH|RA|SN|DZ|FG|BR|HZ|GR|GS|PL|IC|UP|SQ|FC|DS|SS|SA|DU|PO|VA|MI|BC|PR|DR|BL)+$/.test(t)){ g.wx.push(t); }
+  }
+  return g;
+}
+
+// Plain-English groups (a sentence like "Wind from 290° at 5 knots, greater than 6 statute miles visibility, ...")
+const WX_WORDS=['THUNDERSTORM','FREEZING','HAIL','ICE PELLET','SNOW','HEAVY','RAIN','DRIZZLE','SHOWER','FOG','MIST','HAZE','SMOKE','SQUALL','FUNNEL','TORNADO','VOLCANIC','DUST','SAND','CUMULONIMBUS','TOWERING'];
+function parseEnglish(text){
+  const g=emptyG(); const T=text.toUpperCase(); let m;
+  if((m=T.match(/WIND (?:FROM |IS )?(\d{3})°? AT (\d+) KNOTS?(?: GUSTING(?: TO)? (\d+) KNOTS?)?/))){ g.windDir=+m[1]; g.windSpd=+m[2]; g.gust=m[3]?+m[3]:null; }
+  else if((m=T.match(/WIND (?:IS )?VARIABLE AT (\d+) KNOTS?(?: GUSTING(?: TO)? (\d+) KNOTS?)?/))){ g.windDir='VRB'; g.windSpd=+m[1]; g.gust=m[2]?+m[2]:null; }
+  else if(/WIND(?:S)? (?:IS |ARE )?CALM|CALM WIND/.test(T)){ g.windDir=0; g.windSpd=0; }
+  if((m=T.match(/GREATER THAN (\d+) STATUTE MILES? VISIBILITY/))){ g.vis=+m[1]+0.01; }
+  else if((m=T.match(/LESS THAN (\d+(?:\/\d+)?) STATUTE MILES? VISIBILITY/))){ g.vis=frac(m[1])-0.01; }
+  else if((m=T.match(/(\d+ \d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?) STATUTE MILES? VISIBILITY/))){ g.vis=frac(m[1]); }
+  const re=/(BROKEN|OVERCAST|VERTICAL VISIBILITY|INDEFINITE CEILING)(?: AT| OF)? ([\d,]+) FEET/g;
+  while((m=re.exec(T))){ const h=+m[2].replace(/,/g,''); if(g.ceiling===null||h<g.ceiling) g.ceiling=h; }
+  WX_WORDS.forEach(w=>{ if(T.includes(w)) g.wx.push(w.charAt(0)+w.slice(1).toLowerCase()); });
+  if(/THUNDERSTORMS? IN THE VICINITY/.test(T)) g.wx=g.wx.map(w=>w==='Thunderstorm'?'Thunderstorms in the vicinity':w);
+  return g;
+}
+function frac(s){ const p=s.trim().split(' '); let v=0; p.forEach(x=>{ if(x.includes('/')){ const [a,b]=x.split('/'); v+= +a/+b; } else v+= +x; }); return v; }
+function engTime(str,year){ const m=str.match(/([A-Z]{3})\.? (\d{1,2}) AT (\d{2})(\d{2})Z/); if(!m) return null; return Date.UTC(year,MONTHS[m[1]],+m[2],+m[3],+m[4]); }
+
+function category(c,v){
+  const ceil=c===null?99999:c, vis=v===null?99:v;
+  if(ceil<500||vis<1) return 'LIFR'; if(ceil<1000||vis<3) return 'IFR'; if(ceil<=3000||vis<=5) return 'MVFR'; return 'VFR';
+}
+function worse(a,b){ const o=['VFR','MVFR','IFR','LIFR']; return o[Math.max(o.indexOf(a),o.indexOf(b))]; }
+function windStr(g){ if(!g||g.windSpd===null) return ''; return `wind ${g.windDir==='VRB'?'variable':g.windSpd===0?'calm':String(g.windDir).padStart(3,'0')+'°'}${g.windSpd?` at ${g.windSpd}${g.gust?' gusting '+g.gust:''} kt`:''}`; }
+function visStr(v){ return v===null?'?':v>=10?'10+':v>6?'6+':v.toFixed(1).replace(/\.0$/,''); }
+
+// Build a common model: {metar: groups|null, periods:[{kind,start,end,groups}]}, times in ms (UTC)
+function buildModel(raw, depDate){
+  const year=(depDate||new Date()).getUTCFullYear();
+  const model={metar:null,periods:[],english:false};
+  const U=raw.toUpperCase();
+  if(/TERMINAL FORECAST|STATUTE MILE|WIND FROM|WIND IS/.test(U)){
+    model.english=true;
+    const tfIdx=U.search(/TERMINAL FORECAST/);
+    const obs=tfIdx===-1?raw:raw.slice(0,tfIdx);
+    const taf=tfIdx===-1?'':raw.slice(tfIdx);
+    if(/WIND|VISIBILITY/i.test(obs)) model.metar=parseEnglish(obs);
+    if(taf){
+      // split into clauses on period keywords
+      const re=/(TEMPORARILY FROM|TEMPORARY FROM|BECOMING FROM|BECOMING BETWEEN|PROBABILITY \d+% FROM|PROBABILITY OF \d+% FROM|\d+% PROBABILITY FROM|FROM|VALID FROM) ([A-Z]{3}\.? \d{1,2} AT \d{4}Z)(?: (?:UNTIL|TO) ([A-Z]{3}\.? \d{1,2} AT \d{4}Z))?/gi;
+      const hits=[]; let m;
+      while((m=re.exec(taf))){ hits.push({idx:m.index,len:m[0].length,kw:m[1].toUpperCase(),s:m[2].toUpperCase(),e:m[3]?m[3].toUpperCase():null}); }
+      hits.forEach((h,i)=>{
+        const body=taf.slice(h.idx+h.len, i+1<hits.length?hits[i+1].idx:undefined);
+        let kind='FM';
+        if(h.kw.startsWith('VALID')) kind='BASE'; else if(h.kw.startsWith('TEMPOR')) kind='TEMPO'; else if(h.kw.startsWith('BECOMING')) kind='BECMG'; else if(/PROBAB/.test(h.kw)) kind=h.kw.match(/\d+/)[0]+'% probability';
+        model.periods.push({kind,start:engTime(h.s,year),end:h.e?engTime(h.e,year):null,groups:parseEnglish(body)});
+      });
+    }
+  } else {
+    const toks=U.replace(/\s+/g,' ').trim().split(' ');
+    const tafIdx=toks.indexOf('TAF');
+    const metarToks=tafIdx===-1?toks:toks.slice(0,tafIdx);
+    const tafToks=tafIdx===-1?[]:toks.slice(tafIdx);
+    if(metarToks.some(t=>/^\d{6}Z$/.test(t))) model.metar=parseGroups(metarToks);
+    if(tafToks.length){
+      const mo=(depDate||new Date()).getUTCMonth();
+      const abs=(d,h,mi=0)=>Date.UTC(year,mo,d,h,mi);
+      let cur={kind:'BASE',start:null,end:null,toks:[]};
+      for(let i=0;i<tafToks.length;i++){
+        const t=tafToks[i]; let m;
+        if((m=t.match(/^FM(\d{2})(\d{2})(\d{2})$/))){ model.periods.push(cur); cur={kind:'FM',start:abs(+m[1],+m[2],+m[3]),end:null,toks:[]}; continue; }
+        if((t==='TEMPO'||t==='BECMG'||/^PROB\d{2}$/.test(t)) && tafToks[i+1] && /^\d{4}\/\d{4}$/.test(tafToks[i+1])){
+          model.periods.push(cur); const w=tafToks[i+1];
+          cur={kind:t.replace(/^PROB(\d+)$/,'$1% probability'),start:abs(+w.slice(0,2),+w.slice(2,4)),end:abs(+w.slice(5,7),+w.slice(7,9)),toks:[]}; i++; continue; }
+        if(cur.kind==='BASE' && cur.start===null && /^\d{4}\/\d{4}$/.test(t)){ cur.start=abs(+t.slice(0,2),+t.slice(2,4)); cur.end=abs(+t.slice(5,7),+t.slice(7,9)); continue; }
+        cur.toks.push(t);
+      }
+      model.periods.push(cur);
+      model.periods.forEach(p=>{ p.groups=parseGroups(p.toks); delete p.toks; });
+    }
+  }
+  // FM/BASE periods end where the next main period starts
+  const mains=model.periods.filter(p=>p.kind==='BASE'||p.kind==='FM');
+  mains.forEach((p,i)=>{ if(mains[i+1]) p.end=mains[i+1].start; });
+  return model;
+}
+
+function parseWx(){
+  const out=document.getElementById('wxout'); out.hidden=false;
+  const raw=document.getElementById('wxraw').value.replace(/\s+/g,' ').trim();
+  if(!raw){ out.innerHTML='<div class="err">Paste a METAR or TAF first.</div>'; return; }
+  const whenVal=document.getElementById('when').value;
+  const depDate=whenVal?new Date(whenVal):null;
+  const model=buildModel(raw,depDate);
+  const notes=[]; let cat=null, wind=null; const hazards=new Set();
+
+  if(model.metar){
+    const m=model.metar; const c=category(m.ceiling,m.vis); cat=c; wind=m; m.wx.forEach(w=>hazards.add(w));
+    notes.push(`Current observation: ${c} — ceiling ${m.ceiling===null?'none':m.ceiling.toLocaleString()+' ft'}, visibility ${visStr(m.vis)} sm, ${windStr(m)||'wind not reported'}${m.wx.length?', '+m.wx.join(', '):''}`);
+  }
+  if(model.periods.length){
+    const mains=model.periods.filter(p=>p.kind==='BASE'||p.kind==='FM');
+    let applicable=[];
+    if(depDate){ const dep=depDate.getTime(); applicable=model.periods.filter(p=>p.start!==null&&dep>=p.start&&(p.end===null||dep<p.end)); }
+    if(!applicable.length){ applicable=[mains[0]||model.periods[0]]; notes.push(depDate?'Departure time is outside this forecast — using the first period.':'No departure time set — using the first forecast period. Set a departure time to match the right period.'); }
+    let tafCat='VFR', tafWind=null;
+    applicable.forEach(p=>{ const g=p.groups; tafCat=worse(tafCat,category(g.ceiling,g.vis)); g.wx.forEach(w=>hazards.add(w)); if(g.windSpd!==null&&(!tafWind||(g.gust||g.windSpd)>(tafWind.gust||tafWind.windSpd))) tafWind=g; });
+    const labels=applicable.map(p=>{ const k=p.kind==='BASE'?'base forecast':p.kind==='FM'?'period from':p.kind; const d=p.start?new Date(p.start):null; const t=d?`${d.getUTCDate()} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()]} ${String(d.getUTCHours()).padStart(2,'0')}${String(d.getUTCMinutes()).padStart(2,'0')}Z`:''; return `${k} ${t}`.trim(); }).join(' + ');
+    const lowC=Math.min(...applicable.map(p=>p.groups.ceiling===null?Infinity:p.groups.ceiling));
+    notes.push(`Forecast (${labels}): ${tafCat} — ceiling ${lowC===Infinity?'none':lowC.toLocaleString()+' ft'}, visibility ${visStr(Math.min(...applicable.map(p=>p.groups.vis===null?99:p.groups.vis)))} sm${tafWind?', '+windStr(tafWind):''}`);
+    cat=cat?worse(cat,tafCat):tafCat;
+    if(!wind||(tafWind&&(tafWind.gust||tafWind.windSpd)>(wind.gust||wind.windSpd))) wind=tafWind||wind;
+  }
+  if(!cat){ out.innerHTML='<div class="err">Could not find an observation or a forecast in the text. Check that the whole reply was pasted.</div>'; return; }
+
+  const catIdx=cat==='VFR'?0:cat==='MVFR'?1:2;
+  form.querySelector(`input[name="wx_cat"][data-i="${catIdx}"]`).checked=true;
+
+  const rwy=document.getElementById('rwy').value.replace(/[LRC]$/i,'');
+  let xwNote='';
+  if(wind&&wind.windSpd!==null){
+    const spd=wind.gust||wind.windSpd; let xw=null;
+    if(!rwy) xwNote='Enter the runway in use to compute crosswind.';
+    else if(wind.windDir==='VRB') xw=spd;
+    else { const diff=((wind.windDir-(+rwy*10))%360+360)%360; xw=Math.round(Math.abs(Math.sin(diff*Math.PI/180))*spd); }
+    if(xw!==null){ const i=xw<10?0:xw<=15?1:2; form.querySelector(`input[name="wx_xw"][data-i="${i}"]`).checked=true;
+      xwNote=`Crosswind on runway ${rwy}: ${xw} kt${wind.gust?' (using the gust)':''}${wind.windDir==='VRB'?' — variable wind, full speed counted':''}`; }
+  }
+  const haz=[...hazards];
+  const conv=haz.some(w=>/TS|FZ|GR|GS|^\+|Thunderstorm|Freezing|Hail|Heavy|Cumulonimbus|Funnel|Tornado/.test(w));
+  form.querySelector(`input[name="wx_conv"][data-i="${conv?1:0}"]`).checked=true;
+
+  const lv=catIdx===0?'low':catIdx===1?'mod':'high';
+  out.innerHTML=`<div class="lead ${lv}">${cat} — weather questions set</div><ul>${notes.map(n=>`<li>${n}</li>`).join('')}${xwNote?`<li>${xwNote}</li>`:''}<li>${haz.length?'Significant weather: '+haz.join(', ')+(conv?' — thunderstorm/icing question set to Yes':''):'No significant weather reported.'}</li><li>Review the three weather questions below and adjust if your briefing says otherwise.</li></ul>`;
+  render();
+  document.getElementById('cat-wx').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+form.addEventListener('change',render);
+['dep','dest','acft','when'].forEach(i=>document.getElementById(i).addEventListener('input',()=>{save();ffLink();wxCmd();}));
+load(); render(); ffLink(); wxCmd();
+</script>
+</body>
+</html>
