@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Preflight Risk Assessment</title>
+<meta name="description" content="Jeremy & Kilo Aviation preflight risk assessment (PAVE, 1–5 per item) with METAR reading and links to each airplane's dispatch form.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,298 +13,190 @@
   --paper:#EDF0F2; --paper-2:#FFFFFF; --ink:#16212B; --ink-2:#4A5862; --line:#C9D1D8;
   --chart:#1F5F8B; --chart-soft:#DCE8F1;
   --low:#2E7D4F; --low-soft:#DCEFE3; --mod:#B9770E; --mod-soft:#FBEAC7; --high:#B3261E; --high-soft:#F8D9D6;
-  --big3:#CF2F30;
+  --util:#6B5CA5;
   box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   color-scheme:dark; --paper:#161C22; --paper-2:#1F262E; --ink:#E6EBEF; --ink-2:#A3AEB8; --line:#36414B;
   --chart:#6FB1E0; --chart-soft:#243543;
-  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320;
+  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320; --util:#A99BE0;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark; --paper:#161C22; --paper-2:#1F262E; --ink:#E6EBEF; --ink-2:#A3AEB8; --line:#36414B;
   --chart:#6FB1E0; --chart-soft:#243543;
-  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320;
+  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320; --util:#A99BE0;
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:inherit}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45;padding-bottom:112px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45;padding-bottom:120px}
 h1,h2,h3,.cond{font-family:"Barlow Semi Condensed","Barlow",system-ui,sans-serif;margin:0}
-main{max-width:640px;margin:0 auto;padding:16px 16px 24px}
-
+main{max-width:680px;margin:0 auto;padding:16px 16px 24px}
 header{border-bottom:3px solid var(--ink);padding:12px 0 14px;margin-bottom:8px}
-header h1{font-size:34px;font-weight:700;line-height:1;letter-spacing:-.01em}
+header .kicker{font-size:13px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em}
+header h1{font-size:32px;font-weight:700;line-height:1;letter-spacing:-.01em}
 header p{margin:6px 0 0;color:var(--ink-2);font-size:15px;max-width:60ch}
-
-.flight{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 8px}
-.flight label{display:block;font-size:13px;color:var(--ink-2);margin-bottom:4px}
-.flight input{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper-2);color:var(--ink);text-transform:uppercase}
-.flight input[type=datetime-local]{text-transform:none}
-.flight .wide{grid-column:1/-1}
-.ff{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px}
-.ff a{text-decoration:none;display:inline-block}
-.ff a[aria-disabled="true"]{opacity:.45;pointer-events:none}
-.ff span{font-size:13px;color:var(--ink-2)}
-
-.wx{margin-top:14px;border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:12px}
-.wx h2{font-size:20px;font-weight:600}
-.wx p{margin:4px 0 10px;font-size:14px;color:var(--ink-2)}
-.wx textarea{width:100%;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);resize:vertical;text-transform:uppercase}
-.wx-row{display:flex;gap:10px;align-items:flex-end;margin-top:10px}
-.wx-row label{display:block;font-size:13px;color:var(--ink-2);margin-bottom:4px}
-.wx-row input{width:90px;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);text-transform:uppercase}
+a{color:var(--chart)}
+section{margin-top:18px;border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:12px}
+section h2{font-size:21px;font-weight:600;margin-bottom:4px}
+section h3{font-size:16px;font-weight:600;margin:14px 0 6px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+section .help{margin:0 0 10px;font-size:14px;color:var(--ink-2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.wide{grid-column:1/-1}
+label.f{display:block;min-width:0}
+label.f span{display:block;font-size:13px;color:var(--ink-2);margin-bottom:4px}
+label.f small{display:block;font-size:12px;color:var(--ink-2);margin-top:3px}
+input[type=number],input[type=text],input[type=date],input[type=time],select,textarea{width:100%;font:inherit;font-size:17px;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink)}
+input.up{text-transform:uppercase}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;resize:vertical;text-transform:uppercase}
+input[type=range]{width:100%;accent-color:var(--chart);margin:6px 0 2px}
+.chk{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--paper);border:1px solid var(--line);border-radius:4px;font-size:15px}
+.chk input{width:18px;height:18px;accent-color:var(--chart);margin:0;flex:none}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg label{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 8px;border:1px solid var(--line);border-radius:4px;background:var(--paper);font-size:15px;cursor:pointer;min-width:90px}
+.seg label:has(input:checked){border-color:var(--chart);background:var(--chart-soft);font-weight:600}
+.seg input{width:16px;height:16px;accent-color:var(--chart);margin:0}
+.warn{color:var(--high);font-size:13px;margin-top:4px}
+.ok{color:var(--low)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+th,td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-weight:600;color:var(--ink-2);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+tr.sub td{font-weight:600;background:var(--paper)}
+tr.tot td{font-weight:700;border-top:2px solid var(--ink);border-bottom:0}
+.num{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600}
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.pill{border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--paper);min-width:0}
+.pill .t{font-size:12px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+.pill .w{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:22px;line-height:1.1}
+.pill .c{font-size:13px;color:var(--ink-2)}
+.pill.good{border-color:var(--low);background:var(--low-soft)} .pill.good .w{color:var(--low)}
+.pill.bad{border-color:var(--high);background:var(--high-soft)} .pill.bad .w{color:var(--high)}
+.pill.warn2{border-color:var(--mod);background:var(--mod-soft)} .pill.warn2 .w{color:var(--mod)}
+.env{margin-top:10px}
+.env svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--ink-2);margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:15px;margin-top:6px}
+.kv div:nth-child(even){font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;text-align:right}
+.kv .muted{color:var(--ink-2);font-size:13px;grid-column:1/-1;margin-top:-2px}
+/* PAVE matrix */
+.pave .cat{margin-top:16px}
+.pave .cat h3{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 6px;color:var(--ink);text-transform:none;letter-spacing:0;font-size:18px}
+.pave .cat h3 b{font-family:"Barlow Semi Condensed",sans-serif;font-size:15px;color:var(--ink-2)}
+.item{border-top:1px solid var(--line);padding:9px 0 10px}
+.item .q{font-weight:600;font-size:15px;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.item .q small{font-weight:500;color:var(--ink-2);white-space:nowrap}
+.lv{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.lv label{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 3px;border:1px solid var(--line);border-radius:4px;background:var(--paper);cursor:pointer;text-align:center;min-width:0}
+.lv label b{font-family:"Barlow Semi Condensed",sans-serif;font-size:17px;line-height:1}
+.lv label span{font-size:11px;line-height:1.2;color:var(--ink-2)}
+.lv label input{position:absolute;opacity:0;width:0;height:0}
+.lv label.na{opacity:.35;cursor:default}
+.lv label:has(input:checked){border-color:var(--chart);background:var(--chart-soft)}
+.lv label:has(input:checked) span{color:var(--ink)}
+.lv label.l5:has(input:checked){border-color:var(--high);background:var(--high-soft)}
+.lv label.l4:has(input:checked){border-color:var(--mod);background:var(--mod-soft)}
+.lv.cfi label:has(input:checked){border-color:var(--util);background:transparent;box-shadow:inset 0 0 0 1px var(--util)}
+.who{display:flex;gap:6px;margin-top:4px}
+.who label{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:4px}
+.cfirow{margin-top:5px;display:none}
+.dual .cfirow{display:block}
+.cfirow .tag{font-size:11px;color:var(--util);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.bands{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px;font-size:13px}
+.bands div{padding:6px 8px;border-radius:4px;border:1px solid var(--line);text-align:center}
+.bands .b1{background:var(--low-soft);color:var(--low)} .bands .b2{background:var(--mod-soft);color:var(--mod)} .bands .b3{background:var(--high-soft);color:var(--high)}
+.bands div.on{outline:2px solid currentColor}
+/* bottom bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper-2);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.bar-in{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.gauge{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:32px;line-height:1;color:var(--low);white-space:nowrap}
+.gauge small{font-size:13px;color:var(--ink-2);font-weight:500}
+.level{flex:1;min-width:0}
+.level .name{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:19px;line-height:1.1;color:var(--low)}
+.level .why{font-size:12px;color:var(--ink-2);line-height:1.25}
+.bar.mod .gauge,.bar.mod .name{color:var(--mod)} .bar.bad .gauge,.bar.bad .name{color:var(--high)}
+.btn{font:inherit;font-weight:600;font-size:15px;padding:10px 14px;border-radius:4px;border:0;background:var(--ink);color:var(--paper);cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+details{margin-top:14px;font-size:14px;color:var(--ink-2)}
+details summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.note{font-size:13px;color:var(--ink-2);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sig div{border-bottom:1px solid var(--ink);padding:22px 0 4px;font-size:12px;color:var(--ink-2)}
 .wxout{margin-top:12px;font-size:14px;border-top:1px solid var(--line);padding-top:10px}
 .wxout .lead{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:18px}
-.wxout .lead.low{color:var(--low)} .wxout .lead.mod{color:var(--mod)} .wxout .lead.high{color:var(--high)}
 .wxout ul{margin:6px 0 0;padding-left:18px} .wxout li{margin:3px 0}
 .wxout .err{color:var(--high)}
-section.cat{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
-.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.cat-head h2{font-size:22px;font-weight:600;line-height:1.1}
-.cat-head h2 small{display:block;font-family:"Barlow",sans-serif;font-weight:500;font-size:13px;color:var(--big3);margin-top:2px}
-.cat-score{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:18px;white-space:nowrap;padding:3px 9px;border-radius:4px;background:var(--low-soft);color:var(--low)}
-.cat-score.mod{background:var(--mod-soft);color:var(--mod)}
-.cat-score.high{background:var(--high-soft);color:var(--high)}
+@media (max-width:460px){ header h1{font-size:28px} .grid3{grid-template-columns:1fr 1fr} .pills{gap:6px} .pill .w{font-size:19px} .lv label span{font-size:10px} }
+@media print{ .bar,.actions,input[type=range],.help,.wxhelp{display:none} body{padding-bottom:0;background:#fff;color:#000} section{break-inside:avoid;border-color:#999} .lv label{border-color:#999} .lv label:has(input:checked){background:#ddd} main{max-width:none} }
 
-fieldset{border:0;padding:0;margin:14px 0 0}
-legend{font-weight:600;font-size:16px;padding:0;margin-bottom:6px}
-.opts{display:flex;flex-direction:column;gap:6px}
-.opt{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;cursor:pointer}
-.opt input{margin:0;width:18px;height:18px;accent-color:var(--chart);flex:none}
-.opt span{flex:1;font-size:15px}
-.opt b{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:15px;color:var(--ink-2);min-width:2.2em;text-align:right}
-.opt:has(input:checked){border-color:var(--chart);background:var(--chart-soft)}
-.opt:has(input:checked) b{color:var(--ink)}
-.opt:focus-within{outline:2px solid var(--chart);outline-offset:1px}
-
-.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper-2);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
-.bar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px}
-.gauge{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:40px;line-height:1;min-width:2.2ch;color:var(--low)}
-.gauge-wrap{display:flex;align-items:baseline;gap:4px}
-.gauge-wrap small{color:var(--ink-2);font-size:14px}
-.level{flex:1}
-.level .name{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:20px;line-height:1.1;color:var(--low)}
-.level .why{font-size:13px;color:var(--ink-2);line-height:1.25}
-.lv-mod .gauge,.lv-mod .name{color:var(--mod)} .lv-high .gauge,.lv-high .name{color:var(--high)}
-.btn{font:inherit;font-weight:600;font-size:15px;padding:10px 16px;border-radius:4px;border:0;background:var(--ink);color:var(--paper);cursor:pointer}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-
-#result{display:none;margin-top:26px;border:2px solid var(--line);border-radius:6px;background:var(--paper-2);padding:16px}
-#result.show{display:block}
-#result h2{font-size:26px;font-weight:700}
-.verdict{display:flex;gap:14px;align-items:center;margin:8px 0 14px}
-.verdict .big{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:64px;line-height:1}
-.verdict p{margin:0;font-size:15px}
-.rows{display:grid;gap:8px;margin:10px 0}
-.row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:15px}
-.row .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
-.row .fill{height:100%;background:var(--low);transition:width .25s}
-.row .fill.mod{background:var(--mod)} .row .fill.high{background:var(--high)}
-.row .n{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;color:var(--ink-2)}
-.mit{margin:14px 0 0;padding:0 0 0 18px}
-.mit li{margin:5px 0;font-size:15px}
-.note{font-size:13px;color:var(--ink-2);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-
-@media (max-width:420px){ header h1{font-size:30px} .bar-in{gap:10px} .btn{padding:10px 12px} }
-@media print{ .bar,.actions{display:none} body{padding-bottom:0;background:#fff;color:#000} #result{display:block} }
-@media (prefers-reduced-motion:reduce){ .row .fill{transition:none} }
+.fleet{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.fleet a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--paper);text-decoration:none;color:var(--ink)}
+.fleet a b{display:block;font-family:"Barlow Semi Condensed",sans-serif;font-size:18px}
+.fleet a span{font-size:13px;color:var(--ink-2)}
 </style>
 </head>
 <body>
 <main>
 <header>
+  <div class="kicker">AlphaFlight · Jeremy &amp; Kilo Aviation · KLAL</div>
   <h1>Preflight Risk Assessment</h1>
-  <p>Score the flight before you commit to it. Seven categories, 100 points. The Big Three — pilot experience, weather, and human factors — carry the most weight because they show up most often in fatal GA accidents.</p>
+  <p>The school's PAVE matrix: rate each item 1 to 5 in an honest, self-evaluating way, then total the column. 25–49 is normal, 50–74 elevated, 75 and above high. Any 5 is a No-Go. In the elevated or high range solo flight is not authorized; on a dual flight the CFI rates the same items to transfer some of the risk.</p>
 </header>
 
-<div class="flight">
-  <div><label for="dep">Departure</label><input id="dep" placeholder="KZPH" maxlength="4"></div>
-  <div><label for="dest">Destination</label><input id="dest" placeholder="KGNV" maxlength="4"></div>
-  <div><label for="acft">Aircraft</label><input id="acft" placeholder="N12345 C172"></div>
-  <div><label for="when">Departure time</label><input id="when" type="datetime-local"></div>
-  <div class="wide ff"><a id="ffbtn" class="btn ghost" href="#" target="_blank" rel="noopener" aria-disabled="true">Open route in ForeFlight</a><button id="ffcopy" class="btn ghost" type="button" hidden>Copy ForeFlight link</button><span id="ffhint">Enter departure and destination first.</span></div>
-</div>
+<section>
+  <h2>Flight</h2>
+  <div class="grid">
+    <label class="f"><span>Date</span><input type="date" id="date"></label>
+    <label class="f"><span>Departure time (local)</span><input type="time" id="etd"></label>
+    <label class="f"><span>Student / PIC</span><input type="text" id="student" autocomplete="name"></label>
+    <label class="f"><span>Instructor</span><input type="text" id="cfi"></label>
+    <div class="wide seg"><label><input type="radio" name="ftype" value="dual" checked>Dual flight</label><label><input type="radio" name="ftype" value="solo">Solo flight</label></div>
+    <label class="f"><span>Departure</span><input type="text" id="dep" class="up" value="KLAL" maxlength="4"></label>
+    <label class="f"><span>Destination</span><input type="text" id="dest" class="up" maxlength="4" placeholder="KLAL"></label>
+    <div class="wide seg"><label><input type="radio" name="kind" value="training" checked>Training</label><label><input type="radio" name="kind" value="rental">Rental</label><label><input type="radio" name="kind" value="xc">Cross-country</label><label><input type="radio" name="kind" value="ride">Checkride prep</label></div>
+  </div>
+  <h3>Airplane — weight &amp; balance and dispatch</h3>
+  <div class="fleet">
+    <a href="https://n929bm.alphaflight.io"><b>N929BM</b><span>Cessna 172M · 786 lb useful · 38 gal</span></a>
+    <a href="https://n9301e.alphaflight.io"><b>N9301E</b><span>Cessna 172N · 820 lb useful · 40 gal</span></a>
+  </div>
+  <p class="help" style="margin-top:8px">Each airplane's page carries the full dispatch form: W&amp;B, speeds, density altitude, crosswind, and this same risk matrix.</p>
+</section>
 
-<section class="wx">
+<section>
   <h2>Weather from your briefing</h2>
-  <p id="wxhelp">Enter your departure airport above, then text <b id="wxcmd">MT ____ PT</b> to 358782 and paste the reply here. Decoded plain text or raw code both work. The form reads the observation and the forecast period covering your departure time, then sets the weather questions for you.</p>
-  <textarea id="wxraw" rows="5" placeholder="Paste the decoded text (Terminal Forecast for your airport, ...) or the raw METAR/TAF code" spellcheck="false"></textarea>
-  <div class="wx-row">
-    <div><label for="rwy">Runway in use</label><input id="rwy" placeholder="09" maxlength="3"></div>
-    <button class="btn" type="button" onclick="parseWx()">Read weather</button>
+  <p class="help wxhelp">Paste the METAR or TAF for the departure field (text <b>MT KLAL PT</b> to 358782, or copy from ForeFlight). The weather and wind rows below are set from it; adjust them if your briefing says otherwise.</p>
+  <textarea id="wxraw" rows="4" placeholder="KLAL 171853Z 09012G18KT 10SM BKN050 28/21 A3002" spellcheck="false"></textarea>
+  <div class="grid3" style="margin-top:8px;align-items:end">
+    <label class="f"><span>Runway in use</span><input type="text" id="rwy" class="up" maxlength="3" placeholder="09"></label>
+    <label class="f"><span>Max crosswind (kt)</span><input type="number" id="pxw" step="1" inputmode="numeric" value="12"></label>
+    <button class="btn" type="button" onclick="readWx()">Read weather</button>
   </div>
   <div id="wxout" class="wxout" hidden></div>
 </section>
 
-<form id="frat"></form>
-
-<div id="result" aria-live="polite">
-  <h2>Result</h2>
-  <div class="verdict"><div class="big" id="rBig">0</div><div><div class="name cond" id="rName" style="font-size:22px;font-weight:600">Low risk</div><p id="rWhy"></p></div></div>
-  <div class="rows" id="rRows"></div>
-  <h3 class="cond" style="font-size:18px;font-weight:600;margin-top:16px">What would bring the score down</h3>
-  <ul class="mit" id="rMit"></ul>
-  <p class="note">This form makes risk visible so you can talk it through — with an instructor, a safety pilot, or yourself. It does not approve or prevent a flight. Cross-check weather against official briefings before departure.</p>
-  <div class="actions"><button class="btn ghost" type="button" onclick="window.print()">Print</button><button class="btn ghost" type="button" onclick="resetAll()">Start over</button></div>
-</div>
+<section class="pave">
+  <h2>Risk matrix</h2>
+  <div id="pave"></div>
+  <div class="bands"><div class="b1" id="b1">Normal 25–49</div><div class="b2" id="b2">Elevated 50–74</div><div class="b3" id="b3">High 75+</div></div>
+  <div class="kv" id="paveKv"></div>
+  <div class="sig"><div>Instructor signature</div><div>Student signature</div></div>
+  <div class="actions"><button class="btn ghost" type="button" onclick="window.print()">Print</button><button class="btn ghost" type="button" onclick="resetAll()">New flight</button></div>
+  <p class="note">This form is based on the PAVE checklist and common accident causal factors. The list is not exhaustive; as pilot in command you have the ultimate responsibility for the safety of the flight. Cross-check weather against an official briefing before departure.</p>
+</section>
 </main>
 
 <div class="bar" id="bar">
   <div class="bar-in">
-    <div class="gauge-wrap"><div class="gauge" id="gTotal">0</div><small>/100</small></div>
-    <div class="level"><div class="name" id="gName">Low risk</div><div class="why" id="gWhy">Answer the questions to build your score.</div></div>
-    <button class="btn" type="button" onclick="showResult()">See breakdown</button>
+    <div class="gauge" id="gRisk">0</div>
+    <div class="level"><div class="name" id="gName">—</div><div class="why" id="gWhy"></div></div>
+    <button class="btn" type="button" onclick="document.getElementById('paveKv').scrollIntoView({behavior:'smooth',block:'center'})">Totals</button>
   </div>
 </div>
 
 <script>
-const CATS = [
- {id:'pilot', name:'Pilot experience', max:20, big3:true, qs:[
-   {id:'tt', q:'Total flight time', type:'radio', opts:[['More than 500 hours',0],['100 to 500 hours',3],['Under 100 hours',6,'Fly with an instructor or experienced safety pilot until your total time builds.']]},
-   {id:'tit', q:'Time in this aircraft type', type:'radio', opts:[['More than 100 hours',0],['25 to 100 hours',2],['Under 25 hours',4,'Review the POH emergency procedures and V-speeds for this type before engine start.']]},
-   {id:'ldg', q:'Landings in the last 90 days', type:'radio', opts:[['More than 10',0],['3 to 10',2],['Fewer than 3',5,'Not current for passengers — fly a few patterns solo or with a CFI first.']]},
-   {id:'last', q:'Days since your last flight', type:'radio', opts:[['Under 14 days',0],['14 to 30 days',1],['More than 30 days',3,'Rusty: brief the departure and arrival in detail, and expect to be slower on radios and checklists.']]},
-   {id:'ifr', q:'If this flight could go IFR: are you instrument current and proficient?', type:'radio', opts:[['Yes, or the flight is strictly VFR',0],['No',2,'Do not plan on an IFR out — set hard VFR minimums and a turnback plan.']]},
- ]},
- {id:'wx', name:'Weather', max:15, big3:true, qs:[
-   {id:'cat', q:'Worst flight category along the route (METAR/TAF)', type:'radio', opts:[['VFR — ceiling above 3,000 ft and visibility over 5 sm',0],['Marginal VFR',6,'Marginal VFR is where inadvertent IMC happens. Delay, or set a firm turnback trigger before you launch.'],['IFR or worse',9,'IFR conditions on a VFR flight is a no-go. Wait for improvement.']]},
-   {id:'xw', q:'Crosswind component at departure or destination', type:'radio', opts:[['Under 10 kt',0],['10 to 15 kt',2,'Brief the crosswind technique and go-around criteria.'],['Over 15 kt',4,'Near or above demonstrated crosswind for most trainers. Pick a different runway or airport, or wait.']]},
-   {id:'conv', q:'Thunderstorms, turbulence, or icing forecast along the route', type:'radio', opts:[['No',0],['Yes',2,'Plan the route and timing around convective activity, and set a diversion plan.']]},
- ]},
- {id:'human', name:'Human factors', max:20, big3:true, qs:[
-   {id:'sleep', q:'Sleep in the last 24 hours', type:'radio', opts:[['7 hours or more',0],['6 to 7 hours',2],['Under 6 hours',5,'Fatigue degrades judgment before you feel it. Shorten or postpone the flight.']]},
-   {id:'ill', q:'Illness or symptoms today (cold, congestion, nausea)', type:'radio', opts:[['None',0],['Yes',4,'Congestion plus altitude is a bad mix. Ground yourself until you are clear.']]},
-   {id:'med', q:'Medication in the last 24 hours (including over-the-counter)', type:'radio', opts:[['None',0],['Yes',3,'Check the FAA medication guidance for wait times before flying.']]},
-   {id:'stress', q:'Significant personal, work, or financial stress right now', type:'radio', opts:[['No',0],['Yes',3,'Stress competes for attention. Keep the mission simple and brief a backup plan.']]},
-   {id:'alc', q:'Alcohol within 8 hours, or any hangover effects', type:'radio', opts:[['No',0],['Yes',5,'Hard no-go under 14 CFR 91.17.']]},
- ]},
- {id:'acft', name:'Aircraft', max:15, qs:[
-   {id:'fam', q:'Familiarity with this specific airplane and its avionics', type:'radio', opts:[['Flown it recently',0],['Flown the type but not this airplane',2],['New type or new avionics',4,'Spend extra time on the panel setup and the checklist flow before taxi.']]},
-   {id:'sqk', q:'Open squawks or inoperative equipment', type:'radio', opts:[['None',0],['Yes',4,'Confirm 91.213 allows the flight with the inop item and brief how it changes the mission.']]},
-   {id:'mx', q:'First flight after maintenance', type:'radio', opts:[['No',0],['Yes',3,'Do a thorough preflight and a longer run-up; plan a local check before heading out.']]},
-   {id:'fuel', q:'Fuel reserve at destination', type:'radio', opts:[['More than 1 hour',0],['45 minutes to 1 hour',2],['Under 45 minutes',4,'Below a comfortable reserve. Add a fuel stop.']]},
- ]},
- {id:'mission', name:'Mission complexity', max:15, qs:[
-   {id:'type', q:'Type of flight', type:'radio', opts:[['Local or pattern work',0],['Cross-country in VMC',5,'Brief checkpoints, fuel, and diversions along the route.'],['Cross-country in IMC',9,'IFR cross-country: brief alternates, minimums, and the approach you expect.']]},
-   {id:'legs', q:'Multiple legs or more than 3 hours of flying today', type:'radio', opts:[['No',0],['Yes',3,'Build in a real break between legs and re-check weather before each one.']]},
-   {id:'pax', q:'Passengers who are new to small airplanes', type:'radio', opts:[['No passengers, or experienced ones',0],['Yes',3,'Give a sterile-cockpit briefing and set expectations about turning around.']]},
- ]},
- {id:'pressure', name:'External pressure', max:5, qs:[
-   {id:'oblig', q:'Do you feel obligated to complete this flight?', type:'radio', opts:[['No',0],['Yes',2,'Name the pressure out loud. Decide now what would make you cancel, before you are in the airplane.']]},
-   {id:'time', q:'Hard arrival deadline', type:'radio', opts:[['No',0],['Yes',2,'Have a backup way to get there, so the airplane is not the only option.']]},
-   {id:'expect', q:'Passengers or others expecting you to fly', type:'radio', opts:[['No',0],['Yes',1,'Tell them in advance that weather or fatigue can cancel the flight.']]},
- ]},
- {id:'terrain', name:'Terrain and airport', max:10, qs:[
-   {id:'apt', q:'Unfamiliar departure or destination airport', type:'radio', opts:[['No',0],['Yes',3,'Study the airport diagram, pattern altitude, and local procedures before you go.']]},
-   {id:'night', q:'Night flight', type:'radio', opts:[['No',0],['Yes',3,'Confirm night currency, lighting, and a route over lit terrain where possible.']]},
-   {id:'remote', q:'Mountainous, remote, or over-water segments', type:'radio', opts:[['No',0],['Yes',2,'Plan forced-landing options along the route and file a flight plan.']]},
-   {id:'rwy', q:'Short, soft, or obstructed runway (under 3,000 ft or obstacles on approach)', type:'radio', opts:[['No',0],['Yes',2,'Run the takeoff and landing performance numbers with a safety margin.']]},
- ]},
-];
-
-const form = document.getElementById('frat');
-CATS.forEach(c => {
-  const s = document.createElement('section'); s.className='cat'; s.id='cat-'+c.id;
-  s.innerHTML = `<div class="cat-head"><h2>${c.name}${c.big3?'<small>Big Three risk driver</small>':''}</h2><div class="cat-score" id="cs-${c.id}">0 / ${c.max}</div></div>`;
-  c.qs.forEach(q => {
-    const f = document.createElement('fieldset');
-    f.innerHTML = `<legend>${q.q}</legend><div class="opts">` + q.opts.map((o,i)=>
-      `<label class="opt"><input type="radio" name="${c.id}_${q.id}" value="${o[1]}" data-i="${i}" ${i===0?'checked':''}><span>${o[0]}</span><b>${o[1]>0?'+'+o[1]:'0'}</b></label>`).join('') + `</div>`;
-    s.appendChild(f);
-  });
-  form.appendChild(s);
-});
-
-function catLevel(pts,max){ const r=pts/max; return r>=.55?'high':r>=.25?'mod':'low'; }
-function levelName(l){ return l==='high'?'High risk':l==='mod'?'Moderate risk':'Low risk'; }
-
-function score(){
-  let total=0, modOrWorse=0, cats=[], mits=[];
-  CATS.forEach(c=>{
-    let pts=0;
-    c.qs.forEach(q=>{
-      const sel=form.querySelector(`input[name="${c.id}_${q.id}"]:checked`);
-      if(!sel) return;
-      const o=q.opts[+sel.dataset.i]; pts+=o[1];
-      if(o[2]) mits.push(o[2]);
-    });
-    const lv=catLevel(pts,c.max);
-    if(lv!=='low') modOrWorse++;
-    total+=pts; cats.push({...c,pts,lv});
-    const el=document.getElementById('cs-'+c.id); el.textContent=`${pts} / ${c.max}`; el.className='cat-score '+lv;
-  });
-  let lv = total>=30?'high':total>=13?'mod':'low';
-  let why = lv==='high'?'Score of 30 or more.':lv==='mod'?'Score between 13 and 29.':'Score under 13.';
-  if(modOrWorse>=3 && lv!=='high'){
-    lv = lv==='mod'?'high':'mod';
-    why = `${modOrWorse} categories rated moderate or higher — risk compounds, so the overall level is raised one step.`;
-  }
-  if(total===0) why='No elevated factors identified.';
-  return {total,lv,why,cats,mits};
-}
-
-function render(){
-  const r=score();
-  document.getElementById('gTotal').textContent=r.total;
-  document.getElementById('gName').textContent=levelName(r.lv);
-  document.getElementById('gWhy').textContent=r.why;
-  document.getElementById('bar').className='bar lv-'+r.lv;
-  // result panel
-  document.getElementById('rBig').textContent=r.total;
-  document.getElementById('rBig').style.color=`var(--${r.lv})`;
-  document.getElementById('rName').textContent=levelName(r.lv);
-  document.getElementById('rName').style.color=`var(--${r.lv})`;
-  document.getElementById('rWhy').textContent=r.why + (r.lv==='high'?' Talk this flight through with someone before you go, or change what you can and re-score.':r.lv==='mod'?' Decide now which factors you can reduce, and what would make you turn back.':' Normal caution applies — still brief your diversion options.');
-  document.getElementById('rRows').innerHTML=r.cats.map(c=>`<div class="row"><span>${c.name}${c.big3?' <span style="color:var(--big3);font-size:12px">Big 3</span>':''}</span><span class="n">${c.pts} / ${c.max}</span><div class="track"><div class="fill ${c.lv}" style="width:${Math.round(c.pts/c.max*100)}%"></div></div></div>`).join('');
-  document.getElementById('rMit').innerHTML=r.mits.length?r.mits.map(m=>`<li>${m}</li>`).join(''):'<li>Nothing flagged. Keep the plan simple and the minimums firm.</li>';
-  save();
-}
-function showResult(){ render(); const el=document.getElementById('result'); el.classList.add('show'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
-function resetAll(){ form.reset(); ['dep','dest','acft','when'].forEach(i=>document.getElementById(i).value=''); document.getElementById('result').classList.remove('show'); render(); window.scrollTo({top:0,behavior:'smooth'}); }
-
-// ForeFlight deep link: route + tail number + Zulu ETD
-function ffLink(){
-  const dep=document.getElementById('dep').value.trim().toUpperCase();
-  const dest=document.getElementById('dest').value.trim().toUpperCase();
-  const acft=document.getElementById('acft').value.trim().toUpperCase();
-  const whenVal=document.getElementById('when').value;
-  const a=document.getElementById('ffbtn'), h=document.getElementById('ffhint');
-  if(!dep||!dest){ a.setAttribute('aria-disabled','true'); a.href='#'; h.textContent='Enter departure and destination first.'; return; }
-  const parts=[dep,dest];
-  const tail=(acft.match(/\bN[0-9][0-9A-Z]{1,5}\b/)||[])[0]; if(tail) parts.push(tail);
-  if(whenVal){ const d=new Date(whenVal); const p=n=>String(n).padStart(2,'0'); parts.push(`${d.getUTCFullYear()}${p(d.getUTCMonth()+1)}${p(d.getUTCDate())}T${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:00Z`); }
-  const url='foreflightmobile://maps/search?q='+parts.join('+');
-  a.href=url; a.dataset.url=url;
-  a.removeAttribute('aria-disabled');
-  document.getElementById('ffcopy').hidden=false;
-  h.textContent=`Loads ${dep} → ${dest}${tail?' with '+tail:''}${whenVal?' and your ETD':''} on the Maps view.`;
-}
-document.getElementById('ffbtn').addEventListener('click',e=>{
-  const a=e.currentTarget, url=a.dataset.url; if(!url) return;
-  e.preventDefault();
-  let left=false; const mark=()=>{left=true};
-  document.addEventListener('visibilitychange',mark,{once:true}); window.addEventListener('pagehide',mark,{once:true}); window.addEventListener('blur',mark,{once:true});
-  try{ window.location.href=url; }catch(err){}
-  setTimeout(()=>{ if(!left){ try{ window.open(url,'_blank'); }catch(err){} } },300);
-  setTimeout(()=>{ if(!left) document.getElementById('ffhint').textContent='ForeFlight did not open from here — this viewer may block app links. Tap Copy ForeFlight link and paste it into Safari, or open this page in Safari from the share menu and try again.'; },1800);
-});
-document.getElementById('ffcopy').addEventListener('click',async()=>{
-  const url=document.getElementById('ffbtn').dataset.url; if(!url) return;
-  const h=document.getElementById('ffhint');
-  try{ await navigator.clipboard.writeText(url); h.textContent='Link copied. Paste it into Safari’s address bar or a note, then tap it.'; }
-  catch(err){ h.textContent='Copy this link: '+url; }
-});
-
-function wxCmd(){
-  const dep=document.getElementById('dep').value.trim().toUpperCase();
-  const cmd=document.getElementById('wxcmd'), help=document.getElementById('wxhelp');
-  if(dep){ cmd.textContent=`MT ${dep} PT`; help.firstChild.textContent='Text '; }
-  else { cmd.textContent='MT ____ PT'; help.firstChild.textContent='Enter your departure airport above, then text '; }
-}
-function save(){ try{ const d={f:{},i:{}}; form.querySelectorAll('input:checked').forEach(x=>d.f[x.name]=x.dataset.i); ['dep','dest','acft','when'].forEach(i=>d.i[i]=document.getElementById(i).value); localStorage.setItem('frat-last',JSON.stringify(d)); }catch(e){} }
-function load(){ try{ const d=JSON.parse(localStorage.getItem('frat-last')); if(!d) return; Object.entries(d.f||{}).forEach(([n,i])=>{ const x=form.querySelector(`input[name="${n}"][data-i="${i}"]`); if(x) x.checked=true; }); Object.entries(d.i||{}).forEach(([k,v])=>{ const el=document.getElementById(k); if(el) el.value=v; }); }catch(e){} }
-
 // ---- Weather parsing: raw METAR/TAF code or plain-English decoded text ----
 const MONTHS={JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
 function emptyG(){ return {windDir:null,windSpd:null,gust:null,vis:null,ceiling:null,wx:[]}; }
@@ -404,60 +297,142 @@ function buildModel(raw, depDate){
   return model;
 }
 
-function parseWx(){
-  const out=document.getElementById('wxout'); out.hidden=false;
-  const raw=document.getElementById('wxraw').value.replace(/\s+/g,' ').trim();
-  if(!raw){ out.innerHTML='<div class="err">Paste a METAR or TAF first.</div>'; return; }
-  const whenVal=document.getElementById('when').value;
-  const depDate=whenVal?new Date(whenVal):null;
+
+// Returns {cat, wind:{windDir,windSpd,gust}, xwDep, hazards:[], notes:[], conv} or null
+function analyzeWx(raw, depDate, rwy){
+  raw=(raw||'').replace(/\s+/g,' ').trim(); if(!raw) return null;
   const model=buildModel(raw,depDate);
   const notes=[]; let cat=null, wind=null; const hazards=new Set();
-
-  if(model.metar){
-    const m=model.metar; const c=category(m.ceiling,m.vis); cat=c; wind=m; m.wx.forEach(w=>hazards.add(w));
-    notes.push(`Current observation: ${c} — ceiling ${m.ceiling===null?'none':m.ceiling.toLocaleString()+' ft'}, visibility ${visStr(m.vis)} sm, ${windStr(m)||'wind not reported'}${m.wx.length?', '+m.wx.join(', '):''}`);
-  }
+  if(model.metar){ const m=model.metar; const c=category(m.ceiling,m.vis); cat=c; wind=m; m.wx.forEach(w=>hazards.add(w));
+    notes.push(`Current observation: ${c} \u2014 ceiling ${m.ceiling===null?'none':m.ceiling.toLocaleString()+' ft'}, visibility ${visStr(m.vis)} sm, ${windStr(m)||'wind not reported'}${m.wx.length?', '+m.wx.join(', '):''}`); }
   if(model.periods.length){
-    const mains=model.periods.filter(p=>p.kind==='BASE'||p.kind==='FM');
-    let applicable=[];
+    const mains=model.periods.filter(p=>p.kind==='BASE'||p.kind==='FM'); let applicable=[];
     if(depDate){ const dep=depDate.getTime(); applicable=model.periods.filter(p=>p.start!==null&&dep>=p.start&&(p.end===null||dep<p.end)); }
-    if(!applicable.length){ applicable=[mains[0]||model.periods[0]]; notes.push(depDate?'Departure time is outside this forecast — using the first period.':'No departure time set — using the first forecast period. Set a departure time to match the right period.'); }
+    if(!applicable.length){ applicable=[mains[0]||model.periods[0]]; notes.push(depDate?'Departure time is outside this forecast \u2014 using the first period.':'No departure time set \u2014 using the first forecast period.'); }
     let tafCat='VFR', tafWind=null;
     applicable.forEach(p=>{ const g=p.groups; tafCat=worse(tafCat,category(g.ceiling,g.vis)); g.wx.forEach(w=>hazards.add(w)); if(g.windSpd!==null&&(!tafWind||(g.gust||g.windSpd)>(tafWind.gust||tafWind.windSpd))) tafWind=g; });
-    const labels=applicable.map(p=>{ const k=p.kind==='BASE'?'base forecast':p.kind==='FM'?'period from':p.kind; const d=p.start?new Date(p.start):null; const t=d?`${d.getUTCDate()} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()]} ${String(d.getUTCHours()).padStart(2,'0')}${String(d.getUTCMinutes()).padStart(2,'0')}Z`:''; return `${k} ${t}`.trim(); }).join(' + ');
     const lowC=Math.min(...applicable.map(p=>p.groups.ceiling===null?Infinity:p.groups.ceiling));
-    notes.push(`Forecast (${labels}): ${tafCat} — ceiling ${lowC===Infinity?'none':lowC.toLocaleString()+' ft'}, visibility ${visStr(Math.min(...applicable.map(p=>p.groups.vis===null?99:p.groups.vis)))} sm${tafWind?', '+windStr(tafWind):''}`);
+    notes.push(`Forecast: ${tafCat} \u2014 ceiling ${lowC===Infinity?'none':lowC.toLocaleString()+' ft'}, visibility ${visStr(Math.min(...applicable.map(p=>p.groups.vis===null?99:p.groups.vis)))} sm${tafWind?', '+windStr(tafWind):''}`);
     cat=cat?worse(cat,tafCat):tafCat;
     if(!wind||(tafWind&&(tafWind.gust||tafWind.windSpd)>(wind.gust||wind.windSpd))) wind=tafWind||wind;
   }
-  if(!cat){ out.innerHTML='<div class="err">Could not find an observation or a forecast in the text. Check that the whole reply was pasted.</div>'; return; }
-
-  const catIdx=cat==='VFR'?0:cat==='MVFR'?1:2;
-  form.querySelector(`input[name="wx_cat"][data-i="${catIdx}"]`).checked=true;
-
-  const rwy=document.getElementById('rwy').value.replace(/[LRC]$/i,'');
-  let xwNote='';
-  if(wind&&wind.windSpd!==null){
-    const spd=wind.gust||wind.windSpd; let xw=null;
-    if(!rwy) xwNote='Enter the runway in use to compute crosswind.';
-    else if(wind.windDir==='VRB') xw=spd;
-    else { const diff=((wind.windDir-(+rwy*10))%360+360)%360; xw=Math.round(Math.abs(Math.sin(diff*Math.PI/180))*spd); }
-    if(xw!==null){ const i=xw<10?0:xw<=15?1:2; form.querySelector(`input[name="wx_xw"][data-i="${i}"]`).checked=true;
-      xwNote=`Crosswind on runway ${rwy}: ${xw} kt${wind.gust?' (using the gust)':''}${wind.windDir==='VRB'?' — variable wind, full speed counted':''}`; }
-  }
+  if(!cat) return null;
   const haz=[...hazards];
   const conv=haz.some(w=>/TS|FZ|GR|GS|^\+|Thunderstorm|Freezing|Hail|Heavy|Cumulonimbus|Funnel|Tornado/.test(w));
-  form.querySelector(`input[name="wx_conv"][data-i="${conv?1:0}"]`).checked=true;
-
-  const lv=catIdx===0?'low':catIdx===1?'mod':'high';
-  out.innerHTML=`<div class="lead ${lv}">${cat} — weather questions set</div><ul>${notes.map(n=>`<li>${n}</li>`).join('')}${xwNote?`<li>${xwNote}</li>`:''}<li>${haz.length?'Significant weather: '+haz.join(', ')+(conv?' — thunderstorm/icing question set to Yes':''):'No significant weather reported.'}</li><li>Review the three weather questions below and adjust if your briefing says otherwise.</li></ul>`;
-  render();
-  document.getElementById('cat-wx').scrollIntoView({behavior:'smooth',block:'start'});
+  const metar=model.metar;
+  return {cat,wind,hazards:haz,notes,conv,metar,clearAndTen:!!(metar&&metar.ceiling===null&&metar.vis!==null&&metar.vis>10)};
+}
+function crosswind(windDir,spd,gust,rwy){
+  rwy=String(rwy||'').replace(/[LRC]$/i,''); if(!rwy||spd===null||spd===undefined) return null;
+  const s=gust||spd; if(windDir==='VRB') return {xw:s,hw:0,vrb:true};
+  const diff=((windDir-(+rwy*10))%360+360)%360; const r=diff*Math.PI/180;
+  return {xw:Math.round(Math.abs(Math.sin(r))*s),hw:Math.round(Math.cos(r)*s),vrb:false};
 }
 
-form.addEventListener('change',render);
-['dep','dest','acft','when'].forEach(i=>document.getElementById(i).addEventListener('input',()=>{save();ffLink();wxCmd();}));
-load(); render(); ffLink(); wxCmd();
+// ---- Jeremy & Kilo Aviation Preflight Risk Assessment matrix (PAVE, 1–5 per item; 5 = No-Go) ----
+const PAVE = [
+ {id:'pilot', name:'Pilot', items:[
+   {id:'exp',  q:'Total experience', lv:['>500 hrs','200–500 hrs','100–200 hrs','0–100 hrs',null]},
+   {id:'rec',  q:'Recency (<90 days as PIC)', lv:['>20 hrs','15–20 hrs','3–14 hrs','Dual only',null]},
+   {id:'cur',  q:'Currency', lv:['VFR and IFR',null,'VFR only','Not current – dual only',null]},
+   {id:'emo',  q:'Emotional condition', lv:['Excellent','Good','Average','Fair','Poor']},
+   {id:'phy',  q:'Physical condition', lv:['Excellent','Good','Average','Fair','Poor']},
+   {id:'min',  q:'Minimums', lv:['Well above personal / school minimums','Above personal / school minimums','At personal / school minimums','At regulation minimums','Below minimums']},
+   {id:'alc',  q:'Alcohol / medication', lv:['No factor','Used in last 48 hrs','Used in last 24 hrs','Used in last 12 hrs','Used within last 8 hrs']},
+   {id:'fat',  q:'Fatigue / rest', lv:['>8 hrs sleep','7–8 hrs sleep','6–7 hrs sleep','4–6 hrs sleep','<4 hrs sleep']},
+ ]},
+ {id:'acft', name:'Aircraft', items:[
+   {id:'fuel', q:'Fuel reserves', lv:['Well above minimums','Above minimums',"At school's minimums",'At regulation minimums','Below required minimums']},
+   {id:'tit',  q:'Time in type', lv:['>100 hrs PIC','>50 hrs PIC','10–50 hrs PIC','0–50 total hrs',null]},
+   {id:'perf', q:'Performance', lv:['Well within limits','Within limits','At limits',null,'Outside limits']},
+   {id:'eqp',  q:'Equipment', lv:['Approved GPS, on-board wx, traffic','Approved GPS, OBS','Functional comms & nav','Minimum required','Does not meet 14 CFR 91.205']},
+   {id:'anom', q:'Known anomalies', lv:['None','One, non-essential','Two, non-essential','Multiple non-essential','Any essential']},
+ ]},
+ {id:'env', name:'Environment', items:[
+   {id:'apt',  q:'Airport', lv:['Adequate & familiar','Marginally adequate & familiar','Adequate but unfamiliar',null,'Not adequate']},
+   {id:'wx',   q:'Weather', lv:['Clear & visibility >10 sm','VFR, above school minimums','IFR, above school minimums',null,'Below school minimums']},
+   {id:'wind', q:'Wind', lv:['Light & variable','Mild, steady','Mild, some gusts','Shear & gusts','Below school minimums']},
+   {id:'rwy',  q:'Runways', lv:['Dry, hard, more than adequate','Dry, hard, short but adequate','Preferred rwy closed, adequate rwy available','Wet, hard, adequate','Inadequate']},
+   {id:'lite', q:'Lighting (day VFR = 1)', lv:['Runway, taxiway','Familiar with preferred runway and taxiway','Familiar with preferred runway only','Unfamiliar with preferred rwy and taxiway','None or inop']},
+   {id:'terr', q:'Terrain', lv:['Flat with multiple landing sites','Flat, populated','Flat with obstacles','Mountainous',null]},
+   {id:'asp',  q:'Airspace', lv:['Familiar and proficient','Familiar and experienced','Familiar','Unfamiliar (dual)','Unfamiliar (solo)']},
+   {id:'tod',  q:'Time of day', lv:['Day & night proficient','Day only proficient','Day current','Not current (dual)','Not current (solo)']},
+ ]},
+ {id:'ext', name:'External pressures', items:[
+   {id:'dly',  q:'Delays / diversions', lv:['No pressure','Slight pressure','Inconvenient','Problematic','Not possible']},
+   {id:'alt',  q:'Alternate plans', lv:['No pressure','Slight pressure','Inconvenient','Problematic','Not possible']},
+   {id:'peq',  q:'Personal equipment', lv:['Emergency kit, phone numbers, cell phone','Phone numbers and cell phone',null,null,'None']},
+   {id:'imp',  q:'Importance of flight', lv:['No pressure','Slight pressure','Evaluation','Critical',null]},
+   {id:'cpx',  q:'Flight complexity', lv:['Not complex','Moderate','Evaluation','Severe','Extreme']},
+ ]},
+];
+const BANDS=[{min:0,max:49,name:'Normal risk',cls:'good',key:'b1'},{min:50,max:74,name:'Elevated risk',cls:'warn2',key:'b2'},{min:75,max:999,name:'High risk',cls:'bad',key:'b3'}];
+function band(t){ return BANDS.find(b=>t>=b.min&&t<=b.max); }
+
+function renderPave(root){
+  root.innerHTML='';
+  PAVE.forEach(c=>{
+    const d=document.createElement('div'); d.className='cat'; d.id='pcat-'+c.id;
+    d.innerHTML=`<h3>${c.name}<b id="pcs-${c.id}">0</b></h3>`;
+    c.items.forEach(it=>{
+      const row=(who)=>`<div class="lv ${who}">`+it.lv.map((t,i)=>{ const v=i+1, na=t===null; return `<label class="l${v}${na?' na':''}"><input type="radio" name="p_${who}_${c.id}_${it.id}" value="${v}" ${na?'disabled':''} ${(!na&&v===1&&who==='stu')?'checked':''}><b>${na?'–':v}</b><span>${na?'n/a':t}</span></label>`; }).join('')+`</div>`;
+      const e=document.createElement('div'); e.className='item'; e.id='pitem-'+c.id+'-'+it.id;
+      e.innerHTML=`<div class="q"><span>${it.q}</span><small id="pi-${c.id}-${it.id}"></small></div>`+row('stu')+`<div class="cfirow"><div class="tag">CFI rating</div>${row('cfi')}</div>`;
+      d.appendChild(e);
+    });
+    root.appendChild(d);
+  });
+}
+function paveTotals(root){
+  let stu=0, cfi=0, noGo=[], cfiAny=false, cfiN=0, total=0;
+  PAVE.forEach(c=>{ let cs=0; c.items.forEach(it=>{ total++;
+    const s=root.querySelector(`input[name="p_stu_${c.id}_${it.id}"]:checked`); const sv=s?+s.value:0; cs+=sv; stu+=sv;
+    const k=root.querySelector(`input[name="p_cfi_${c.id}_${it.id}"]:checked`); const kv=k?+k.value:sv; cfi+=kv; if(k){ cfiAny=true; cfiN++; }
+    if(sv===5) noGo.push(it.q);
+    const tag=document.getElementById(`pi-${c.id}-${it.id}`); if(tag) tag.textContent=sv===5?'NO-GO':(sv>=4?'watch':'');
+  }); const el=document.getElementById('pcs-'+c.id); if(el) el.textContent=cs; });
+  return {stu,cfi,cfiAny,cfiN,total,noGo};
+}
+function setPave(root,cat,item,level,who='stu'){ const x=root.querySelector(`input[name="p_${who}_${cat}_${item}"][value="${level}"]`); if(x&&!x.disabled){ x.checked=true; return true; } return false; }
+
+const KEY='frat-pave';
+const $=id=>document.getElementById(id);
+const SAVE_IDS=['date','etd','student','cfi','dep','dest','wxraw','rwy','pxw'];
+const RADIOS=['ftype','kind'];
+function save(){ try{ const d={}; SAVE_IDS.forEach(i=>d[i]=$(i).value); RADIOS.forEach(r=>{ const x=document.querySelector(`input[name="${r}"]:checked`); d['r_'+r]=x?x.value:''; }); const p={}; document.querySelectorAll('#pave input:checked').forEach(x=>p[x.name]=x.value); d.pave=p; localStorage.setItem(KEY,JSON.stringify(d)); }catch(e){} }
+function load(){ $('date').value=new Date().toISOString().slice(0,10); try{ const d=JSON.parse(localStorage.getItem(KEY)); if(!d) return; SAVE_IDS.forEach(i=>{ if(i in d) $(i).value=d[i]; }); RADIOS.forEach(r=>{ const x=document.querySelector(`input[name="${r}"][value="${d['r_'+r]??''}"]`); if(x) x.checked=true; }); Object.entries(d.pave||{}).forEach(([k,v])=>{ const x=document.querySelector(`input[name="${k}"][value="${v}"]`); if(x) x.checked=true; }); }catch(e){} }
+function resetAll(){ if(!confirm('Clear this assessment?')) return; localStorage.removeItem(KEY); ['etd','student','cfi','dest','wxraw','rwy'].forEach(i=>$(i).value=''); $('dep').value='KLAL'; $('wxout').hidden=true; document.querySelector('input[name="ftype"][value="dual"]').checked=true; renderPave($('pave')); load(); calc(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function readWx(){
+  const raw=$('wxraw').value; const out=$('wxout'); out.hidden=false;
+  const r=analyzeWx(raw,null,$('rwy').value);
+  if(!r){ out.innerHTML='<div class="err">Could not read a METAR or TAF from that text.</div>'; return; }
+  const pv=$('pave'); const notes=[];
+  const wxLv=r.cat==='VFR'?(r.clearAndTen?1:2):r.cat==='MVFR'?2:r.cat==='IFR'?3:5;
+  if(setPave(pv,'env','wx',wxLv)) notes.push(`Weather row set to ${wxLv}: ${PAVE[2].items.find(i=>i.id==='wx').lv[wxLv-1]}`);
+  if(r.wind&&r.wind.windSpd!==null){ const s=r.wind.windSpd,g=r.wind.gust; let wl=(s<=6&&!g)?1:(!g?2:(g-s>=10?4:3));
+    const xw=crosswind(r.wind.windDir,s,g,$('rwy').value); const lim=parseFloat($('pxw').value);
+    if(xw){ notes.push(`Crosswind on runway ${$('rwy').value.toUpperCase()}: ${xw.xw} kt${g?' (gust)':''}, ${xw.hw>=0?'headwind':'tailwind'} ${Math.abs(xw.hw)} kt`); if(!isNaN(lim)&&xw.xw>lim){ wl=5; notes.push(`Crosswind exceeds your ${lim} kt maximum — wind row set to 5 (No-Go).`); } }
+    if(setPave(pv,'env','wind',wl)) notes.push(`Wind row set to ${wl}: ${PAVE[2].items.find(i=>i.id==='wind').lv[wl-1]}`); }
+  if(r.conv) notes.push('Convective or icing weather reported — review the weather row and your minimums.');
+  out.innerHTML=`<div class="lead">${r.cat}</div><ul>${r.notes.map(x=>`<li>${x}</li>`).join('')}${notes.map(x=>`<li>${x}</li>`).join('')}<li>${r.hazards.length?'Significant weather: '+r.hazards.join(', '):'No significant weather reported.'}</li></ul>`;
+  calc(); document.getElementById('pcat-env').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function calc(){
+  const dual=document.querySelector('input[name="ftype"]:checked').value==='dual'; document.body.classList.toggle('dual',dual);
+  const t=paveTotals($('pave')); const final=dual&&t.cfiAny?t.cfi:t.stu; const b=band(final);
+  ['b1','b2','b3'].forEach(k=>$(k).classList.toggle('on',b.key===k));
+  const soloBlocked=!dual&&final>=50;
+  $('paveKv').innerHTML=`<div>Student total</div><div>${t.stu}</div>`+(dual?`<div>CFI total</div><div>${t.cfiAny?t.cfi+(t.cfiN<t.total?` (${t.cfiN} of ${t.total} rated; the rest use the student's rating)`:''):'—'}</div><div>Difference between totals</div><div>${t.cfiAny?t.stu-t.cfi:'—'}</div>`:'')+`<div>Final flight risk</div><div class="${b.cls==='good'?'ok':'warn'}">${final} · ${b.name}</div>`+(t.noGo.length?`<div class="muted warn">No-Go items: ${t.noGo.join(', ')}.</div>`:'')+(soloBlocked?`<div class="muted warn">Solo flight is not authorized in the elevated or high range — fly dual or reduce the risk.</div>`:'');
+  $('gRisk').textContent=final; $('bar').className='bar '+((t.noGo.length||soloBlocked)?'bad':b.cls==='good'?'':b.cls==='warn2'?'mod':'bad');
+  $('gName').textContent=t.noGo.length?'No-Go item':b.name;
+  $('gWhy').textContent=t.noGo.length?t.noGo.join(', '):soloBlocked?'Solo not authorized at this level':b.key==='b1'?'Go — brief your diversions and minimums.':b.key==='b2'?'CFI review; dual only.':'Talk it through or change the plan.';
+  save();
+}
+renderPave($('pave')); load();
+document.querySelectorAll('input,textarea').forEach(el=>{ if(el.id!=='wxraw') el.addEventListener('input',calc); el.addEventListener('change',calc); });
+calc();
 </script>
 </body>
 </html>
