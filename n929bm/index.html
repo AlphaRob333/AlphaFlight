@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>N929BM Dispatch</title>
+<meta name="description" content="Flight dispatch form for N929BM (Cessna 172M, KLAL): weight and balance, speeds, density altitude, crosswind, and the Jeremy & Kilo preflight risk assessment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2; --paper-2:#FFFFFF; --ink:#16212B; --ink-2:#4A5862; --line:#C9D1D8;
+  --chart:#1F5F8B; --chart-soft:#DCE8F1;
+  --low:#2E7D4F; --low-soft:#DCEFE3; --mod:#B9770E; --mod-soft:#FBEAC7; --high:#B3261E; --high-soft:#F8D9D6;
+  --util:#6B5CA5;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --paper:#161C22; --paper-2:#1F262E; --ink:#E6EBEF; --ink-2:#A3AEB8; --line:#36414B;
+  --chart:#6FB1E0; --chart-soft:#243543;
+  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320; --util:#A99BE0;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark; --paper:#161C22; --paper-2:#1F262E; --ink:#E6EBEF; --ink-2:#A3AEB8; --line:#36414B;
+  --chart:#6FB1E0; --chart-soft:#243543;
+  --low:#5FC98A; --low-soft:#1E3A2B; --mod:#E8B04E; --mod-soft:#3F3119; --high:#F0766E; --high-soft:#452320; --util:#A99BE0;
+}
+*{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45;padding-bottom:120px}
+h1,h2,h3,.cond{font-family:"Barlow Semi Condensed","Barlow",system-ui,sans-serif;margin:0}
+main{max-width:680px;margin:0 auto;padding:16px 16px 24px}
+header{border-bottom:3px solid var(--ink);padding:12px 0 14px;margin-bottom:8px}
+header .kicker{font-size:13px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em}
+header h1{font-size:32px;font-weight:700;line-height:1;letter-spacing:-.01em}
+header p{margin:6px 0 0;color:var(--ink-2);font-size:15px;max-width:60ch}
+a{color:var(--chart)}
+section{margin-top:18px;border:1px solid var(--line);border-radius:6px;background:var(--paper-2);padding:12px}
+section h2{font-size:21px;font-weight:600;margin-bottom:4px}
+section h3{font-size:16px;font-weight:600;margin:14px 0 6px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+section .help{margin:0 0 10px;font-size:14px;color:var(--ink-2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.wide{grid-column:1/-1}
+label.f{display:block;min-width:0}
+label.f span{display:block;font-size:13px;color:var(--ink-2);margin-bottom:4px}
+label.f small{display:block;font-size:12px;color:var(--ink-2);margin-top:3px}
+input[type=number],input[type=text],input[type=date],input[type=time],select,textarea{width:100%;font:inherit;font-size:17px;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink)}
+input.up{text-transform:uppercase}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;resize:vertical;text-transform:uppercase}
+input[type=range]{width:100%;accent-color:var(--chart);margin:6px 0 2px}
+.chk{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--paper);border:1px solid var(--line);border-radius:4px;font-size:15px}
+.chk input{width:18px;height:18px;accent-color:var(--chart);margin:0;flex:none}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg label{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 8px;border:1px solid var(--line);border-radius:4px;background:var(--paper);font-size:15px;cursor:pointer;min-width:90px}
+.seg label:has(input:checked){border-color:var(--chart);background:var(--chart-soft);font-weight:600}
+.seg input{width:16px;height:16px;accent-color:var(--chart);margin:0}
+.warn{color:var(--high);font-size:13px;margin-top:4px}
+.ok{color:var(--low)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+th,td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-weight:600;color:var(--ink-2);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+tr.sub td{font-weight:600;background:var(--paper)}
+tr.tot td{font-weight:700;border-top:2px solid var(--ink);border-bottom:0}
+.num{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600}
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.pill{border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--paper);min-width:0}
+.pill .t{font-size:12px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+.pill .w{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:22px;line-height:1.1}
+.pill .c{font-size:13px;color:var(--ink-2)}
+.pill.good{border-color:var(--low);background:var(--low-soft)} .pill.good .w{color:var(--low)}
+.pill.bad{border-color:var(--high);background:var(--high-soft)} .pill.bad .w{color:var(--high)}
+.pill.warn2{border-color:var(--mod);background:var(--mod-soft)} .pill.warn2 .w{color:var(--mod)}
+.env{margin-top:10px}
+.env svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--ink-2);margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:15px;margin-top:6px}
+.kv div:nth-child(even){font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;text-align:right}
+.kv .muted{color:var(--ink-2);font-size:13px;grid-column:1/-1;margin-top:-2px}
+/* PAVE matrix */
+.pave .cat{margin-top:16px}
+.pave .cat h3{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 6px;color:var(--ink);text-transform:none;letter-spacing:0;font-size:18px}
+.pave .cat h3 b{font-family:"Barlow Semi Condensed",sans-serif;font-size:15px;color:var(--ink-2)}
+.item{border-top:1px solid var(--line);padding:9px 0 10px}
+.item .q{font-weight:600;font-size:15px;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.item .q small{font-weight:500;color:var(--ink-2);white-space:nowrap}
+.lv{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.lv label{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 3px;border:1px solid var(--line);border-radius:4px;background:var(--paper);cursor:pointer;text-align:center;min-width:0}
+.lv label b{font-family:"Barlow Semi Condensed",sans-serif;font-size:17px;line-height:1}
+.lv label span{font-size:11px;line-height:1.2;color:var(--ink-2)}
+.lv label input{position:absolute;opacity:0;width:0;height:0}
+.lv label.na{opacity:.35;cursor:default}
+.lv label:has(input:checked){border-color:var(--chart);background:var(--chart-soft)}
+.lv label:has(input:checked) span{color:var(--ink)}
+.lv label.l5:has(input:checked){border-color:var(--high);background:var(--high-soft)}
+.lv label.l4:has(input:checked){border-color:var(--mod);background:var(--mod-soft)}
+.lv.cfi label:has(input:checked){border-color:var(--util);background:transparent;box-shadow:inset 0 0 0 1px var(--util)}
+.who{display:flex;gap:6px;margin-top:4px}
+.who label{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:4px}
+.cfirow{margin-top:5px;display:none}
+.dual .cfirow{display:block}
+.cfirow .tag{font-size:11px;color:var(--util);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.bands{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px;font-size:13px}
+.bands div{padding:6px 8px;border-radius:4px;border:1px solid var(--line);text-align:center}
+.bands .b1{background:var(--low-soft);color:var(--low)} .bands .b2{background:var(--mod-soft);color:var(--mod)} .bands .b3{background:var(--high-soft);color:var(--high)}
+.bands div.on{outline:2px solid currentColor}
+/* bottom bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper-2);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.bar-in{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.gauge{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:32px;line-height:1;color:var(--low);white-space:nowrap}
+.gauge small{font-size:13px;color:var(--ink-2);font-weight:500}
+.level{flex:1;min-width:0}
+.level .name{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:19px;line-height:1.1;color:var(--low)}
+.level .why{font-size:12px;color:var(--ink-2);line-height:1.25}
+.bar.mod .gauge,.bar.mod .name{color:var(--mod)} .bar.bad .gauge,.bar.bad .name{color:var(--high)}
+.btn{font:inherit;font-weight:600;font-size:15px;padding:10px 14px;border-radius:4px;border:0;background:var(--ink);color:var(--paper);cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+details{margin-top:14px;font-size:14px;color:var(--ink-2)}
+details summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.note{font-size:13px;color:var(--ink-2);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sig div{border-bottom:1px solid var(--ink);padding:22px 0 4px;font-size:12px;color:var(--ink-2)}
+.wxout{margin-top:12px;font-size:14px;border-top:1px solid var(--line);padding-top:10px}
+.wxout .lead{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:18px}
+.wxout ul{margin:6px 0 0;padding-left:18px} .wxout li{margin:3px 0}
+.wxout .err{color:var(--high)}
+@media (max-width:460px){ header h1{font-size:28px} .grid3{grid-template-columns:1fr 1fr} .pills{gap:6px} .pill .w{font-size:19px} .lv label span{font-size:10px} }
+@media print{ .bar,.actions,input[type=range],.help,.wxhelp{display:none} body{padding-bottom:0;background:#fff;color:#000} section{break-inside:avoid;border-color:#999} .lv label{border-color:#999} .lv label:has(input:checked){background:#ddd} main{max-width:none} }
+
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="kicker"><a href="../">AlphaFlight</a> · Jeremy &amp; Kilo Aviation · Cessna 172M · KLAL</div>
+  <h1>N929BM Flight Dispatch</h1>
+  <p>Weight and balance, performance numbers, and the preflight risk assessment for this airplane, laid out like the school's dispatch form. Everything you type is kept on this phone. Print it for the instructor's signature.</p>
+</header>
+
+<section>
+  <h2>Flight</h2>
+  <div class="grid">
+    <label class="f"><span>Date</span><input type="date" id="date"></label>
+    <label class="f"><span>Departure time (local)</span><input type="time" id="etd"></label>
+    <label class="f"><span>Student / PIC</span><input type="text" id="student" autocomplete="name"></label>
+    <label class="f"><span>Instructor</span><input type="text" id="cfi"></label>
+    <div class="wide seg" id="ftype">
+      <label><input type="radio" name="ftype" value="dual" checked>Dual flight</label>
+      <label><input type="radio" name="ftype" value="solo">Solo flight</label>
+      <label><input type="checkbox" id="insured">Insured</label>
+    </div>
+    <label class="f"><span>Departure airport</span><input type="text" id="dep" class="up" value="KLAL" maxlength="4"></label>
+    <label class="f"><span>Destination airport</span><input type="text" id="dest" class="up" maxlength="4" placeholder="KLAL"></label>
+    <div class="wide seg" id="parea">
+      <label><input type="radio" name="parea" value="">No practice area</label>
+      <label><input type="radio" name="parea" value="A">Area A</label>
+      <label><input type="radio" name="parea" value="B">Area B</label>
+      <label><input type="radio" name="parea" value="C">Area C</label>
+    </div>
+    <label class="f wide"><span>Route of flight</span><input type="text" id="route" class="up" placeholder="KLAL – PRACTICE AREA A – KLAL"></label>
+    <label class="f"><span>Estimated time en route (hrs)</span><input type="number" id="ete" step="0.1" inputmode="decimal" placeholder="1.2"></label>
+    <label class="f"><span>Estimated time of arrival (local)</span><input type="time" id="eta"></label>
+  </div>
+</section>
+
+<section>
+  <h2>Airplane</h2>
+  <p class="help">From the airplane's current weight-and-balance record. Saved on this phone once set.</p>
+  <div class="grid">
+    <label class="f"><span>Basic empty weight (lb)</span><input type="number" id="ew" step="0.1" inputmode="decimal"><small>School fleet page: 1,514 lb</small></label>
+    <label class="f"><span>Empty CG arm (in)</span><input type="number" id="ea" step="0.01" inputmode="decimal"><small id="eaNote"></small></label>
+    <label class="chk wide"><input type="checkbox" id="oilIn"><span>Empty weight already includes full oil</span></label>
+    <label class="f"><span>Oil (qt)</span><input type="number" id="oil" step="1" inputmode="numeric"><small>7.5 lb/gal · only added if the box is unchecked</small></label>
+    <label class="f"><span>Fuel burn (gph)</span><input type="number" id="gph" step="0.1" inputmode="decimal"><small>For trip fuel and reserve</small></label>
+  </div>
+  <div id="eaWarn" class="warn" hidden>The empty CG arm is a placeholder. Replace it with the arm (or moment ÷ weight) from the airplane's W&amp;B record before relying on the CG.</div>
+</section>
+
+<section>
+  <h2>Weight &amp; balance</h2>
+  <div class="grid">
+    <label class="f"><span>Pilot (lb)</span><input type="number" id="pilot" step="1" inputmode="numeric"></label>
+    <label class="f"><span>Instructor / front passenger (lb)</span><input type="number" id="fpax" step="1" inputmode="numeric"></label>
+    <label class="f"><span>Rear passenger 1 (lb)</span><input type="number" id="rpax1" step="1" inputmode="numeric"></label>
+    <label class="f"><span>Rear passenger 2 (lb)</span><input type="number" id="rpax2" step="1" inputmode="numeric"></label>
+    <label class="f"><span>Baggage area 1 (lb)</span><input type="number" id="bag1" step="1" inputmode="numeric"><small>Max 120 lb</small></label>
+    <label class="f"><span>Baggage area 2 (lb)</span><input type="number" id="bag2" step="1" inputmode="numeric"><small>Max 50 lb · 120 lb combined</small></label>
+    <label class="f wide"><span>Fuel on board at start: <b id="fuelLbl" class="num"></b></span><input type="range" id="fuel" min="0" max="38" step="1"><small>Usable capacity 38 gal · 6 lb/gal</small></label>
+    <label class="f"><span>Taxi fuel (gal)</span><input type="number" id="taxi" step="0.1" inputmode="decimal"><small>Start, taxi, run-up</small></label>
+    <label class="f"><span>Trip fuel (gal)</span><input type="number" id="trip" step="0.1" inputmode="decimal"><small id="tripNote">ETE × burn</small></label>
+  </div>
+  <div id="bagWarn" class="warn" hidden></div>
+  <table id="tbl"><thead><tr><th>Item</th><th>Weight</th><th>Arm</th><th>Moment</th></tr></thead><tbody></tbody></table>
+  <div class="pills" id="pills"></div>
+  <div class="env" id="env"></div>
+  <div class="legend">
+    <span><i style="background:var(--chart-soft);border:1px solid var(--chart)"></i>Normal category</span>
+    <span><i style="background:transparent;border:1px dashed var(--util)"></i>Utility category</span>
+    <span>● takeoff &nbsp;◆ landing &nbsp;▲ zero fuel</span>
+  </div>
+  <div class="kv" id="fuelKv"></div>
+</section>
+
+<section>
+  <h2>Speeds &amp; limits</h2>
+  <div class="kv" id="speeds"></div>
+</section>
+
+<section>
+  <h2>Atmosphere &amp; wind</h2>
+  <p class="help">Paste the METAR for the departure field to fill the altimeter, temperature and wind, or type them. Runway numbers give the crosswind and headwind components.</p>
+  <textarea id="wxraw" rows="3" placeholder="KLAL 171853Z 09012G18KT 10SM BKN050 28/21 A3002" spellcheck="false"></textarea>
+  <div class="actions" style="margin-top:8px"><button class="btn" type="button" onclick="readWx()">Read METAR</button></div>
+  <div id="wxout" class="wxout" hidden></div>
+  <div class="grid3" style="margin-top:10px">
+    <label class="f"><span>Field elevation (ft)</span><input type="number" id="elev" step="1" inputmode="numeric"></label>
+    <label class="f"><span>Altimeter (inHg)</span><input type="number" id="alt" step="0.01" inputmode="decimal" placeholder="29.92"></label>
+    <label class="f"><span>OAT (°C)</span><input type="number" id="oat" step="1" inputmode="numeric" placeholder="15"></label>
+  </div>
+  <div class="kv" id="atmos"></div>
+  <h3>Departure wind</h3>
+  <div class="grid3">
+    <label class="f"><span>Wind from (°)</span><input type="number" id="dwd" step="10" inputmode="numeric" placeholder="090"></label>
+    <label class="f"><span>Speed / gust (kt)</span><div style="display:flex;gap:6px"><input type="number" id="dws" step="1" inputmode="numeric" placeholder="12"><input type="number" id="dwg" step="1" inputmode="numeric" placeholder="G"></div></label>
+    <label class="f"><span>Runway</span><input type="text" id="drwy" class="up" maxlength="3" placeholder="09"></label>
+  </div>
+  <div class="kv" id="dxw"></div>
+  <h3>Arrival wind</h3>
+  <div class="grid3">
+    <label class="f"><span>Wind from (°)</span><input type="number" id="awd" step="10" inputmode="numeric"></label>
+    <label class="f"><span>Speed / gust (kt)</span><div style="display:flex;gap:6px"><input type="number" id="aws" step="1" inputmode="numeric"><input type="number" id="awg" step="1" inputmode="numeric" placeholder="G"></div></label>
+    <label class="f"><span>Runway</span><input type="text" id="arwy" class="up" maxlength="3"></label>
+  </div>
+  <div class="kv" id="axw"></div>
+  <label class="f" style="margin-top:10px"><span>Personal minimum: max crosswind (kt)</span><input type="number" id="pxw" step="1" inputmode="numeric"></label>
+</section>
+
+<section>
+  <h2>Takeoff &amp; landing data</h2>
+  <p class="help">Computed from the POH tables at the pressure altitude, temperature and takeoff weight above (interpolated between table rows, zero wind). You can overwrite any figure with the one you read from the book.</p>
+  <div class="grid">
+    <label class="chk"><input type="checkbox" id="grass"><span>Dry grass runway</span></label>
+    <div><button class="btn" type="button" onclick="fillPerf()" style="width:100%">Compute from POH</button></div>
+    <label class="f"><span>Takeoff ground roll (ft)</span><input type="number" id="togr" step="10" inputmode="numeric"></label>
+    <label class="f"><span>Takeoff over 50 ft obstacle (ft)</span><input type="number" id="to50" step="10" inputmode="numeric"></label>
+    <label class="f"><span>Landing ground roll (ft)</span><input type="number" id="ldgr" step="10" inputmode="numeric"></label>
+    <label class="f"><span>Landing over 50 ft obstacle (ft)</span><input type="number" id="ld50" step="10" inputmode="numeric"></label>
+    <label class="f"><span>Length of shortest runway (ft)</span><input type="number" id="rwylen" step="10" inputmode="numeric"></label>
+    <label class="f"><span>Accelerate-stop (ft)</span><input type="number" id="accstop" step="10" inputmode="numeric" readonly><small>Takeoff ground roll + landing ground roll</small></label>
+  </div>
+  <div class="kv" id="perfKv"></div>
+  <div id="perfNotes" class="help" style="margin-top:8px"></div>
+</section>
+
+<section>
+  <h2>Preflight</h2>
+  <div class="grid">
+    <div class="wide seg"><label><input type="radio" name="brief" value="standard">Standard briefing</label><label><input type="radio" name="brief" value="abbrev">Abbreviated briefing</label><label><input type="radio" name="brief" value="" checked>No briefing yet</label></div>
+    <label class="chk"><input type="checkbox" id="notams"><span>NOTAMs / TFRs checked</span></label>
+    <label class="chk"><input type="checkbox" id="fuelreq"><span>Fuel required confirmed</span></label>
+    <label class="chk"><input type="checkbox" id="navlog"><span>Nav log, charts, plates, supplements current</span></label>
+    <label class="chk"><input type="checkbox" id="perfdone"><span>Performance numbers done</span></label>
+  </div>
+</section>
+
+<section class="pave" id="paveSec">
+  <h2>Preflight risk assessment</h2>
+  <p class="help">Rate each item 1 to 5. A 5 is a No-Go. Total 25–49 is normal, 50–74 elevated, 75 and above high. In the elevated or high range solo flight is not authorized; on a dual flight the CFI rates the same items to transfer some of the risk.</p>
+  <div id="pave"></div>
+  <div class="bands"><div class="b1" id="b1">Normal 25–49</div><div class="b2" id="b2">Elevated 50–74</div><div class="b3" id="b3">High 75+</div></div>
+  <div class="kv" id="paveKv"></div>
+  <div class="sig"><div>Instructor signature</div><div>Student signature</div></div>
+  <div class="actions"><button class="btn ghost" type="button" onclick="window.print()">Print</button><button class="btn ghost" type="button" onclick="resetFlight()">New flight</button></div>
+  <details><summary>Stations, limits and formulas</summary><div id="limits"></div></details>
+  <p class="note">91.103 — Each pilot in command shall, before beginning a flight, become familiar with all available information concerning that flight: weather reports and forecasts, fuel requirements, alternatives available, traffic delays, and runway lengths and takeoff and landing distances. This page is a planning aid; the POH and the airplane's W&amp;B record govern.</p>
+</section>
+</main>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="gauge" id="gRisk">0</div>
+    <div class="level"><div class="name" id="gName">—</div><div class="why" id="gWhy"></div></div>
+    <a class="btn" href="../">Risk form</a>
+  </div>
+</div>
+
+<script>
+const AC = {"arms": {"front": 37.0, "rear": 73.0, "fuel": 48.0, "bag1": 95.0, "bag2": 123.0, "oil": -14.0}, "normal": {"maxW": 2300, "fwd": [[1950, 35.0], [2300, 38.5]], "aft": 47.3}, "utility": {"maxW": 2000, "fwd": [[1950, 35.0], [2000, 35.5]], "aft": 40.5}, "maxRamp": 2300, "maxLanding": 2300, "bag1Max": 120, "bag2Max": 50, "bagMax": 120, "datum": "front face of firewall", "fieldElev": 142, "taxiFuel": 1.1, "gph": 8.5, "reserveHrs": 1.0, "personalXw": 12, "oilQts": 8, "emptyArm": 39.5, "emptyArmIsPlaceholder": true, "tail": "N929BM", "model": "172M", "speeds": {"mph": true, "vaMax": 97, "vaMaxMph": 112, "rows": [["Lift nose wheel (normal takeoff)", "60 mph \u00b7 52 kt"], ["Vx \u2014 best angle (max performance climb)", "68 mph \u00b7 59 kt"], ["Vy \u2014 best rate (sea level, 2300 lb)", "91 mph \u00b7 79 kt"], ["Best glide", "80 mph \u00b7 70 kt"], ["Vfe \u2014 flaps extended", "100 mph \u00b7 87 kt"], ["Vno / Vne", "145 / 182 mph \u00b7 126 / 158 kt"], ["Max demonstrated crosswind", "15 kt"]], "note": "1975 172 Owner's Manual, Section IV (CAS, mph)"}, "emptyWeight": 1514, "oilIncluded": false, "usableFuel": 38, "totalFuel": 42, "notes": "The fleet page lists 1,514 lb as \"aircraft empty weight\". The 1975 owner's manual uses a licensed empty weight that excludes engine oil (8 qt = 15 lb at \u221214 in), so oil is added separately unless you tick the box. Speeds are the owner's manual CAS values in mph with knots alongside; this airplane has the 160 hp conversion, which does not change the published limits."};
+// ---- Weather parsing: raw METAR/TAF code or plain-English decoded text ----
+const MONTHS={JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
+function emptyG(){ return {windDir:null,windSpd:null,gust:null,vis:null,ceiling:null,wx:[]}; }
+
+// Raw code groups (tokens)
+function parseGroups(tokens){
+  const g=emptyG();
+  for(let i=0;i<tokens.length;i++){
+    const t=tokens[i]; let m;
+    if((m=t.match(/^(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT$/))){ g.windDir=m[1]==='VRB'?'VRB':+m[1]; g.windSpd=+m[2]; g.gust=m[3]?+m[3]:null; continue; }
+    if(t==='CAVOK'){ g.vis=10; continue; }
+    if((m=t.match(/^P(\d+)SM$/))){ g.vis=+m[1]+0.01; continue; }
+    if((m=t.match(/^M?(\d+)\/(\d+)SM$/))){ const base=(tokens[i-1]&&/^\d$/.test(tokens[i-1]))?+tokens[i-1]:0; g.vis=base+(+m[1])/(+m[2]); continue; }
+    if((m=t.match(/^(\d+)SM$/))){ g.vis=+m[1]; continue; }
+    if((m=t.match(/^(BKN|OVC)(\d{3})/))){ const h=+m[2]*100; if(g.ceiling===null||h<g.ceiling) g.ceiling=h; continue; }
+    if((m=t.match(/^VV(\d{3})$/))){ const h=+m[1]*100; if(g.ceiling===null||h<g.ceiling) g.ceiling=h; continue; }
+    if(/^[+-]?(VC)?(TS|FZ|SH|RA|SN|DZ|FG|BR|HZ|GR|GS|PL|IC|UP|SQ|FC|DS|SS|SA|DU|PO|VA|MI|BC|PR|DR|BL)+$/.test(t)){ g.wx.push(t); }
+  }
+  return g;
+}
+
+// Plain-English groups (a sentence like "Wind from 290° at 5 knots, greater than 6 statute miles visibility, ...")
+const WX_WORDS=['THUNDERSTORM','FREEZING','HAIL','ICE PELLET','SNOW','HEAVY','RAIN','DRIZZLE','SHOWER','FOG','MIST','HAZE','SMOKE','SQUALL','FUNNEL','TORNADO','VOLCANIC','DUST','SAND','CUMULONIMBUS','TOWERING'];
+function parseEnglish(text){
+  const g=emptyG(); const T=text.toUpperCase(); let m;
+  if((m=T.match(/WIND (?:FROM |IS )?(\d{3})°? AT (\d+) KNOTS?(?: GUSTING(?: TO)? (\d+) KNOTS?)?/))){ g.windDir=+m[1]; g.windSpd=+m[2]; g.gust=m[3]?+m[3]:null; }
+  else if((m=T.match(/WIND (?:IS )?VARIABLE AT (\d+) KNOTS?(?: GUSTING(?: TO)? (\d+) KNOTS?)?/))){ g.windDir='VRB'; g.windSpd=+m[1]; g.gust=m[2]?+m[2]:null; }
+  else if(/WIND(?:S)? (?:IS |ARE )?CALM|CALM WIND/.test(T)){ g.windDir=0; g.windSpd=0; }
+  if((m=T.match(/GREATER THAN (\d+) STATUTE MILES? VISIBILITY/))){ g.vis=+m[1]+0.01; }
+  else if((m=T.match(/LESS THAN (\d+(?:\/\d+)?) STATUTE MILES? VISIBILITY/))){ g.vis=frac(m[1])-0.01; }
+  else if((m=T.match(/(\d+ \d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?) STATUTE MILES? VISIBILITY/))){ g.vis=frac(m[1]); }
+  const re=/(BROKEN|OVERCAST|VERTICAL VISIBILITY|INDEFINITE CEILING)(?: AT| OF)? ([\d,]+) FEET/g;
+  while((m=re.exec(T))){ const h=+m[2].replace(/,/g,''); if(g.ceiling===null||h<g.ceiling) g.ceiling=h; }
+  WX_WORDS.forEach(w=>{ if(T.includes(w)) g.wx.push(w.charAt(0)+w.slice(1).toLowerCase()); });
+  if(/THUNDERSTORMS? IN THE VICINITY/.test(T)) g.wx=g.wx.map(w=>w==='Thunderstorm'?'Thunderstorms in the vicinity':w);
+  return g;
+}
+function frac(s){ const p=s.trim().split(' '); let v=0; p.forEach(x=>{ if(x.includes('/')){ const [a,b]=x.split('/'); v+= +a/+b; } else v+= +x; }); return v; }
+function engTime(str,year){ const m=str.match(/([A-Z]{3})\.? (\d{1,2}) AT (\d{2})(\d{2})Z/); if(!m) return null; return Date.UTC(year,MONTHS[m[1]],+m[2],+m[3],+m[4]); }
+
+function category(c,v){
+  const ceil=c===null?99999:c, vis=v===null?99:v;
+  if(ceil<500||vis<1) return 'LIFR'; if(ceil<1000||vis<3) return 'IFR'; if(ceil<=3000||vis<=5) return 'MVFR'; return 'VFR';
+}
+function worse(a,b){ const o=['VFR','MVFR','IFR','LIFR']; return o[Math.max(o.indexOf(a),o.indexOf(b))]; }
+function windStr(g){ if(!g||g.windSpd===null) return ''; return `wind ${g.windDir==='VRB'?'variable':g.windSpd===0?'calm':String(g.windDir).padStart(3,'0')+'°'}${g.windSpd?` at ${g.windSpd}${g.gust?' gusting '+g.gust:''} kt`:''}`; }
+function visStr(v){ return v===null?'?':v>=10?'10+':v>6?'6+':v.toFixed(1).replace(/\.0$/,''); }
+
+// Build a common model: {metar: groups|null, periods:[{kind,start,end,groups}]}, times in ms (UTC)
+function buildModel(raw, depDate){
+  const year=(depDate||new Date()).getUTCFullYear();
+  const model={metar:null,periods:[],english:false};
+  const U=raw.toUpperCase();
+  if(/TERMINAL FORECAST|STATUTE MILE|WIND FROM|WIND IS/.test(U)){
+    model.english=true;
+    const tfIdx=U.search(/TERMINAL FORECAST/);
+    const obs=tfIdx===-1?raw:raw.slice(0,tfIdx);
+    const taf=tfIdx===-1?'':raw.slice(tfIdx);
+    if(/WIND|VISIBILITY/i.test(obs)) model.metar=parseEnglish(obs);
+    if(taf){
+      // split into clauses on period keywords
+      const re=/(TEMPORARILY FROM|TEMPORARY FROM|BECOMING FROM|BECOMING BETWEEN|PROBABILITY \d+% FROM|PROBABILITY OF \d+% FROM|\d+% PROBABILITY FROM|FROM|VALID FROM) ([A-Z]{3}\.? \d{1,2} AT \d{4}Z)(?: (?:UNTIL|TO) ([A-Z]{3}\.? \d{1,2} AT \d{4}Z))?/gi;
+      const hits=[]; let m;
+      while((m=re.exec(taf))){ hits.push({idx:m.index,len:m[0].length,kw:m[1].toUpperCase(),s:m[2].toUpperCase(),e:m[3]?m[3].toUpperCase():null}); }
+      hits.forEach((h,i)=>{
+        const body=taf.slice(h.idx+h.len, i+1<hits.length?hits[i+1].idx:undefined);
+        let kind='FM';
+        if(h.kw.startsWith('VALID')) kind='BASE'; else if(h.kw.startsWith('TEMPOR')) kind='TEMPO'; else if(h.kw.startsWith('BECOMING')) kind='BECMG'; else if(/PROBAB/.test(h.kw)) kind=h.kw.match(/\d+/)[0]+'% probability';
+        model.periods.push({kind,start:engTime(h.s,year),end:h.e?engTime(h.e,year):null,groups:parseEnglish(body)});
+      });
+    }
+  } else {
+    const toks=U.replace(/\s+/g,' ').trim().split(' ');
+    const tafIdx=toks.indexOf('TAF');
+    const metarToks=tafIdx===-1?toks:toks.slice(0,tafIdx);
+    const tafToks=tafIdx===-1?[]:toks.slice(tafIdx);
+    if(metarToks.some(t=>/^\d{6}Z$/.test(t))) model.metar=parseGroups(metarToks);
+    if(tafToks.length){
+      const mo=(depDate||new Date()).getUTCMonth();
+      const abs=(d,h,mi=0)=>Date.UTC(year,mo,d,h,mi);
+      let cur={kind:'BASE',start:null,end:null,toks:[]};
+      for(let i=0;i<tafToks.length;i++){
+        const t=tafToks[i]; let m;
+        if((m=t.match(/^FM(\d{2})(\d{2})(\d{2})$/))){ model.periods.push(cur); cur={kind:'FM',start:abs(+m[1],+m[2],+m[3]),end:null,toks:[]}; continue; }
+        if((t==='TEMPO'||t==='BECMG'||/^PROB\d{2}$/.test(t)) && tafToks[i+1] && /^\d{4}\/\d{4}$/.test(tafToks[i+1])){
+          model.periods.push(cur); const w=tafToks[i+1];
+          cur={kind:t.replace(/^PROB(\d+)$/,'$1% probability'),start:abs(+w.slice(0,2),+w.slice(2,4)),end:abs(+w.slice(5,7),+w.slice(7,9)),toks:[]}; i++; continue; }
+        if(cur.kind==='BASE' && cur.start===null && /^\d{4}\/\d{4}$/.test(t)){ cur.start=abs(+t.slice(0,2),+t.slice(2,4)); cur.end=abs(+t.slice(5,7),+t.slice(7,9)); continue; }
+        cur.toks.push(t);
+      }
+      model.periods.push(cur);
+      model.periods.forEach(p=>{ p.groups=parseGroups(p.toks); delete p.toks; });
+    }
+  }
+  // FM/BASE periods end where the next main period starts
+  const mains=model.periods.filter(p=>p.kind==='BASE'||p.kind==='FM');
+  mains.forEach((p,i)=>{ if(mains[i+1]) p.end=mains[i+1].start; });
+  return model;
+}
+
+
+// Returns {cat, wind:{windDir,windSpd,gust}, xwDep, hazards:[], notes:[], conv} or null
+function analyzeWx(raw, depDate, rwy){
+  raw=(raw||'').replace(/\s+/g,' ').trim(); if(!raw) return null;
+  const model=buildModel(raw,depDate);
+  const notes=[]; let cat=null, wind=null; const hazards=new Set();
+  if(model.metar){ const m=model.metar; const c=category(m.ceiling,m.vis); cat=c; wind=m; m.wx.forEach(w=>hazards.add(w));
+    notes.push(`Current observation: ${c} \u2014 ceiling ${m.ceiling===null?'none':m.ceiling.toLocaleString()+' ft'}, visibility ${visStr(m.vis)} sm, ${windStr(m)||'wind not reported'}${m.wx.length?', '+m.wx.join(', '):''}`); }
+  if(model.periods.length){
+    const mains=model.periods.filter(p=>p.kind==='BASE'||p.kind==='FM'); let applicable=[];
+    if(depDate){ const dep=depDate.getTime(); applicable=model.periods.filter(p=>p.start!==null&&dep>=p.start&&(p.end===null||dep<p.end)); }
+    if(!applicable.length){ applicable=[mains[0]||model.periods[0]]; notes.push(depDate?'Departure time is outside this forecast \u2014 using the first period.':'No departure time set \u2014 using the first forecast period.'); }
+    let tafCat='VFR', tafWind=null;
+    applicable.forEach(p=>{ const g=p.groups; tafCat=worse(tafCat,category(g.ceiling,g.vis)); g.wx.forEach(w=>hazards.add(w)); if(g.windSpd!==null&&(!tafWind||(g.gust||g.windSpd)>(tafWind.gust||tafWind.windSpd))) tafWind=g; });
+    const lowC=Math.min(...applicable.map(p=>p.groups.ceiling===null?Infinity:p.groups.ceiling));
+    notes.push(`Forecast: ${tafCat} \u2014 ceiling ${lowC===Infinity?'none':lowC.toLocaleString()+' ft'}, visibility ${visStr(Math.min(...applicable.map(p=>p.groups.vis===null?99:p.groups.vis)))} sm${tafWind?', '+windStr(tafWind):''}`);
+    cat=cat?worse(cat,tafCat):tafCat;
+    if(!wind||(tafWind&&(tafWind.gust||tafWind.windSpd)>(wind.gust||wind.windSpd))) wind=tafWind||wind;
+  }
+  if(!cat) return null;
+  const haz=[...hazards];
+  const conv=haz.some(w=>/TS|FZ|GR|GS|^\+|Thunderstorm|Freezing|Hail|Heavy|Cumulonimbus|Funnel|Tornado/.test(w));
+  const metar=model.metar;
+  return {cat,wind,hazards:haz,notes,conv,metar,clearAndTen:!!(metar&&metar.ceiling===null&&metar.vis!==null&&metar.vis>10)};
+}
+function crosswind(windDir,spd,gust,rwy){
+  rwy=String(rwy||'').replace(/[LRC]$/i,''); if(!rwy||spd===null||spd===undefined) return null;
+  const s=gust||spd; if(windDir==='VRB') return {xw:s,hw:0,vrb:true};
+  const diff=((windDir-(+rwy*10))%360+360)%360; const r=diff*Math.PI/180;
+  return {xw:Math.round(Math.abs(Math.sin(r))*s),hw:Math.round(Math.cos(r)*s),vrb:false};
+}
+
+// ---- Jeremy & Kilo Aviation Preflight Risk Assessment matrix (PAVE, 1–5 per item; 5 = No-Go) ----
+const PAVE = [
+ {id:'pilot', name:'Pilot', items:[
+   {id:'exp',  q:'Total experience', lv:['>500 hrs','200–500 hrs','100–200 hrs','0–100 hrs',null]},
+   {id:'rec',  q:'Recency (<90 days as PIC)', lv:['>20 hrs','15–20 hrs','3–14 hrs','Dual only',null]},
+   {id:'cur',  q:'Currency', lv:['VFR and IFR',null,'VFR only','Not current – dual only',null]},
+   {id:'emo',  q:'Emotional condition', lv:['Excellent','Good','Average','Fair','Poor']},
+   {id:'phy',  q:'Physical condition', lv:['Excellent','Good','Average','Fair','Poor']},
+   {id:'min',  q:'Minimums', lv:['Well above personal / school minimums','Above personal / school minimums','At personal / school minimums','At regulation minimums','Below minimums']},
+   {id:'alc',  q:'Alcohol / medication', lv:['No factor','Used in last 48 hrs','Used in last 24 hrs','Used in last 12 hrs','Used within last 8 hrs']},
+   {id:'fat',  q:'Fatigue / rest', lv:['>8 hrs sleep','7–8 hrs sleep','6–7 hrs sleep','4–6 hrs sleep','<4 hrs sleep']},
+ ]},
+ {id:'acft', name:'Aircraft', items:[
+   {id:'fuel', q:'Fuel reserves', lv:['Well above minimums','Above minimums',"At school's minimums",'At regulation minimums','Below required minimums']},
+   {id:'tit',  q:'Time in type', lv:['>100 hrs PIC','>50 hrs PIC','10–50 hrs PIC','0–50 total hrs',null]},
+   {id:'perf', q:'Performance', lv:['Well within limits','Within limits','At limits',null,'Outside limits']},
+   {id:'eqp',  q:'Equipment', lv:['Approved GPS, on-board wx, traffic','Approved GPS, OBS','Functional comms & nav','Minimum required','Does not meet 14 CFR 91.205']},
+   {id:'anom', q:'Known anomalies', lv:['None','One, non-essential','Two, non-essential','Multiple non-essential','Any essential']},
+ ]},
+ {id:'env', name:'Environment', items:[
+   {id:'apt',  q:'Airport', lv:['Adequate & familiar','Marginally adequate & familiar','Adequate but unfamiliar',null,'Not adequate']},
+   {id:'wx',   q:'Weather', lv:['Clear & visibility >10 sm','VFR, above school minimums','IFR, above school minimums',null,'Below school minimums']},
+   {id:'wind', q:'Wind', lv:['Light & variable','Mild, steady','Mild, some gusts','Shear & gusts','Below school minimums']},
+   {id:'rwy',  q:'Runways', lv:['Dry, hard, more than adequate','Dry, hard, short but adequate','Preferred rwy closed, adequate rwy available','Wet, hard, adequate','Inadequate']},
+   {id:'lite', q:'Lighting (day VFR = 1)', lv:['Runway, taxiway','Familiar with preferred runway and taxiway','Familiar with preferred runway only','Unfamiliar with preferred rwy and taxiway','None or inop']},
+   {id:'terr', q:'Terrain', lv:['Flat with multiple landing sites','Flat, populated','Flat with obstacles','Mountainous',null]},
+   {id:'asp',  q:'Airspace', lv:['Familiar and proficient','Familiar and experienced','Familiar','Unfamiliar (dual)','Unfamiliar (solo)']},
+   {id:'tod',  q:'Time of day', lv:['Day & night proficient','Day only proficient','Day current','Not current (dual)','Not current (solo)']},
+ ]},
+ {id:'ext', name:'External pressures', items:[
+   {id:'dly',  q:'Delays / diversions', lv:['No pressure','Slight pressure','Inconvenient','Problematic','Not possible']},
+   {id:'alt',  q:'Alternate plans', lv:['No pressure','Slight pressure','Inconvenient','Problematic','Not possible']},
+   {id:'peq',  q:'Personal equipment', lv:['Emergency kit, phone numbers, cell phone','Phone numbers and cell phone',null,null,'None']},
+   {id:'imp',  q:'Importance of flight', lv:['No pressure','Slight pressure','Evaluation','Critical',null]},
+   {id:'cpx',  q:'Flight complexity', lv:['Not complex','Moderate','Evaluation','Severe','Extreme']},
+ ]},
+];
+const BANDS=[{min:0,max:49,name:'Normal risk',cls:'good',key:'b1'},{min:50,max:74,name:'Elevated risk',cls:'warn2',key:'b2'},{min:75,max:999,name:'High risk',cls:'bad',key:'b3'}];
+function band(t){ return BANDS.find(b=>t>=b.min&&t<=b.max); }
+
+function renderPave(root){
+  root.innerHTML='';
+  PAVE.forEach(c=>{
+    const d=document.createElement('div'); d.className='cat'; d.id='pcat-'+c.id;
+    d.innerHTML=`<h3>${c.name}<b id="pcs-${c.id}">0</b></h3>`;
+    c.items.forEach(it=>{
+      const row=(who)=>`<div class="lv ${who}">`+it.lv.map((t,i)=>{ const v=i+1, na=t===null; return `<label class="l${v}${na?' na':''}"><input type="radio" name="p_${who}_${c.id}_${it.id}" value="${v}" ${na?'disabled':''} ${(!na&&v===1&&who==='stu')?'checked':''}><b>${na?'–':v}</b><span>${na?'n/a':t}</span></label>`; }).join('')+`</div>`;
+      const e=document.createElement('div'); e.className='item'; e.id='pitem-'+c.id+'-'+it.id;
+      e.innerHTML=`<div class="q"><span>${it.q}</span><small id="pi-${c.id}-${it.id}"></small></div>`+row('stu')+`<div class="cfirow"><div class="tag">CFI rating</div>${row('cfi')}</div>`;
+      d.appendChild(e);
+    });
+    root.appendChild(d);
+  });
+}
+function paveTotals(root){
+  let stu=0, cfi=0, noGo=[], cfiAny=false, cfiN=0, total=0;
+  PAVE.forEach(c=>{ let cs=0; c.items.forEach(it=>{ total++;
+    const s=root.querySelector(`input[name="p_stu_${c.id}_${it.id}"]:checked`); const sv=s?+s.value:0; cs+=sv; stu+=sv;
+    const k=root.querySelector(`input[name="p_cfi_${c.id}_${it.id}"]:checked`); const kv=k?+k.value:sv; cfi+=kv; if(k){ cfiAny=true; cfiN++; }
+    if(sv===5) noGo.push(it.q);
+    const tag=document.getElementById(`pi-${c.id}-${it.id}`); if(tag) tag.textContent=sv===5?'NO-GO':(sv>=4?'watch':'');
+  }); const el=document.getElementById('pcs-'+c.id); if(el) el.textContent=cs; });
+  return {stu,cfi,cfiAny,cfiN,total,noGo};
+}
+function setPave(root,cat,item,level,who='stu'){ const x=root.querySelector(`input[name="p_${who}_${cat}_${item}"][value="${level}"]`); if(x&&!x.disabled){ x.checked=true; return true; } return false; }
+
+// ---- POH takeoff / landing distance tables (short field, paved, level, dry, zero wind) ----
+const PERF = {
+ // 1978 Cessna 172N POH, Figures 5-4 and 5-10. Rows: pressure altitude 0..8000 ft; columns: 0,10,20,30,40 °C. [ground roll, total over 50 ft]
+ '172N': { kind:'N', temps:[0,10,20,30,40], pas:[0,1000,2000,3000,4000,5000,6000,7000,8000],
+  to:{ 2300:[[[720,1300],[775,1390],[835,1490],[895,1590],[960,1700]],[[790,1420],[850,1525],[915,1630],[980,1745],[1050,1865]],[[865,1555],[930,1670],[1000,1790],[1075,1915],[1155,2055]],[[950,1710],[1025,1835],[1100,1970],[1185,2115],[1270,2265]],[[1045,1880],[1125,2025],[1210,2175],[1300,2335],[1400,2510]],[[1150,2075],[1240,2240],[1335,2410],[1435,2595],[1540,2795]],[[1265,2305],[1365,2485],[1475,2680],[1585,2895],[1705,3125]],[[1400,2565],[1510,2770],[1630,3000],[1755,3245],[1890,3515]],[[1550,2870],[1675,3110],[1805,3375],[1945,3670],[2095,3990]]],
+       2100:[[[585,1070],[630,1140],[680,1220],[725,1300],[780,1390]],[[640,1165],[690,1245],[740,1330],[795,1420],[850,1520]],[[700,1270],[755,1360],[810,1455],[870,1555],[935,1665]],[[770,1390],[830,1490],[890,1595],[955,1710],[1025,1830]],[[845,1525],[910,1640],[980,1755],[1050,1880],[1130,2015]],[[930,1680],[1000,1805],[1075,1935],[1155,2075],[1240,2230]],[[1025,1850],[1100,1990],[1185,2140],[1275,2300],[1370,2475]],[[1130,2050],[1215,2210],[1310,2380],[1410,2560],[1515,2755]],[[1245,2275],[1345,2460],[1450,2655],[1560,2865],[1680,3090]]],
+       1900:[[[470,865],[505,920],[540,985],[580,1045],[620,1115]],[[515,940],[550,1005],[590,1070],[635,1140],[680,1215]],[[560,1025],[605,1095],[645,1170],[695,1245],[745,1330]],[[615,1115],[660,1195],[710,1275],[760,1365],[815,1455]],[[670,1220],[725,1305],[780,1400],[835,1495],[895,1595]],[[740,1340],[795,1435],[855,1535],[920,1640],[985,1755]],[[810,1470],[875,1575],[940,1690],[1010,1810],[1085,1940]],[[895,1620],[965,1740],[1035,1865],[1115,2000],[1195,2145]],[[985,1790],[1065,1925],[1145,2065],[1230,2220],[1320,2385]]] },
+  toSpeeds:{2300:[52,59],2100:[50,56],1900:[47,54]},
+  ldg:{ 2300:[[[495,1205],[510,1235],[530,1265],[545,1295],[565,1330]],[[510,1235],[530,1265],[550,1300],[565,1330],[585,1365]],[[530,1265],[550,1300],[570,1335],[590,1370],[610,1405]],[[550,1300],[570,1335],[590,1370],[610,1405],[630,1440]],[[570,1335],[590,1370],[615,1410],[635,1445],[655,1480]],[[590,1370],[615,1415],[635,1450],[655,1485],[680,1525]],[[615,1415],[640,1455],[660,1490],[685,1535],[705,1570]],[[640,1455],[660,1495],[685,1535],[710,1575],[730,1615]],[[665,1500],[690,1540],[710,1580],[735,1620],[760,1665]]] },
+  ldgSpeed:60, grassTo:0.15, grassLdg:0.45, headwindTo:[10,9], headwindLdg:[10,9],
+  src:'1978 Cessna 172N POH, Section 5, Figures 5-4 (takeoff, short field) and 5-10 (landing, short field)' },
+ // 1975 Cessna 172 / Skyhawk Owner's Manual, Figures 6-3 and 6-5. Columns: SL & 59°F, 2500 ft & 50°F, 5000 ft & 41°F, 7500 ft & 32°F (standard day); zero wind, flaps up.
+ '172M': { kind:'M', alts:[0,2500,5000,7500], stdF:[59,50,41,32],
+  to:{ 2300:[[865,1525],[1040,1910],[1255,2480],[1565,3855]], 2000:[[630,1095],[755,1325],[905,1625],[1120,2155]], 1700:[[435,780],[520,920],[625,1095],[765,1370]] },
+  toSpeeds:{2300:[60,68],2000:[60,63],1700:[60,58]},
+  ldg:{ 2300:[[520,1250],[560,1310],[605,1385],[650,1455]] },
+  ldgSpeed:70, grassTo:0.07, grassLdg:0.20, tempPct:[0.10,25],
+  src:'1975 Cessna 172/Skyhawk Owner\'s Manual, Section VI, Figures 6-3 (take-off data) and 6-5 (landing data)' },
+};
+function lerp(a,b,t){ return a+(b-a)*t; }
+function bracket(arr,x){ if(x<=arr[0]) return [0,0,0]; for(let i=1;i<arr.length;i++){ if(x<=arr[i]) return [i-1,i,(x-arr[i-1])/(arr[i]-arr[i-1])]; } return [arr.length-1,arr.length-1,0]; }
+function weightKeys(tbl){ return Object.keys(tbl).map(Number).sort((a,b)=>a-b); }
+// Interpolate a [gr,obs] cell across weight keys; weight above the heaviest table uses the heaviest (and is flagged).
+function byWeight(tbl,w,cellFn){ const ks=weightKeys(tbl); const wc=Math.min(Math.max(w,ks[0]),ks[ks.length-1]); const [i,j,t]=bracket(ks,wc); const a=cellFn(tbl[ks[i]]), b=cellFn(tbl[ks[j]]); return [lerp(a[0],b[0],t),lerp(a[1],b[1],t)]; }
+function pohDistances(P,{pa,oatC,weight,ldgWeight,grass}){
+  const notes=[]; let to,ld,ex=false;
+  if(P.kind==='N'){
+    const paC=Math.min(Math.max(pa,0),8000); if(pa>8000) notes.push('Pressure altitude above the 8,000 ft table; 8,000 ft used.');
+    const tC=Math.min(Math.max(oatC,0),40); if(oatC>40){ notes.push(`OAT above the 40 °C table; distances increased 10% per 10 °C beyond it.`); ex=true; }
+    const [pi,pj,pt]=bracket(P.pas,paC), [ti,tj,tt]=bracket(P.temps,tC);
+    const cell=(rows)=>{ const r=(row)=>[lerp(row[ti][0],row[tj][0],tt),lerp(row[ti][1],row[tj][1],tt)]; const a=r(rows[pi]),b=r(rows[pj]); return [lerp(a[0],b[0],pt),lerp(a[1],b[1],pt)]; };
+    to=byWeight(P.to,weight,cell); ld=byWeight(P.ldg,ldgWeight,cell);
+    if(ex){ const f=1+0.10*((oatC-40)/10); to=to.map(v=>v*f); ld=ld.map(v=>v*f); }
+    if(weight>2300) notes.push('Takeoff weight above 2,300 lb — table maximum used; the airplane is over gross.');
+    if(weight<1900) notes.push('Takeoff weight below the 1,900 lb table; 1,900 lb figures used (conservative).');
+    notes.push('Landing table is for 2,300 lb (conservative at lighter weights).');
+  } else {
+    const paC=Math.min(Math.max(pa,0),7500); if(pa>7500) notes.push('Pressure altitude above the 7,500 ft table; 7,500 ft used.');
+    const [ai,aj,at]=bracket(P.alts,paC);
+    const cell=(rows)=>[lerp(rows[ai][0],rows[aj][0],at),lerp(rows[ai][1],rows[aj][1],at)];
+    to=byWeight(P.to,weight,cell); ld=byWeight(P.ldg,ldgWeight,cell);
+    const stdF=lerp(P.stdF[ai],P.stdF[aj],at), oatF=oatC*9/5+32;
+    if(oatF>stdF){ const f=1+P.tempPct[0]*((oatF-stdF)/P.tempPct[1]); to=to.map(v=>v*f); ld=ld.map(v=>v*f); notes.push(`OAT ${oatF.toFixed(0)} °F is ${(oatF-stdF).toFixed(0)} °F above the standard ${stdF.toFixed(0)} °F for that altitude: distances increased ${((f-1)*100).toFixed(0)}% (10% per 25 °F, per the manual's note; applied to landing as well for margin).`); }
+    if(weight>2300) notes.push('Takeoff weight above 2,300 lb — table maximum used; the airplane is over gross.');
+    if(weight<1700) notes.push('Takeoff weight below the 1,700 lb table; 1,700 lb figures used (conservative).');
+    notes.push('Landing table is for 2,300 lb (conservative at lighter weights). Table assumes flaps up for takeoff, 40° flaps power-off for landing.');
+  }
+  if(grass){ const g=P.kind==='N'?{to:[to[0]*(1+P.grassTo),to[1]+to[0]*P.grassTo],ld:[ld[0]*(1+P.grassLdg),ld[1]+ld[0]*P.grassLdg]}:{to:[to[0]+to[1]*P.grassTo,to[1]*(1+P.grassTo)],ld:[ld[0]+ld[1]*P.grassLdg,ld[1]*(1+P.grassLdg)]}; to=g.to; ld=g.ld; notes.push('Dry grass correction applied per the POH note.'); }
+  notes.push('Zero wind assumed — no headwind credit taken.');
+  const r=v=>Math.round(v/5)*5;
+  return {togr:r(to[0]),to50:r(to[1]),ldgr:r(ld[0]),ld50:r(ld[1]),notes};
+}
+
+const KEY='dispatch-'+AC.tail;
+const $=id=>document.getElementById(id);
+const n=id=>{ const v=parseFloat($(id).value); return isNaN(v)?NaN:v; };
+const n0=id=>{ const v=n(id); return isNaN(v)?0:v; };
+const SAVE_IDS=['date','etd','student','cfi','insured','dep','dest','route','ete','eta','ew','ea','oilIn','oil','gph','pilot','fpax','rpax1','rpax2','bag1','bag2','fuel','taxi','trip','wxraw','elev','alt','oat','dwd','dws','dwg','drwy','awd','aws','awg','arwy','pxw','togr','to50','ldgr','ld50','rwylen','grass','notams','fuelreq','navlog','perfdone'];
+const RADIOS=['ftype','parea','brief'];
+
+function defaults(){
+  $('ew').value=AC.emptyWeight; $('ea').value=AC.emptyArm; $('oilIn').checked=AC.oilIncluded; $('oil').value=AC.oilQts; $('gph').value=AC.gph;
+  $('fuel').value=AC.usableFuel; $('taxi').value=AC.taxiFuel; $('elev').value=AC.fieldElev; $('pxw').value=AC.personalXw; $('dep').value='KLAL';
+  $('date').value=new Date().toISOString().slice(0,10);
+}
+function save(){ try{ const d={}; SAVE_IDS.forEach(i=>d[i]=$(i).type==='checkbox'?$(i).checked:$(i).value); RADIOS.forEach(r=>{ const x=document.querySelector(`input[name="${r}"]:checked`); d['r_'+r]=x?x.value:''; });
+  const p={}; document.querySelectorAll('#pave input:checked').forEach(x=>p[x.name]=x.value); d.pave=p; localStorage.setItem(KEY,JSON.stringify(d)); }catch(e){} }
+function load(){ defaults(); try{ const d=JSON.parse(localStorage.getItem(KEY)); if(!d) return; SAVE_IDS.forEach(i=>{ if(i in d){ if($(i).type==='checkbox') $(i).checked=d[i]; else $(i).value=d[i]; } });
+  RADIOS.forEach(r=>{ const x=document.querySelector(`input[name="${r}"][value="${d['r_'+r]??''}"]`); if(x) x.checked=true; });
+  Object.entries(d.pave||{}).forEach(([k,v])=>{ const x=document.querySelector(`input[name="${k}"][value="${v}"]`); if(x) x.checked=true; }); }catch(e){} }
+function resetFlight(){ if(!confirm('Clear this flight? Airplane numbers are kept.')) return; const keep={ew:$('ew').value,ea:$('ea').value,oilIn:$('oilIn').checked,oil:$('oil').value,gph:$('gph').value,pxw:$('pxw').value}; localStorage.removeItem(KEY); defaults(); SAVE_IDS.forEach(i=>{ if(!(i in keep)) { if($(i).type==='checkbox') $(i).checked=false; else if(!['ew','ea','oil','gph','fuel','taxi','elev','dep','date'].includes(i)) $(i).value=''; } }); Object.entries(keep).forEach(([k,v])=>{ if(k==='oilIn') $(k).checked=v; else $(k).value=v; }); document.querySelector('input[name="ftype"][value="dual"]').checked=true; document.querySelector('input[name="parea"][value=""]').checked=true; document.querySelector('input[name="brief"][value=""]').checked=true; renderPave($('pave')); calc(); }
+
+function fwdLimit(env,w){ const p=env.fwd; if(w<=p[0][0]) return p[0][1]; for(let i=1;i<p.length;i++){ if(w<=p[i][0]){ const [w0,a0]=p[i-1],[w1,a1]=p[i]; return a0+(a1-a0)*(w-w0)/(w1-w0); } } return p[p.length-1][1]; }
+function inEnv(env,w,cg){ return w<=env.maxW+1e-9 && cg>=fwdLimit(env,w)-1e-9 && cg<=env.aft+1e-9; }
+function why(env,w,cg){ return w>env.maxW?`${(w-env.maxW).toFixed(0)} lb over`:cg<fwdLimit(env,w)?'CG forward of limit':cg>env.aft?'CG aft of limit':'in limits'; }
+
+function calcWB(){
+  const ew=n0('ew'), ea=n0('ea');
+  const rows=[['Basic empty weight',ew,ea]];
+  if(!$('oilIn').checked) rows.push([`Oil (${n0('oil')} qt)`,n0('oil')*7.5/4,AC.arms.oil]);
+  rows.push(['Pilot & instructor',n0('pilot')+n0('fpax'),AC.arms.front]);
+  rows.push(['Passenger seating',n0('rpax1')+n0('rpax2'),AC.arms.rear]);
+  rows.push(['Baggage area 1',n0('bag1'),AC.arms.bag1]);
+  rows.push(['Baggage area 2',n0('bag2'),AC.arms.bag2]);
+  const fuel=Math.min(n0('fuel'),AC.usableFuel);
+  const ete=n('ete'); if(!isNaN(ete)&&ete>0&&!$('trip').dataset.manual){ $('trip').value=(ete*n0('gph')).toFixed(1); }
+  const taxi=Math.min(n0('taxi'),fuel), trip=Math.min(n0('trip'),fuel-taxi);
+  $('fuelLbl').textContent=`${fuel} gal · ${fuel*6} lb`;
+  const zf=rows.reduce((a,r)=>({w:a.w+r[1],m:a.m+r[1]*r[2]}),{w:0,m:0});
+  const F=AC.arms.fuel;
+  const P={ zf:{name:'Zero fuel',w:zf.w,m:zf.m}, ramp:{name:'Ramp',w:zf.w+fuel*6,m:zf.m+fuel*6*F}, to:{name:'Takeoff',w:zf.w+(fuel-taxi)*6,m:zf.m+(fuel-taxi)*6*F}, ldg:{name:'Landing',w:zf.w+(fuel-taxi-trip)*6,m:zf.m+(fuel-taxi-trip)*6*F} };
+  Object.values(P).forEach(p=>p.cg=p.w?p.m/p.w:0);
+  const tb=$('tbl').querySelector('tbody'); tb.innerHTML='';
+  const add=(name,w,a,cls)=>{ const tr=document.createElement('tr'); if(cls) tr.className=cls; tr.innerHTML=`<td>${name}</td><td class="num">${w.toFixed(0)}</td><td>${a===null?'—':a.toFixed(2)}</td><td class="num">${a===null?'—':(w*a).toFixed(0)}</td>`; tb.appendChild(tr); };
+  rows.forEach(r=>add(r[0],r[1],r[2]));
+  add('Zero fuel weight',P.zf.w,P.zf.cg,'sub');
+  add(`Fuel (${fuel} gal)`,fuel*6,F);
+  add('Ramp weight',P.ramp.w,P.ramp.cg,'sub');
+  add(`Taxi fuel (${taxi} gal)`,-taxi*6,F);
+  add('Gross takeoff weight',P.to.w,P.to.cg,'sub');
+  add(`Trip fuel (${trip} gal)`,-trip*6,F);
+  add('Planned landing weight',P.ldg.w,P.ldg.cg,'tot');
+  const bw=[]; if(n0('bag1')>AC.bag1Max) bw.push(`Baggage area 1 over ${AC.bag1Max} lb.`); if(n0('bag2')>AC.bag2Max) bw.push(`Baggage area 2 over ${AC.bag2Max} lb.`); if(n0('bag1')+n0('bag2')>AC.bagMax) bw.push(`Combined baggage over ${AC.bagMax} lb.`);
+  $('bagWarn').hidden=!bw.length; $('bagWarn').textContent=bw.join(' ');
+  $('eaWarn').hidden=!(AC.emptyArmIsPlaceholder&&Math.abs(ea-AC.emptyArm)<1e-6);
+  const pl=$('pills'); pl.innerHTML=''; let allOk=true;
+  [P.to,P.ldg,P.zf].forEach(p=>{ const ok=inEnv(AC.normal,p.w,p.cg); if(!ok) allOk=false; const u=inEnv(AC.utility,p.w,p.cg); const d=document.createElement('div'); d.className='pill '+(ok?'good':'bad'); d.innerHTML=`<div class="t">${p.name}</div><div class="w">${p.w.toFixed(0)} lb</div><div class="c">CG ${p.cg.toFixed(1)} in · ${why(AC.normal,p.w,p.cg)}${u?' · utility ok':''}</div>`; pl.appendChild(d); });
+  if(P.ramp.w>AC.maxRamp){ allOk=false; const d=document.createElement('div'); d.className='pill bad wide'; d.innerHTML=`<div class="t">Ramp</div><div class="w">${P.ramp.w.toFixed(0)} lb</div><div class="c">${(P.ramp.w-AC.maxRamp).toFixed(0)} lb over max ramp weight ${AC.maxRamp}</div>`; pl.appendChild(d); }
+  drawEnv(P);
+  // fuel reserve
+  const left=fuel-taxi-trip, gph=n0('gph'), hrs=gph?left/gph:0;
+  const resOk=hrs>=AC.reserveHrs;
+  $('fuelKv').innerHTML=`<div>Fuel remaining at landing</div><div>${left.toFixed(1)} gal · ${hrs?hrs.toFixed(1):'—'} hr</div><div>Reserve (school minimum ${AC.reserveHrs} hr)</div><div class="${resOk?'ok':'warn'}">${resOk?'OK':'SHORT'}</div><div>Useful load</div><div>${(AC.normal.maxW-ew-($('oilIn').checked?0:n0('oil')*7.5/4)).toFixed(0)} lb</div><div>Max takeoff / landing weight</div><div>${AC.normal.maxW} / ${AC.maxLanding} lb</div>`;
+  return {P,allOk,resOk,hrs,left};
+}
+
+function drawEnv(P){
+  const W=640,H=400,L=48,R=16,T=14,B=40, x0=33,x1=49,y0=1400,y1=2400;
+  const X=a=>L+(a-x0)/(x1-x0)*(W-L-R), Y=w=>T+(y1-w)/(y1-y0)*(H-T-B);
+  const poly=env=>{ const p=[[fwdLimit(env,y0),y0]]; env.fwd.forEach(q=>p.push([q[1],q[0]])); p.push([fwdLimit(env,env.maxW),env.maxW],[env.aft,env.maxW],[env.aft,y0]); return p.map(([a,w])=>`${X(a).toFixed(1)},${Y(w).toFixed(1)}`).join(' '); };
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="CG envelope with takeoff, landing and zero-fuel points">`;
+  for(let a=x0+1;a<x1;a+=2) s+=`<line x1="${X(a)}" y1="${T}" x2="${X(a)}" y2="${H-B}" stroke="var(--line)"/><text x="${X(a)}" y="${H-B+16}" font-size="12" text-anchor="middle" fill="var(--ink-2)">${a}</text>`;
+  for(let w=y0+100;w<y1;w+=200) s+=`<line x1="${L}" y1="${Y(w)}" x2="${W-R}" y2="${Y(w)}" stroke="var(--line)"/><text x="${L-6}" y="${Y(w)+4}" font-size="12" text-anchor="end" fill="var(--ink-2)">${w}</text>`;
+  s+=`<text x="${(L+W-R)/2}" y="${H-6}" font-size="12" text-anchor="middle" fill="var(--ink-2)">CG arm, inches aft of datum</text><text transform="translate(12 ${(T+H-B)/2}) rotate(-90)" font-size="12" text-anchor="middle" fill="var(--ink-2)">Weight, lb</text>`;
+  s+=`<polygon points="${poly(AC.normal)}" fill="var(--chart-soft)" stroke="var(--chart)" stroke-width="2" stroke-linejoin="round"/><polygon points="${poly(AC.utility)}" fill="none" stroke="var(--util)" stroke-width="2" stroke-dasharray="6 4" stroke-linejoin="round"/>`;
+  const mark=(p,shape,dy)=>{ const c=inEnv(AC.normal,p.w,p.cg)?'var(--low)':'var(--high)'; const x=Math.max(L,Math.min(W-R,X(p.cg))), y=Math.max(T,Math.min(H-B,Y(p.w))); let g='';
+    if(shape==='circle') g=`<circle cx="${x}" cy="${y}" r="7" fill="${c}" stroke="var(--paper-2)" stroke-width="2"/>`;
+    else if(shape==='diamond') g=`<polygon points="${x},${y-9} ${x+9},${y} ${x},${y+9} ${x-9},${y}" fill="${c}" stroke="var(--paper-2)" stroke-width="2"/>`;
+    else g=`<polygon points="${x},${y-9} ${x+8},${y+7} ${x-8},${y+7}" fill="${c}" stroke="var(--paper-2)" stroke-width="2"/>`;
+    const lx=x>W-150?x-11:x+11, anchor=x>W-150?'end':'start';
+    return g+`<text x="${lx}" y="${y+dy}" font-size="12" font-weight="600" text-anchor="${anchor}" fill="var(--ink)">${p.name} ${p.w.toFixed(0)} / ${p.cg.toFixed(1)}</text>`; };
+  s+=mark(P.zf,'triangle',14)+mark(P.ldg,'diamond',4)+mark(P.to,'circle',-8)+'</svg>'; $('env').innerHTML=s;
+}
+
+function calcSpeeds(toW){
+  const S=AC.speeds; const f=Math.sqrt(Math.max(toW,1000)/AC.normal.maxW);
+  const va=S.mph?`${Math.round(S.vaMaxMph*f)} mph · ${Math.round(S.vaMax*f)} kt`:`${Math.round(S.vaMax*f)} KIAS`;
+  let h=''; S.rows.forEach(r=>{ h+=`<div>${r[0]}</div><div>${r[1]}</div>`; });
+  h+=`<div>Va — maneuvering at ${toW.toFixed(0)} lb</div><div>${va}</div><div class="muted">Va = √(current weight ÷ ${AC.normal.maxW}) × ${S.mph?S.vaMaxMph+' mph':S.vaMax+' KIAS'}${S.note?' · '+S.note:''}</div>`;
+  $('speeds').innerHTML=h;
+}
+function fillPerf(){
+  const a=calcAtmos(); const pa=isNaN(a.pa)?n0('elev'):a.pa; const oat=isNaN(n('oat'))?15:n('oat');
+  const wb=calcWB(); const P=PERF[AC.model]; if(!P) return;
+  const r=pohDistances(P,{pa,oatC:oat,weight:wb.P.to.w,ldgWeight:wb.P.ldg.w,grass:$('grass').checked});
+  $('togr').value=r.togr; $('to50').value=r.to50; $('ldgr').value=r.ldgr; $('ld50').value=r.ld50;
+  const spd=(tbl,w)=>{ const ks=Object.keys(tbl).map(Number).sort((x,y)=>x-y); const k=ks.reduce((b,x)=>Math.abs(x-w)<Math.abs(b-w)?x:b,ks[0]); return tbl[k]; };
+  const ts=spd(P.toSpeeds,wb.P.to.w);
+  $('perfNotes').innerHTML=`<b>Basis:</b> ${P.src}. PA ${Math.round(pa)} ft, OAT ${oat} °C, takeoff ${wb.P.to.w.toFixed(0)} lb, landing ${wb.P.ldg.w.toFixed(0)} lb. Short-field speeds: lift off ${ts[0]}, at 50 ft ${ts[1]}${P.kind==='M'?' mph (table uses 60 mph nose-wheel lift-off, 50 ft speed by weight)':' KIAS'}; landing approach ${P.ldgSpeed}${P.kind==='M'?' mph':' KIAS'}. ${r.notes.join(' ')}`;
+  calc();
+}
+
+function calcAtmos(){
+  const elev=n('elev'), alt=n('alt'), oat=n('oat'); const out=[];
+  let pa=NaN, da=NaN;
+  if(!isNaN(elev)&&!isNaN(alt)){ pa=(29.92-alt)*1000+elev; out.push(['Pressure altitude',`${Math.round(pa)} ft`]); }
+  if(!isNaN(pa)&&!isNaN(oat)){ const isa=15-2*pa/1000; da=pa+120*(oat-isa); out.push(['Density altitude',`${Math.round(da)} ft`]); out.push(['ISA at that altitude',`${isa.toFixed(1)} °C`]); }
+  $('atmos').innerHTML=out.map(r=>`<div>${r[0]}</div><div>${r[1]}</div>`).join('')+`<div class="muted">PA = (29.92 − altimeter) × 1000 + field elevation · DA = PA + 120 × (OAT − ISA)</div>`;
+  return {pa,da};
+}
+function windBlock(pre,outId){
+  const d=n(pre+'wd'), s=n(pre+'ws'), g=n(pre+'wg'), rwy=$(pre+'rwy').value;
+  if(isNaN(s)||!rwy){ $(outId).innerHTML=''; return null; }
+  const r=crosswind(isNaN(d)?'VRB':d,s,isNaN(g)?null:g,rwy); if(!r) return null;
+  const lim=n('pxw'); const over=!isNaN(lim)&&r.xw>lim;
+  $(outId).innerHTML=`<div>Crosswind component on runway ${rwy.toUpperCase()}</div><div class="${over?'warn':''}">${r.xw} kt${!isNaN(g)?' (gust)':''}${r.vrb?' (variable)':''}</div><div>${r.hw>=0?'Headwind':'Tailwind'} component</div><div class="${r.hw<0?'warn':''}">${Math.abs(r.hw)} kt</div>`+(over?`<div class="muted warn">Above your ${lim} kt personal maximum.</div>`:'');
+  return r;
+}
+function readWx(){
+  const raw=$('wxraw').value; const out=$('wxout'); out.hidden=false;
+  const r=analyzeWx(raw,null,$('drwy').value);
+  if(!r){ out.innerHTML='<div class="err">Could not read a METAR or TAF from that text.</div>'; return; }
+  const U=raw.toUpperCase(); let m;
+  if((m=U.match(/\bA(\d{4})\b/))) $('alt').value=(+m[1]/100).toFixed(2);
+  if((m=U.match(/\b(M?\d{2})\/(M?\d{2})\b/))) $('oat').value=m[1].replace('M','-');
+  if(r.wind&&r.wind.windSpd!==null){ $('dwd').value=r.wind.windDir==='VRB'?'':r.wind.windDir; $('dws').value=r.wind.windSpd; $('dwg').value=r.wind.gust??''; }
+  // PAVE suggestions: weather & wind rows
+  const pv=$('pave'); const notes=[];
+  const wxLv=r.cat==='VFR'?(r.clearAndTen?1:2):r.cat==='MVFR'?2:r.cat==='IFR'?3:5;
+  if(setPave(pv,'env','wx',wxLv)) notes.push(`Weather row set to ${wxLv}`);
+  if(r.wind&&r.wind.windSpd!==null){ const s=r.wind.windSpd,g=r.wind.gust; let wl=(s<=6&&!g)?1:(!g?2:(g-s>=10?4:3));
+    const xw=crosswind(r.wind.windDir,s,g,$('drwy').value); const lim=n('pxw');
+    if(xw&&!isNaN(lim)&&xw.xw>lim){ wl=5; notes.push(`Crosswind ${xw.xw} kt exceeds your ${lim} kt maximum — wind row set to 5 (No-Go).`); }
+    if(setPave(pv,'env','wind',wl)) notes.push(`Wind row set to ${wl}`); }
+  if(r.conv) notes.push('Convective or icing weather reported — review the weather row.');
+  out.innerHTML=`<div class="lead">${r.cat}</div><ul>${r.notes.map(x=>`<li>${x}</li>`).join('')}${notes.map(x=>`<li>${x}</li>`).join('')}<li>${r.hazards.length?'Significant weather: '+r.hazards.join(', '):'No significant weather reported.'}</li></ul>`;
+  calc();
+}
+
+function calcPerf(){
+  const togr=n('togr'), ldgr=n('ldgr'), to50=n('to50'), ld50=n('ld50'), len=n('rwylen');
+  const acc=(!isNaN(togr)&&!isNaN(ldgr))?togr+ldgr:NaN; $('accstop').value=isNaN(acc)?'':Math.round(acc);
+  const rows=[]; if(!isNaN(len)){ if(!isNaN(to50)) rows.push(['Runway ÷ takeoff over 50 ft',`${(len/to50).toFixed(1)}×`,len/to50<1.5]); if(!isNaN(ld50)) rows.push(['Runway ÷ landing over 50 ft',`${(len/ld50).toFixed(1)}×`,len/ld50<1.5]); if(!isNaN(acc)) rows.push(['Runway ÷ accelerate-stop',`${(len/acc).toFixed(1)}×`,len/acc<1]); }
+  $('perfKv').innerHTML=rows.map(r=>`<div>${r[0]}</div><div class="${r[2]?'warn':'ok'}">${r[1]}</div>`).join('')+(rows.length?'<div class="muted">A 50% margin (1.5×) over the POH figure is a common training minimum.</div>':'');
+}
+
+function calc(){
+  document.body.classList.toggle('dual',document.querySelector('input[name="ftype"]:checked').value==='dual');
+  const wb=calcWB(); calcSpeeds(wb.P.to.w); calcAtmos(); windBlock('d','dxw'); windBlock('a','axw'); calcPerf();
+  const t=paveTotals($('pave')); const dual=document.body.classList.contains('dual');
+  const final=dual&&t.cfiAny?t.cfi:t.stu; const b=band(final);
+  ['b1','b2','b3'].forEach(k=>$(k).classList.toggle('on',b.key===k));
+  const soloBlocked=!dual&&final>=50;
+  $('paveKv').innerHTML=`<div>Student total</div><div>${t.stu}</div>`+(dual?`<div>CFI total</div><div>${t.cfiAny?t.cfi+(t.cfiN<t.total?` (${t.cfiN} of ${t.total} rated; the rest use the student's rating)`:''):'—'}</div><div>Difference between totals</div><div>${t.cfiAny?t.stu-t.cfi:'—'}</div>`:'')+`<div>Final flight risk</div><div class="${b.cls==='good'?'ok':'warn'}">${final} · ${b.name}</div>`+(t.noGo.length?`<div class="muted warn">No-Go items: ${t.noGo.join(', ')}.</div>`:'')+(soloBlocked?`<div class="muted warn">Solo flight is not authorized in the elevated or high range.</div>`:'');
+  const bad=t.noGo.length||!wb.allOk||!wb.resOk||soloBlocked, mod=b.cls!=='good';
+  $('gRisk').textContent=final; $('bar').className='bar '+(bad?'bad':mod?'mod':'');
+  $('gName').textContent=t.noGo.length?'No-Go item':!wb.allOk?'W&B out of limits':!wb.resOk?'Fuel reserve short':b.name;
+  $('gWhy').textContent=`TO ${wb.P.to.w.toFixed(0)} lb / CG ${wb.P.to.cg.toFixed(1)} · landing with ${wb.hrs?wb.hrs.toFixed(1)+' hr':'—'} reserve`;
+  save();
+}
+function limitsText(){
+  const f=e=>e.fwd.map(p=>`${p[1]} in at ${p[0]} lb`).join(' → ');
+  $('limits').innerHTML=`<p>Datum: ${AC.datum}. Arms (in): front seats ${AC.arms.front}, rear seats ${AC.arms.rear}, fuel ${AC.arms.fuel}, baggage 1 ${AC.arms.bag1} (max ${AC.bag1Max} lb), baggage 2 ${AC.arms.bag2} (max ${AC.bag2Max} lb, ${AC.bagMax} lb combined), oil ${AC.arms.oil}.</p><p>Normal category: max ${AC.normal.maxW} lb; forward limit ${f(AC.normal)}; aft limit ${AC.normal.aft} in. Utility category: max ${AC.utility.maxW} lb; forward limit ${f(AC.utility)}; aft limit ${AC.utility.aft} in. Max ramp ${AC.maxRamp} lb, max landing ${AC.maxLanding} lb.</p><p>Usable fuel ${AC.usableFuel} gal (${AC.totalFuel} gal total), 6 lb/gal. ${AC.notes}</p><p>Risk bands and item wording follow the Jeremy &amp; Kilo Aviation Preflight Risk Assessment Form and Flight Dispatch Form.</p>`;
+  $('eaNote').textContent=AC.emptyArmIsPlaceholder?'Placeholder — set from the W&B record':'From the W&B record';
+}
+
+renderPave($('pave')); load(); limitsText();
+$('trip').addEventListener('input',()=>{ $('trip').dataset.manual='1'; });
+$('ete').addEventListener('input',()=>{ delete $('trip').dataset.manual; });
+document.querySelectorAll('input,select,textarea').forEach(el=>{ if(el.id!=='wxraw') el.addEventListener('input',calc); el.addEventListener('change',calc); });
+calc();
+</script>
+</body>
+</html>
