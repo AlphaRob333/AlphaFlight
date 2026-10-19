@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Preflight Risk Assessment</title>
+<meta property="og:image" content="https://alphaflight.io/assets/banner.jpg">
 <meta name="description" content="Preflight risk assessment (PAVE, 1–5 per item) with METAR reading and links to each airplane's weight and balance page.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,13 +151,17 @@ details summary{cursor:pointer;font-weight:700;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
 @media print{ .bar,.actions,input[type=range],.help,.wxhelp,.navlinks{display:none} body{padding-bottom:0;background:#fff;color:#000} section{break-inside:avoid;border-color:#999;box-shadow:none} .lv label{border-color:#999} .lv label:has(input:checked){background:#ddd} main{max-width:none} }
 
+.hero{display:block;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:#0B1220;line-height:0}
+.hero img{width:100%;height:auto;display:block}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
 <main>
 <header>
-  <div class="kicker"><a class="brand" href="/"><i></i>AlphaFlight</a><span class="tag">PAVE · 1–5 scale</span></div>
-  <h1>Preflight Risk Assessment</h1>
+  <a class="hero" href="/" aria-label="AlphaFlight Risk Assessment"><img src="/assets/banner-1200.jpg" srcset="/assets/banner-1200.jpg 1200w, /assets/banner.jpg 2066w" sizes="(max-width: 760px) 100vw, 720px" width="2066" height="761" alt="AlphaFlight — Risk Assessment" fetchpriority="high"></a>
+  <h1 class="vh">Preflight Risk Assessment</h1>
+  <div class="kicker"><span class="tag">PAVE · 1–5 scale</span></div>
   <p>Rate each item 1 to 5, honestly, then total the column. 25–49 is normal, 50–74 elevated, 75 and above high. Any 5 is a No-Go. In the elevated or high range solo flight is not authorized; on a dual flight the CFI rates the same items to transfer some of the risk.</p>
   <nav class="navlinks" aria-label="Weight and balance"><a href="/n929bm/"><b>N929BM</b><span>W&amp;B · 172M</span></a><a href="/n9301e/"><b>N9301E</b><span>W&amp;B · 172N</span></a></nav>
 </header>
