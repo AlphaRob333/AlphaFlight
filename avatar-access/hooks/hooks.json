@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are the Avatar Access approval-gate guard. Inspect this tool call: $TOOL_INPUT. BLOCK it if it would (a) send, pay, transfer, or charge money of any amount; (b) send an email, message, proposal, quote, or invoice to anyone other than Rob Lewis (rob@avataraccess.com or roblewis78@yahoo.com); (c) create or complete an e-signature request; (d) submit a state, tax, license, or permit filing; (e) change bank, tax-ID, registered-agent, officer, or subscription settings; (f) mark any drawing, model, or calculation as issued, sealed, or for construction; (g) change HubSpot deal stage to Proposed or Won; or (h) modify pricing policy, margin, fee schedule, or load tables. If blocked, reply with reason 'Avatar Access approval gate: <what> must be queued in the approvals table for Rob.' Drafting, reading, saving files, creating draft invoices, and writing to the approvals table are allowed. Otherwise approve.",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

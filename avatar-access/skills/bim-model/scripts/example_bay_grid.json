@@ -1,0 +1,34 @@
+{
+  "project": "Example facade — 3 bays x 4 lifts",
+  "revision": 1,
+  "system": "layher_allround",
+  "units": "m",
+  "duty": { "osha_class": "medium", "psf": 50, "decked_lifts_loaded": 2 },
+  "elevations": [
+    {
+      "name": "North",
+      "origin": [0, 0],
+      "direction_deg": 0,
+      "length": 7.71,
+      "height": 8.0,
+      "width": 0.73,
+      "bays": [2.57, 2.57, 2.57],
+      "lifts": [2.0, 2.0, 2.0, 2.0],
+      "decked_lifts": [2, 4],
+      "ties": [
+        { "bay": 0, "lift": 2, "type": "through", "design_load_kN": 6.1 },
+        { "bay": 2, "lift": 2, "type": "through", "design_load_kN": 6.1 },
+        { "bay": 1, "lift": 4, "type": "through", "design_load_kN": 6.1 }
+      ],
+      "braces": { "facade_every_n_bays": 3, "plan_at_lifts": [1, 4] },
+      "access": "ladder",
+      "base": { "ground": "slab", "sole_boards": false }
+    }
+  ],
+  "special": [],
+  "pe_required": false,
+  "rules": [
+    { "rule": "OSHA 1926.451(c)(1)", "applied": "height 8.0 m / base 0.73 m = 11:1 > 4:1, ties required; first tie at 2.9 m -> lift 2" },
+    { "rule": "OSHA 1926.451(g)", "applied": "guardrail top rail 38-45 in, midrail, toeboard on decked lifts" }
+  ]
+}

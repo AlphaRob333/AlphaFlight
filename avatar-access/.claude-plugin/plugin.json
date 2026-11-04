@@ -1,0 +1,11 @@
+{
+  "name": "avatar-access",
+  "version": "0.1.0",
+  "description": "Avatar Access company operating system: AI-run scaffold design, BIM modeling, load checks, cost models, proposals, and back office for an engineered-access startup.",
+  "author": {
+    "name": "Rob Lewis"
+  },
+  "homepage": "https://www.avataraccess.com",
+  "license": "Proprietary",
+  "keywords": ["scaffold", "bim", "estimating", "temporary-works", "layher", "ringlock", "osha", "construction"]
+}

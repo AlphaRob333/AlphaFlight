@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Avatar Access bay grid",
+  "type": "object",
+  "required": ["project", "system", "units", "duty", "elevations"],
+  "properties": {
+    "project": { "type": "string" },
+    "revision": { "type": "integer", "default": 1 },
+    "system": { "enum": ["layher_allround", "ringlock", "tube_clamp", "frame", "cuplock"] },
+    "units": { "enum": ["m", "ft"], "default": "m" },
+    "duty": {
+      "type": "object",
+      "properties": {
+        "osha_class": { "enum": ["light", "medium", "heavy"] },
+        "psf": { "type": "number" },
+        "en12811_class": { "type": "integer", "minimum": 1, "maximum": 6 },
+        "decked_lifts_loaded": { "type": "integer", "default": 2 }
+      }
+    },
+    "elevations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "length", "height", "bays", "lifts"],
+        "properties": {
+          "name": { "type": "string" },
+          "origin": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 3 },
+          "direction_deg": { "type": "number", "default": 0 },
+          "length": { "type": "number" },
+          "height": { "type": "number" },
+          "width": { "type": "number", "default": 0.73 },
+          "bays": { "type": "array", "items": { "type": "number" }, "description": "bay lengths along the elevation" },
+          "lifts": { "type": "array", "items": { "type": "number" }, "description": "lift heights from base" },
+          "decked_lifts": { "type": "array", "items": { "type": "integer" } },
+          "ties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bay": { "type": "integer" },
+                "lift": { "type": "integer" },
+                "type": { "enum": ["through", "box", "anchor", "rake", "engineered"] },
+                "design_load_kN": { "type": "number" }
+              }
+            }
+          },
+          "braces": {
+            "type": "object",
+            "properties": {
+              "facade_every_n_bays": { "type": "integer", "default": 5 },
+              "plan_at_lifts": { "type": "array", "items": { "type": "integer" } }
+            }
+          },
+          "access": { "enum": ["stair_tower", "ladder", "none"] },
+          "base": {
+            "type": "object",
+            "properties": {
+              "ground": { "enum": ["slab", "asphalt", "soil", "deck"] },
+              "sole_boards": { "type": "boolean" },
+              "allowable_bearing_kPa": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "special": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "dance_floor | hanging | cantilever | loading_bay | hoist | enclosure | shoring"
+    },
+    "pe_required": { "type": "boolean" },
+    "rules": {
+      "type": "array",
+      "items": { "type": "object", "properties": { "rule": { "type": "string" }, "applied": { "type": "string" } } }
+    }
+  }
+}

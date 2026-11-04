@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "HubSpot": {
+      "type": "http",
+      "url": "https://mcp.hubspot.com/"
+    },
+    "Supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp"
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "Intuit QuickBooks": {
+      "type": "http",
+      "url": "https://mcp.intuit.com/mcp"
+    }
+  },
+  "recommendedCategories": [
+    "crm",
+    "software-coding",
+    "documents",
+    "email",
+    "calendar"
+  ]
+}

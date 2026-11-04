@@ -1,0 +1,19 @@
+{
+  "fee.layout": 1200, "fee.engineered": 4500, "fee.program_min": 9000,
+  "fee.adder.elevation": 750, "fee.adder.stair_tower": 600, "fee.adder.dance_floor": 1500,
+  "fee.adder.hanging": 2500, "fee.adder.enclosure": 800, "fee.adder.loading_bay": 900,
+  "fee.adder.revision": 450, "fee.adder.theme_park_package": 1200, "fee.expedite_pct": 35,
+  "fee.pe_passthrough_pct": 10,
+  "labor.erector.hour": 38, "labor.foreman.hour": 48, "labor.competent_person.hour": 52,
+  "labor.night_factor": 1.15, "labor.theme_park_factor": 1.20,
+  "freight.zone1": 650, "freight.zone2": 900, "freight.zone3": 1400, "freight.payload_lb": 40000,
+  "margin.equipment": 25, "margin.labor": 20, "margin.passthrough": 10,
+  "waste.pct": 3,
+  "rental.STD-4.0.month": 3.10, "rental.STD-3.0.month": 2.60, "rental.STD-2.0.month": 2.00,
+  "rental.LDG-2.57.month": 1.90, "rental.LDG-2.07.month": 1.70, "rental.LDG-1.09.month": 1.30,
+  "rental.TRN-0.73.month": 1.10, "rental.TRN-1.09.month": 1.30,
+  "rental.DECK-2.57.month": 3.40, "rental.DECK-2.07.month": 3.00, "rental.DECK-3.07.month": 3.90,
+  "rental.DIAG-2.57x2.00.month": 1.60, "rental.DIAG-2.07x2.00.month": 1.50,
+  "rental.BASEJACK.month": 0.90, "rental.TOE-2.57.month": 0.60, "rental.TIE-THROUGH.month": 0.70,
+  "_note": "Seed values only. Rob replaces with real supplier rates; agents never edit this table."
+}
