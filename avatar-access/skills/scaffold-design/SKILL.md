@@ -67,9 +67,10 @@ elevations, bays, lifts, decked lifts, ties, braces, access, base
 conditions, duty, and system. Record every rule applied under `rules[]` so
 the proposal can quote them. Then hand off:
 
-- `bim-model` builds the IFC from `bay_grid.json`
-- `load-check` verifies leg loads, tie loads, and bearing
-- `cost-model` expands to a component list and prices it
+- `bim-model` (`modeler` agent) builds the IFC from `bay_grid.json` and
+  returns it to the `designer`
+- `load-check` (`designer` agent) verifies leg loads, tie loads, and bearing
+- `cost-model` (`estimator` agent) expands to a component list and prices it
 
 ## Non-negotiables
 

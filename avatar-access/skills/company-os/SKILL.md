@@ -15,8 +15,9 @@ owner (Rob) approves, signs, and seals; the AI does everything else.
 
 ## Operating principles
 
-1. **One narrow job per agent.** Estimator prices. Modeler models. Back-office
-   books and follows up. Never let one agent improvise across roles.
+1. **One narrow job per agent.** Triage checks and sorts. Estimator prices.
+   Designer designs and checks. Modeler models. Back-office books and follows
+   up. Never let one agent improvise across roles.
 2. **Approval gates are hard stops.** Anything in `references/approval-gates.md`
    is prepared, then queued for Rob. Never executed by an agent.
 3. **Data plumbing before cleverness.** Every run starts by checking that the
@@ -31,32 +32,60 @@ owner (Rob) approves, signs, and seals; the AI does everything else.
 
 ## Roles
 
-| Role | Runs as | Does | Never does |
-|---|---|---|---|
-| CEO routine | Claude Code routine, nightly | Reads inbox, board, pipeline; assigns work; writes the morning brief | Spends money, signs, files |
-| Estimator | `estimator` agent | Takeoff → cost model → estimate JSON → proposal draft | Commits a price to a client |
-| Modeler | `modeler` agent | Layout → IFC model → drawings → load-check request | Issues drawings as "for construction" |
-| Back-office | `back-office` agent | Invoices drafts, CRM hygiene, weekly numbers, follow-ups | Sends money, changes bank/tax settings |
-| Rob | Human | Approves, signs, seals via PE, sets strategy | — |
+| Role | Runs as | Model | Skills | Does | Never does |
+|---|---|---|---|---|---|
+| CEO routine | Claude Code routine, nightly | sonnet | `company-os` | Orchestrates the daily run: delegates health and inbox to triage, routes the work queue, compiles approvals, writes the morning brief | Spends money, signs, files |
+| Triage | `triage` agent | haiku | — | Connector health check → `ops_health`; sorts the inbox into bids, vendor bills, other | Qualifies bids, replies to mail |
+| Estimator | `estimator` agent | sonnet | `bid-intake`, `cost-model`, `proposal` | Qualify → cost model → estimate JSON → proposal draft | Commits a price to a client |
+| Designer | `designer` agent | opus | `scaffold-design`, `load-check` | Layout → `bay_grid.json` → load-check on the modeler's output → PE package; takes all escalations | Issues drawings as "for construction" |
+| Modeler | `modeler` agent | sonnet | `bim-model` | `bay_grid.json` → IFC model + component count → drawings after PASS | Designs grids, runs load checks |
+| Back-office | `back-office` agent | haiku | — | Invoices drafts, CRM hygiene, weekly numbers, follow-ups | Sends money, changes bank/tax settings |
+| Rob | Human | — | — | Approves, signs, seals via PE, sets strategy | — |
+
+Design handoffs: `designer` writes `bay_grid.json` → `modeler` builds the IFC
+and component count (`models.status = draft`) → `designer` runs `load-check`
+(FAIL: revise grid, back to modeler; PASS: `status = checked`) → `modeler`
+produces drawings → `designer` assembles the PE package if `pe_required`.
 
 ## Daily run (the CEO routine)
 
 Execute in this order; stop and report at the first connector failure.
 
-1. **Health check.** Ping each connector with a cheap read (HubSpot: list 1
-   deal; Supabase: `select 1`; GitHub: repo metadata; Gmail: unread count).
-   Record result in `ops_health`.
-2. **Inbox triage.** New ITBs, RFPs, plan sets, GC questions → hand to
-   `bid-intake`. Vendor invoices → back-office. Everything else → summarize.
+1. **Health check.** Run the `triage` agent: it pings each connector with a
+   cheap read (HubSpot: list 1 deal; Supabase: `select 1`; GitHub: repo
+   metadata; Gmail: unread count) and records results in `ops_health`.
+2. **Inbox triage.** The `triage` agent sorts new mail: ITBs, RFPs, plan
+   sets, GC questions → `estimator` (`bid-intake`). Vendor invoices →
+   back-office. Everything else → summarize.
 3. **Board sweep.** For every open deal in HubSpot, check stage age. Deals
    idle > 5 business days get a follow-up draft queued for approval.
 4. **Work queue.** For each `estimates` row with status `queued`, run the
-   estimator. For each `models` row with status `queued`, run the modeler.
+   estimator. For each `models` row: `queued` with no `bay_grid` → designer;
+   `queued` with a `bay_grid` → modeler; `draft` → designer (load-check);
+   `checked` with no drawings → modeler. Follow every `HANDOFF →` and
+   `ESCALATED → designer` line an agent returns by launching that agent.
 5. **Approval queue.** Compile everything awaiting Rob into one message: what
    it is, the recommended action, the one-click decision. Nothing else goes
-   in that message.
+   in that message. Rows of kind `escalation` are not decisions; leave them
+   out of this message and report only their count in the brief.
 6. **Morning brief.** Write to Drive `/Avatar Access/Briefs/YYYY-MM-DD.md` and
    email it. Format in `references/routines.md`.
+
+## Escalation to the designer
+
+Every haiku and sonnet agent (triage, back-office, estimator, modeler) and
+this CEO routine stop and hand the task to the `designer` agent (opus) when
+they see a cantilever, hanging scaffold, or loading bay; sheeted, netted,
+or wind-exposed scaffold; a PE trigger; unusual geometry; conflicting
+drawings; or when they are not confident in their own output. Each
+escalation is logged as an `approvals` row with `kind = 'escalation'`,
+`summary = '<agent> → designer: <trigger>'`, and the reason in `payload`;
+`decision` stays empty. Review frequency with:
+
+```sql
+select summary, payload->>'reason' as reason, created_at
+from approvals where kind = 'escalation' order by created_at desc;
+```
 
 ## Weekly run (Friday)
 
@@ -97,5 +126,8 @@ invent pipeline numbers.
 
 ## Related skills
 
-`bid-intake` → `scaffold-design` → `bim-model` → `load-check` → `cost-model`
-→ `proposal`. Read `references/approval-gates.md` before any external action.
+`bid-intake` (estimator, sonnet) → `scaffold-design` (designer, opus) →
+`bim-model` (modeler, sonnet) → `load-check` (designer, opus) → `cost-model`
+→ `proposal` (estimator, sonnet). Health and inbox: `triage` (haiku).
+Back office: `back-office` (haiku). Read `references/approval-gates.md`
+before any external action.

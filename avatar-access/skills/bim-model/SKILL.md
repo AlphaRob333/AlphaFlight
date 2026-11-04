@@ -24,8 +24,9 @@ unless the client demands a native Revit file.
    `IfcRailing`, diagonals and ties as `IfcMember`. Every element carries an
    `AvatarAccess_Scaffold` property set with `Sku`, `System`, `Length_m`.
    A `*_components.json` count file is written beside the IFC.
-3. **Load check** — hand the same `bay_grid.json` to the `load-check`
-   skill. Do not proceed to drawings on a FAIL.
+3. **Load check** — hand the IFC, component count, and the same
+   `bay_grid.json` back to the `designer` agent, which runs the
+   `load-check` skill. Do not proceed to drawings on a FAIL.
 4. **Drawings** — plan at each decked lift, elevation, tie schedule, and a
    section through the widest bay. Produce with Bonsai/Blender headless
    (`blender -b --python`) or, when unavailable, render the IFC to SVG with
@@ -36,7 +37,8 @@ unless the client demands a native Revit file.
 5. **Share** — push the IFC to Speckle (free tier) for a browser link, and
    save IFC + drawings + counts to the bid's `03_Design` Drive folder.
 6. **Record** — update the `models` row: `ifc_path`, `drawings_path`,
-   `status = checked` (if the load check passed) and the revision.
+   and the revision (`status = draft` after the IFC; the designer sets
+   `status = checked` when the load check passes).
 
 ## When the client wants .rvt
 

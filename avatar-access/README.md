@@ -19,7 +19,21 @@ signs, and routes PE seals.
 | `cost-model` | Design fee schedule, equipment rental, labor productivity, freight, margin; estimate schema |
 | `proposal` | Assemble the proposal package and queue it for approval |
 
-**Agents**: `estimator`, `modeler`, `back-office` — each does one job.
+**Agents** — each does one job, on the model sized for it:
+
+| Agent | Model | Skills / work |
+|---|---|---|
+| CEO routine | sonnet | `company-os` daily run, morning brief (set in the routine config) |
+| `triage` | haiku | Connector health check, inbox triage |
+| `estimator` | sonnet | `bid-intake`, `cost-model`, `proposal` |
+| `designer` | opus | `scaffold-design`, `load-check`, PE package; escalation target |
+| `modeler` | sonnet | `bim-model` (IFC + drawings) |
+| `back-office` | haiku | Invoice drafts, CRM hygiene, follow-ups, weekly numbers |
+
+Haiku and sonnet agents stop and escalate to `designer` on cantilevers,
+loading bays, sheeted or wind-exposed scaffold, PE triggers, unusual
+geometry, conflicting drawings, or low confidence, logging each as an
+`approvals` row of kind `escalation`.
 
 **Hook**: a PreToolUse guard that blocks money movement, client sends,
 signatures, filings, and "issued" stamps, so those always land in the
