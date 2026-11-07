@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Private Pilot Ground School</title>
+<meta name="description" content="AlphaFlight Private Pilot ground school: ten self-paced modules with lesson notes, knowledge checks, a practice exam, and a 14 CFR 61.109 hour tracker.">
+<meta property="og:image" content="https://alphaflight.io/assets/banner.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5F9; --card:#FFFFFF; --card-2:#F7F9FC; --ink:#0F172A; --ink-2:#55637A; --line:#E3E8F0; --line-2:#CBD3DF;
+  --accent:#2563EB; --accent-2:#1D4ED8; --accent-soft:#E8EFFF; --accent-ink:#1E3A8A;
+  --low:#15803D; --low-soft:#E7F6EC; --mod:#B45309; --mod-soft:#FDF1DC; --high:#DC2626; --high-soft:#FDE8E8; --util:#7C3AED; --util-soft:#F1EAFE;
+  --shadow:0 1px 2px rgba(15,23,42,.05),0 8px 24px -12px rgba(15,23,42,.18);
+  --r:16px; --r-s:10px;
+  --display:"Plus Jakarta Sans","Figtree",system-ui,-apple-system,sans-serif; --body:"Figtree","Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --bg:#0B1220; --card:#131C2E; --card-2:#182338; --ink:#E6ECF5; --ink-2:#9AA8BF; --line:#243149; --line-2:#334664;
+  --accent:#60A5FA; --accent-2:#3B82F6; --accent-soft:#17264A; --accent-ink:#BFD5FF;
+  --low:#4ADE80; --low-soft:#122B1C; --mod:#FBBF24; --mod-soft:#33240B; --high:#F87171; --high-soft:#3B1515; --util:#C4B5FD; --util-soft:#241B3F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark; --bg:#0B1220; --card:#131C2E; --card-2:#182338; --ink:#E6ECF5; --ink-2:#9AA8BF; --line:#243149; --line-2:#334664;
+  --accent:#60A5FA; --accent-2:#3B82F6; --accent-soft:#17264A; --accent-ink:#BFD5FF;
+  --low:#4ADE80; --low-soft:#122B1C; --mod:#FBBF24; --mod-soft:#33240B; --high:#F87171; --high-soft:#3B1515; --util:#C4B5FD; --util-soft:#241B3F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:inherit}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);margin:0;letter-spacing:-.01em}
+a{color:var(--accent)}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+/* nav */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px}
+.brand{display:inline-flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.02em}
+.brand i{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--util));display:inline-block}
+.top nav{display:flex;gap:18px;font-size:14px;font-weight:600}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.top nav a:hover{color:var(--ink)}
+@media (max-width:640px){.top nav .hide-s{display:none}}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;font:600 15px var(--body);text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .1s,background .15s}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.pri{color:#0B1220}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.pri{color:#0B1220}}
+.btn.pri:hover{background:var(--accent-2)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line-2)}
+.btn.sm{padding:8px 14px;font-size:14px}
+/* hero */
+.hero{padding:56px 0 28px}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent-soft);padding:5px 12px;border-radius:999px}
+.hero h1{font-size:clamp(34px,6vw,56px);font-weight:800;line-height:1.04;margin:16px 0 14px;text-wrap:balance;max-width:16ch}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--util));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:18px;color:var(--ink-2);max-width:58ch;margin:0 0 22px}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:34px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--display);font-size:26px;font-weight:800}
+.stat span{font-size:13px;color:var(--ink-2)}
+@media (max-width:640px){.stats{grid-template-columns:1fr 1fr}}
+/* sections */
+.sec{padding:40px 0}
+.sec>.wrap>h2{font-size:clamp(24px,4vw,32px);font-weight:800;margin-bottom:6px}
+.sec>.wrap>p.sub{color:var(--ink-2);margin:0 0 22px;max-width:62ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.feat .card{padding:18px}
+.feat .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-ink);margin-bottom:12px}
+.feat .ic svg{width:20px;height:20px}
+.feat h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.feat p{margin:0;font-size:14px;color:var(--ink-2)}
+@media (max-width:760px){.feat{grid-template-columns:1fr}}
+/* path */
+.path{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;counter-reset:s}
+.path li{counter-increment:s;padding:16px 14px;position:relative}
+.path li::before{content:counter(s);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font:800 13px var(--display);margin-bottom:10px}
+.path h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.path p{margin:0;font-size:13px;color:var(--ink-2)}
+@media (max-width:860px){.path{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.path{grid-template-columns:1fr}}
+/* progress */
+.prog{display:flex;align-items:center;gap:14px;padding:14px 16px;margin-bottom:14px}
+.prog .bar{flex:1;height:10px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--util));transition:width .4s}
+.prog b{font-family:var(--display);font-size:15px;white-space:nowrap}
+.prog button{background:none;border:0;color:var(--ink-2);font:600 13px var(--body);cursor:pointer;text-decoration:underline}
+/* modules */
+.mods{display:grid;gap:10px}
+.mod{overflow:hidden}
+.mod>summary{list-style:none;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:16px;cursor:pointer}
+.mod>summary::-webkit-details-marker{display:none}
+.mod .num{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font:800 15px var(--display);background:var(--card-2);border:1px solid var(--line);color:var(--ink-2)}
+.mod.done .num{background:var(--low-soft);border-color:transparent;color:var(--low)}
+.mod h3{font-size:16px;font-weight:700}
+.mod .meta{font-size:13px;color:var(--ink-2)}
+.mod .chev{width:22px;height:22px;color:var(--ink-2);transition:transform .2s}
+.mod[open] .chev{transform:rotate(180deg)}
+.mod .body{padding:0 16px 18px;border-top:1px solid var(--line)}
+.mod .body h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);margin:18px 0 8px}
+.mod .body ul.pts{margin:0;padding-left:20px}
+.mod .body ul.pts li{margin:4px 0}
+.mod .ref{font-size:13px;color:var(--ink-2);margin-top:8px}
+.q{background:var(--card-2);border:1px solid var(--line);border-radius:var(--r-s);padding:14px;margin-top:10px}
+.q p{margin:0 0 10px;font-weight:600}
+.q .opts{display:grid;gap:6px}
+.q button.o{text-align:left;font:inherit;font-size:15px;padding:10px 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);cursor:pointer}
+.q button.o:hover:not(:disabled){border-color:var(--accent)}
+.q button.o:disabled{cursor:default}
+.q button.o.right{background:var(--low-soft);border-color:var(--low);color:var(--ink)}
+.q button.o.wrong{background:var(--high-soft);border-color:var(--high)}
+.q .why{font-size:14px;color:var(--ink-2);margin-top:8px;display:none}
+.q.answered .why{display:block}
+.modfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px}
+.modfoot .score{font-size:14px;color:var(--ink-2)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--low-soft);color:var(--low)}
+/* exam */
+.exam{padding:18px}
+.exam .head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.result{margin-top:16px;padding:16px;border-radius:var(--r-s);font-weight:600;display:none}
+.result.show{display:block}
+.result.pass{background:var(--low-soft);color:var(--low)}
+.result.fail{background:var(--mod-soft);color:var(--mod)}
+/* hours tracker */
+.hrs{padding:18px}
+.hrow{display:grid;grid-template-columns:1fr 92px 110px;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.hrow:last-child{border-bottom:0}
+.hrow .lbl{font-size:14px}
+.hrow .lbl small{display:block;color:var(--ink-2);font-size:12.5px}
+.hrow input{width:100%;font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line-2);border-radius:8px;background:var(--card-2);color:var(--ink)}
+.hrow input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.mini{height:8px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);overflow:hidden}
+.mini i{display:block;height:100%;background:var(--accent);width:0}
+.mini.full i{background:var(--low)}
+@media (max-width:520px){.hrow{grid-template-columns:1fr 80px}.hrow .mini{grid-column:1/-1}}
+/* faq */
+.faq details{border-bottom:1px solid var(--line);padding:4px 18px}
+.faq details:last-child{border-bottom:0}
+.faq summary{cursor:pointer;font-weight:700;padding:12px 0;font-family:var(--display)}
+.faq details p{margin:0 0 14px;color:var(--ink-2)}
+/* final cta */
+.band{padding:28px;text-align:center;background:linear-gradient(135deg,var(--accent-soft),var(--util-soft));border:1px solid var(--line);border-radius:var(--r)}
+.band h2{font-size:clamp(22px,3.5vw,30px);font-weight:800;margin-bottom:8px}
+.band p{color:var(--ink-2);margin:0 auto 18px;max-width:52ch}
+footer{padding:28px 0 40px;font-size:13px;color:var(--ink-2)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><i aria-hidden="true"></i>ALPHAFLIGHT</a>
+  <nav aria-label="Sections"><a href="#curriculum">Curriculum</a><a class="hide-s" href="#exam">Practice exam</a><a class="hide-s" href="#hours">Hours</a><a href="#faq">FAQ</a></nav>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <span class="eyebrow">Private Pilot · Airplane Single-Engine Land</span>
+  <h1>Ground school that gets you to your <em>checkride</em>.</h1>
+  <p class="lead">Ten self-paced modules that follow the FAA Private Pilot ACS. Read the lesson, answer the knowledge check, and track your flight hours against 61.109 as you go. Your progress saves in this browser.</p>
+  <div class="cta"><a class="btn pri" href="#curriculum">Start module 1</a><a class="btn ghost" href="#exam">Take the practice exam</a></div>
+  <div class="stats">
+    <div class="stat"><b>10</b><span>modules</span></div>
+    <div class="stat"><b id="statQ">40</b><span>practice questions</span></div>
+    <div class="stat"><b>70%</b><span>to pass the FAA test</span></div>
+    <div class="stat"><b>40 hr</b><span>flight time minimum</span></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <h2>What's in the course</h2>
+  <p class="sub">Built for student pilots training under Part 61 who want ground knowledge that carries into the airplane, not just a memorized question bank.</p>
+  <div class="feat">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/></svg></div><h3>Lessons by ACS area</h3><p>Short lessons on aerodynamics, airspace, weather, regulations, navigation, and more, each tied to its FAA reference.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></div><h3>Knowledge checks</h3><p>Every module ends with questions in the knowledge-test style, with an explanation for each answer.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Checkride readiness</h3><p>A randomized practice exam, a 61.109 hour tracker, and links to AlphaFlight's risk assessment and W&amp;B tools.</p></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <h2>Your path to the certificate</h2>
+  <p class="sub">The typical order of milestones from first lesson to temporary certificate.</p>
+  <ol class="path">
+    <li class="card"><h4>Student certificate</h4><p>Apply through IACRA with your CFI. You must be at least 16 to solo.</p></li>
+    <li class="card"><h4>Medical</h4><p>Get a third-class medical (or higher) from an AME before your first solo.</p></li>
+    <li class="card"><h4>First solo</h4><p>Pre-solo knowledge test, then 61.87 training and a CFI endorsement.</p></li>
+    <li class="card"><h4>Cross-country</h4><p>Dual and solo cross-country, night training, and towered airport work.</p></li>
+    <li class="card"><h4>Knowledge test</h4><p>60 questions, 2.5 hours, 70% to pass. Needs a CFI endorsement.</p></li>
+    <li class="card"><h4>Checkride</h4><p>Oral and flight test with a DPE, flown to the ACS standards. You must be 17.</p></li>
+  </ol>
+</div></section>
+
+<section class="sec" id="curriculum"><div class="wrap">
+  <h2>Curriculum</h2>
+  <p class="sub">Open a module, read the key points, and answer every question to complete it. You need 2 of 3 correct to mark a module complete.</p>
+  <div class="card prog"><b id="progTxt">0 of 10 complete</b><div class="bar" aria-hidden="true"><i id="progBar"></i></div><button type="button" id="resetBtn">Reset</button></div>
+  <div class="mods" id="mods"></div>
+</div></section>
+
+<section class="sec" id="exam"><div class="wrap">
+  <h2>Practice exam</h2>
+  <p class="sub">Ten questions drawn at random from every module. Score 70% or better, the same as the FAA knowledge test.</p>
+  <div class="card exam">
+    <div class="head"><b id="examTxt">Answered 0 of 10</b><button class="btn pri sm" type="button" id="newExam">New exam</button></div>
+    <div id="examQs"></div>
+    <div class="result" id="examRes" role="status"></div>
+  </div>
+</div></section>
+
+<section class="sec" id="hours"><div class="wrap">
+  <h2>Flight hour tracker</h2>
+  <p class="sub">Enter the hours from your logbook to see where you stand against the aeronautical experience required by 14 CFR 61.109(a).</p>
+  <div class="card hrs" id="hrs"></div>
+</div></section>
+
+<section class="sec" id="faq"><div class="wrap">
+  <h2>Questions</h2>
+  <p class="sub">Common questions from student pilots starting out.</p>
+  <div class="card faq">
+    <details><summary>How long does a private pilot certificate take?</summary><p>The regulation sets 40 hours as the minimum, but most students finish between 55 and 75 hours. Flying two or three times a week keeps skills fresh and usually costs less overall than flying once a week.</p></details>
+    <details><summary>Does this course give me a knowledge test endorsement?</summary><p>No. An endorsement for the FAA knowledge test must come from an authorized instructor, either your CFI after a ground review or a home-study course provider that issues endorsements. Use this course to prepare, then ask your CFI.</p></details>
+    <details><summary>When should I take the knowledge test?</summary><p>Many students take it around their solo cross-country phase, once the ground material lines up with what they are flying. Results are valid for 24 calendar months, so don't take it too early.</p></details>
+    <details><summary>What medical do I need?</summary><p>You need at least a third-class medical certificate to solo. BasicMed requires having held a medical certificate after July 14, 2006, so most new students start with a third-class medical from an AME.</p></details>
+    <details><summary>Where is my progress saved?</summary><p>In this browser only. Clearing site data or switching devices starts you over.</p></details>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="band">
+    <h2>Fly your next lesson prepared.</h2>
+    <p>Run the preflight risk assessment and check weight and balance before you head to the airport.</p>
+    <div class="cta" style="justify-content:center"><a class="btn pri" href="/">Preflight risk assessment</a><a class="btn ghost" href="/n929bm/">N929BM W&amp;B</a><a class="btn ghost" href="/n9301e/">N9301E W&amp;B</a></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap"><span>© AlphaFlight · For study only. Always defer to the current FAR/AIM, the ACS, and your instructor.</span><a href="/">alphaflight.io</a></div></footer>
+
+<script>
+const MODS=[
+ {t:'Aerodynamics & Principles of Flight',ref:'PHAK Ch. 4–5',min:20,pts:[
+  'Four forces act on an airplane in flight: lift, weight, thrust, and drag. In straight-and-level unaccelerated flight they are in balance.',
+  'A wing stalls when it exceeds its critical angle of attack. This can happen at any airspeed, any attitude, and any power setting.',
+  'Load factor rises with bank angle: about 2 G in a level 60° bank, which raises the stall speed by about 41%.',
+  'Left-turning tendencies (torque, P-factor, spiraling slipstream, gyroscopic precession) are strongest at high power and low airspeed.'],
+  qs:[['What causes an airplane to stall?',['Low airspeed','Exceeding the critical angle of attack','High pitch attitude'],1,'A stall depends only on angle of attack. Airspeed and attitude matter only as far as they change it.'],
+   ['In a level, coordinated 60° bank, the load factor is about…',['1.5 G','2 G','3 G'],1,'Load factor = 1 ÷ cos(bank). cos 60° = 0.5, so the load factor is 2 G.'],
+   ['P-factor is greatest when the airplane is at…',['High AOA and high power','Low AOA and high power','High airspeed and low power'],0,'At a high angle of attack the descending propeller blade takes a bigger bite of air, so it makes more thrust and yaws the nose left.']]},
+ {t:'Aircraft Systems & Instruments',ref:'PHAK Ch. 7–8',min:20,pts:[
+  'Dual magnetos provide redundant ignition that doesn\'t depend on the electrical system. Check each one during the run-up.',
+  'Carburetor ice can form at temperatures up to about 21°C (70°F) in humid air. The first sign in a fixed-pitch airplane is a drop in RPM.',
+  'Pitot-static instruments: the airspeed indicator uses pitot and static pressure, while the altimeter and VSI use static pressure only.',
+  'If the pitot tube is blocked but its drain hole and static port are open, airspeed drops to zero. If the ram air inlet and drain hole are both blocked, the airspeed indicator acts like an altimeter.'],
+  qs:[['The first sign of carburetor ice in an airplane with a fixed-pitch propeller is…',['A rise in oil temperature','A loss of RPM','Engine roughness followed by a rise in RPM'],1,'Ice restricts airflow, so RPM drops. Applying carb heat may first cause more roughness as the ice melts.'],
+   ['Which instruments use only the static system?',['Airspeed indicator only','Altimeter and VSI','Attitude and heading indicators'],1,'The airspeed indicator also needs pitot pressure. The attitude and heading indicators are gyroscopic.'],
+   ['Why do aircraft engines have two magnetos?',['To provide more power at takeoff','For redundancy and more complete combustion','To charge the battery'],1,'Two independent ignition sources make the engine safer and burn the mixture more efficiently.']]},
+ {t:'Airspace',ref:'AIM Ch. 3 · 14 CFR 91.155',min:25,pts:[
+  'Class B: you need an ATC clearance to enter. Class C: two-way radio contact established. Class D: two-way radio contact established.',
+  'Class E below 10,000 ft MSL: 3 SM visibility and 500 ft below, 1,000 ft above, 2,000 ft horizontal from clouds.',
+  'Class G by day, at or below 1,200 ft AGL: 1 SM visibility and clear of clouds.',
+  'Unless otherwise authorized, the speed limit is 250 KIAS below 10,000 ft MSL and 200 KIAS at or below 2,500 ft AGL within 4 NM of a Class C or D primary airport.'],
+  qs:[['What is required before entering Class B airspace?',['Two-way radio contact','An explicit ATC clearance','A transponder only'],1,'"Cleared into the Class Bravo" is required. Radio contact alone is not enough.'],
+   ['VFR minimums in Class E below 10,000 ft MSL are…',['1 SM, clear of clouds','3 SM; 500 below, 1,000 above, 2,000 horizontal','5 SM; 1,000 below, 1,000 above, 1 SM horizontal'],1,'This is the "3-152" rule: 3 SM visibility and 1,000 above, 500 below, 2,000 horizontal from clouds.'],
+   ['Class G by day, at 1,000 ft AGL, requires…',['1 SM, clear of clouds','3 SM, clear of clouds','1 SM; 500 below, 1,000 above'],0,'At or below 1,200 AGL by day, Class G requires 1 SM visibility and clear of clouds.']]},
+ {t:'Weather Theory & Reports',ref:'AC 00-6 · AC 00-45',min:30,pts:[
+  'The standard lapse rate is about 2°C (3.5°F) per 1,000 ft. A small temperature–dewpoint spread warns of fog or low clouds.',
+  'Thunderstorms need moisture, unstable air, and a lifting force. Their mature stage has both updrafts and downdrafts.',
+  'A METAR is an observation and a TAF is a forecast for 5 SM around an airport. Times are given in UTC (Zulu).',
+  'Stable air gives stratiform clouds, smooth air, and poor visibility. Unstable air gives cumuliform clouds, turbulence, and good visibility.'],
+  qs:[['What is the standard temperature lapse rate?',['1°C per 1,000 ft','2°C per 1,000 ft','3°C per 1,000 ft'],1,'Standard atmosphere is 15°C at sea level, cooling about 2°C per 1,000 ft.'],
+   ['Which condition is a sign of possible fog?',['Rising pressure','A small temperature–dewpoint spread','Strong gusty winds'],1,'When temperature and dewpoint converge, the air is close to saturation.'],
+   ['Which stage of a thunderstorm has both updrafts and downdrafts?',['Cumulus','Mature','Dissipating'],1,'Precipitation at the surface marks the mature stage, the most violent one.']]},
+ {t:'Federal Aviation Regulations',ref:'14 CFR Parts 61 & 91',min:25,pts:[
+  'Documents required on board: Airworthiness certificate, Registration, Radio station license (international only), Operating limitations (POH/AFM), and Weight & balance (ARROW).',
+  'VFR fuel reserves (91.151): enough to reach the first point of intended landing plus 30 minutes by day or 45 minutes at night.',
+  'Alcohol (91.17): no flying within 8 hours of drinking, while under the influence, or with a blood alcohol concentration of 0.04 or more.',
+  'To carry passengers you need 3 takeoffs and landings in the past 90 days in the same category, class, and type (if required). At night they must be full-stop landings.'],
+  qs:[['What VFR fuel reserve is required by day?',['20 minutes','30 minutes','45 minutes'],1,'91.151 requires a 30-minute reserve by day and 45 minutes at night.'],
+   ['A pilot may not act as crew within how many hours of drinking alcohol?',['4 hours','8 hours','12 hours'],1,'"8 hours bottle to throttle", and the BAC must also be below 0.04.'],
+   ['To carry passengers at night, the 3 recent takeoffs and landings must be…',['Touch-and-goes','Full-stop landings','At a towered airport'],1,'Night currency under 61.57(b) requires full-stop landings between 1 hour after sunset and 1 hour before sunrise.']]},
+ {t:'Navigation & Charts',ref:'PHAK Ch. 16 · Chart User\'s Guide',min:30,pts:[
+  'Pilotage uses visual landmarks and dead reckoning uses time, speed, and heading. Most VFR flights combine the two.',
+  'Convert true course to magnetic: "East is least, West is best." Subtract easterly variation and add westerly variation.',
+  'One minute of latitude equals 1 NM, so one degree equals 60 NM.',
+  'VOR radials point outbound from the station. With a TO indication the CDI shows the course to the station, and with FROM it shows the course away from it.'],
+  qs:[['Your true course is 090° and variation is 5°E. What is the magnetic course?',['085°','095°','090°'],0,'East is least: 090° − 5° = 085°.'],
+   ['How many nautical miles are in one degree of latitude?',['60 NM','69 NM','100 NM'],0,'One minute of latitude equals 1 NM, so 60 minutes equals 60 NM.'],
+   ['You are on the 180° radial of a VOR. Where are you relative to the station?',['North','South','East'],1,'Radials go outbound from the station, so the 180° radial lies south of it.']]},
+ {t:'Performance, Weight & Balance',ref:'PHAK Ch. 10–11',min:25,pts:[
+  'High, hot, and humid conditions raise density altitude, which means longer takeoff rolls and lower climb rates.',
+  'CG = total moment ÷ total weight. Keep the airplane within both the weight limits and the CG envelope.',
+  'An aft CG gives less stability and harder stall recovery. A forward CG gives a higher stall speed and higher stick forces.',
+  'Avgas weighs 6 lb/gal, oil 7.5 lb/gal, and water 8.35 lb/gal.'],
+  qs:[['Which combination increases density altitude?',['Low temperature, low humidity','High temperature, high humidity','High pressure, low temperature'],1,'Hot, humid air is less dense. Water vapor is lighter than dry air.'],
+   ['A CG aft of the limit makes the airplane…',['More stable','Less stable and harder to recover from a stall','Slower to rotate'],1,'An aft CG shortens the tail\'s arm and reduces stability.'],
+   ['How much do 40 gallons of avgas weigh?',['200 lb','240 lb','300 lb'],1,'40 gal × 6 lb/gal = 240 lb.']]},
+ {t:'Airport Operations & Communication',ref:'AIM Ch. 2 & 4',min:20,pts:[
+  'Runway numbers are the magnetic heading rounded to the nearest 10°: runway 27 points about 270° magnetic.',
+  'A standard traffic pattern uses left turns. Enter on a 45° to the downwind leg at pattern altitude, usually 1,000 ft AGL.',
+  'Light gun signals for aircraft in flight: steady green means cleared to land, flashing green means return for landing, and steady red means give way and continue circling.',
+  'On the ground, flashing green means cleared to taxi. Hold-short lines: stay on the solid-line side until cleared.'],
+  qs:[['You see a flashing green light gun signal while on the ground. It means…',['Cleared for takeoff','Cleared to taxi','Return to the starting point'],1,'Flashing green on the ground means cleared to taxi. Steady green means cleared for takeoff.'],
+   ['Runway 09 has a magnetic heading of about…',['009°','090°','900°'],1,'Add a zero: runway 09 → 090° magnetic.'],
+   ['The standard entry to an uncontrolled airport\'s traffic pattern is…',['Straight in on final','A 45° entry to midfield downwind','Crossing over the runway at pattern altitude'],1,'AC 90-66 recommends a 45° entry to downwind at pattern altitude.']]},
+ {t:'Aeromedical Factors & ADM',ref:'PHAK Ch. 2 & 17',min:20,pts:[
+  'Use PAVE (Pilot, Aircraft, enVironment, External pressures) before each flight and IMSAFE for yourself.',
+  'The five hazardous attitudes are anti-authority, impulsivity, invulnerability, macho, and resignation. Each has an antidote phrase.',
+  'Hypoxia sneaks up on you: euphoria and poor judgment come before you notice symptoms. Above 12,500 ft MSL, check 91.211 for supplemental oxygen rules.',
+  'Spatial disorientation: without outside visual references, trust the instruments over your inner ear.'],
+  qs:[['What is the antidote to the "anti-authority" attitude?',['"Not so fast. Think first."','"Follow the rules. They are usually right."','"Taking chances is foolish."'],1,'Anti-authority ("Don\'t tell me!") is countered by "Follow the rules."'],
+   ['What does the "E" in IMSAFE stand for?',['Experience','Emotion','Equipment'],1,'Illness, Medication, Stress, Alcohol, Fatigue, Emotion (some versions use Eating).'],
+   ['An early effect of hypoxia is often…',['Sharper vision','A sense of well-being (euphoria)','Rapid recognition of the problem'],1,'Euphoria and impaired judgment make hypoxia dangerous, because pilots rarely notice it coming.']]},
+ {t:'Checkride Preparation',ref:'FAA-S-ACS-6 · 14 CFR 61.39',min:20,pts:[
+  'The ACS lists the knowledge, risk management, and skill elements for each task. The examiner tests all three.',
+  'Before the practical test (61.39) you need a passed knowledge test within the preceding 24 calendar months and 3 hours of test prep with a CFI within the preceding 2 calendar months.',
+  'Bring a valid photo ID, your medical, your student certificate, your logbook with endorsements, the knowledge test report, aircraft documents, and maintenance records.',
+  'Typical ACS tolerances: altitude ±100 ft, heading ±10°, and airspeed +10/−5 knots for most maneuvers.'],
+  qs:[['How long is a knowledge test result valid for the practical test?',['12 calendar months','24 calendar months','36 calendar months'],1,'61.39(a)(1): you must pass the knowledge test within the preceding 24 calendar months.'],
+   ['The 3 hours of checkride prep must be completed within the preceding…',['30 days','2 calendar months','6 calendar months'],1,'61.109(a)(4) requires 3 hours of flight training with a CFI to prepare for the practical test, within the 2 calendar months before it.'],
+   ['The typical ACS altitude tolerance for steep turns is…',['±50 ft','±100 ft','±200 ft'],1,'Private pilot steep turns: altitude ±100 ft, airspeed ±10 kt, bank 45° ±5°, rollout heading ±10°.']]}
+];
+
+const KEY='af-ppl-v1';
+let S={done:{},ans:{},hrs:{}};
+try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const chev='<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>';
+
+function qHTML(q,id,picked){
+  const [txt,opts,right,why]=q; const ans=picked!==undefined&&picked!==null;
+  return `<div class="q${ans?' answered':''}" data-q="${id}"><p>${esc(txt)}</p><div class="opts">${opts.map((o,i)=>{
+    const cls=ans?(i===right?' right':(i===picked?' wrong':'')):'';
+    return `<button type="button" class="o${cls}" data-i="${i}"${ans?' disabled':''}>${String.fromCharCode(65+i)}. ${esc(o)}</button>`;}).join('')}</div><div class="why">${ans?(picked===right?'<b>Correct.</b> ':'<b>Not quite.</b> '):''}${esc(why)}</div></div>`;
+}
+function wireQ(root,onPick){
+  root.querySelectorAll('.q').forEach(el=>el.querySelectorAll('button.o').forEach(b=>b.addEventListener('click',()=>onPick(el.dataset.q,+b.dataset.i))));
+}
+
+function renderMods(){
+  const open=[...document.querySelectorAll('.mod[open]')].map(d=>d.dataset.m);
+  $('mods').innerHTML=MODS.map((m,mi)=>{
+    const a=S.ans[mi]||{}; const n=Object.keys(a).length; const c=m.qs.filter((q,qi)=>a[qi]===q[2]).length; const done=!!S.done[mi];
+    return `<details class="card mod${done?' done':''}" data-m="${mi}"${open.includes(String(mi))?' open':''}>
+      <summary><span class="num">${done?'✓':mi+1}</span><span><h3>${esc(m.t)}</h3><span class="meta">${m.min} min · ${m.qs.length} questions${done?' · <span class="pill">Complete</span>':''}</span></span>${chev}</summary>
+      <div class="body"><h4>Key points</h4><ul class="pts">${m.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ul><div class="ref">Reference: ${esc(m.ref)}</div>
+      <h4>Knowledge check</h4>${m.qs.map((q,qi)=>qHTML(q,mi+'-'+qi,a[qi])).join('')}
+      <div class="modfoot"><span class="score">${n<m.qs.length?`${n} of ${m.qs.length} answered`:`${c} of ${m.qs.length} correct`}</span>${n===m.qs.length&&c<2?'<button type="button" class="btn ghost sm" data-retry="'+mi+'">Retry questions</button>':''}${mi<MODS.length-1&&done?'<button type="button" class="btn pri sm" data-next="'+(mi+1)+'">Next module →</button>':''}</div></div></details>`;
+  }).join('');
+  wireQ($('mods'),(id,i)=>{const [mi,qi]=id.split('-').map(Number);(S.ans[mi]=S.ans[mi]||{})[qi]=i;
+    const m=MODS[mi],a=S.ans[mi]; if(Object.keys(a).length===m.qs.length&&m.qs.filter((q,k)=>a[k]===q[2]).length>=2) S.done[mi]=true; save(); renderMods();});
+  $('mods').querySelectorAll('[data-retry]').forEach(b=>b.addEventListener('click',()=>{delete S.ans[b.dataset.retry];save();renderMods();}));
+  $('mods').querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.next;document.querySelectorAll('.mod').forEach(d=>d.open=d.dataset.m===k);const el=document.querySelector(`.mod[data-m="${k}"]`);el.scrollIntoView({block:'start'});window.scrollBy(0,-70);}));
+  const d=Object.keys(S.done).length; $('progTxt').textContent=`${d} of ${MODS.length} complete`; $('progBar').style.width=(d/MODS.length*100)+'%';
+}
+$('resetBtn').addEventListener('click',()=>{if(confirm('Reset all module progress?')){S.done={};S.ans={};save();renderMods();}});
+
+// practice exam
+const POOL=MODS.flatMap((m,mi)=>m.qs.map((q,qi)=>[mi,qi]));
+$('statQ').textContent=POOL.length;
+let EX={qs:[],ans:{}};
+function newExam(){const p=POOL.slice();for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]];}EX={qs:p.slice(0,10),ans:{}};renderExam();}
+function renderExam(){
+  $('examQs').innerHTML=EX.qs.map(([mi,qi],k)=>qHTML(MODS[mi].qs[qi],String(k),EX.ans[k])).join('');
+  wireQ($('examQs'),(k,i)=>{EX.ans[k]=i;renderExam();});
+  const n=Object.keys(EX.ans).length; $('examTxt').textContent=`Answered ${n} of ${EX.qs.length}`;
+  const r=$('examRes');
+  if(n===EX.qs.length){const c=EX.qs.filter(([mi,qi],k)=>EX.ans[k]===MODS[mi].qs[qi][2]).length;const pct=Math.round(c/EX.qs.length*100);
+    r.className='result show '+(pct>=70?'pass':'fail');
+    const miss=[...new Set(EX.qs.filter(([mi,qi],k)=>EX.ans[k]!==MODS[mi].qs[qi][2]).map(([mi])=>MODS[mi].t))];
+    r.textContent=`${pct}% (${c} of ${EX.qs.length}). `+(pct>=70?'Passing score.':'Below 70%.')+(miss.length?' Review: '+miss.join(', ')+'.':' No misses.');}
+  else r.className='result';
+}
+$('newExam').addEventListener('click',newExam);
+
+// 61.109(a) hours
+const HRS=[['total','Total flight time','61.109(a)',40],['dual','Dual instruction','61.109(a)',20],['solo','Solo flight','61.109(a)',10],
+ ['dxc','Dual cross-country','61.109(a)(1)',3],['dnight','Dual night','61.109(a)(2)',3],['nland','Night takeoffs & landings (full stop)','61.109(a)(2)(ii) · count',10],
+ ['inst','Flight by reference to instruments','61.109(a)(3)',3],['prep','Checkride prep (last 2 calendar months)','61.109(a)(4)',3],
+ ['sxc','Solo cross-country','61.109(a)(5)(i)',5],['tland','Solo towered takeoffs & landings (full stop)','61.109(a)(5)(iii) · count',3]];
+function renderHrs(){
+  $('hrs').innerHTML=HRS.map(([k,l,r,req])=>{const v=parseFloat(S.hrs[k])||0;const p=Math.min(1,v/req);
+    return `<div class="hrow"><label class="lbl" for="h_${k}">${esc(l)}<small>${esc(r)} · need ${req}</small></label><input id="h_${k}" type="number" min="0" step="0.1" inputmode="decimal" value="${S.hrs[k]??''}" placeholder="0"><div class="mini${p>=1?' full':''}" aria-hidden="true"><i style="width:${p*100}%"></i></div></div>`;}).join('')+
+   '<p style="margin:12px 0 0;font-size:13px;color:var(--ink-2)">You also need one solo cross-country of at least 150 NM total, with full-stop landings at three points and one leg of at least 50 NM between takeoff and landing points, and one dual night cross-country of over 100 NM.</p>';
+  $('hrs').querySelectorAll('input').forEach(inp=>inp.addEventListener('input',()=>{S.hrs[inp.id.slice(2)]=inp.value;save();
+    const row=inp.closest('.hrow');const req=HRS.find(h=>h[0]===inp.id.slice(2))[3];const p=Math.min(1,(parseFloat(inp.value)||0)/req);
+    row.querySelector('.mini i').style.width=p*100+'%';row.querySelector('.mini').classList.toggle('full',p>=1);}));
+}
+renderMods(); newExam(); renderHrs();
+</script>
+</body>
+</html>
