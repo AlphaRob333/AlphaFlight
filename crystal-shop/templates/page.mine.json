@@ -1,0 +1,72 @@
+{
+  "sections": {
+    "main": {
+      "type": "mine",
+      "blocks": {
+        "brazil": {
+          "type": "site",
+          "settings": {
+            "title": "Brazil",
+            "region": "Minas Gerais and Rio Grande do Sul",
+            "minerals": "Quartz, Amethyst",
+            "text": "The pegmatites of Minas Gerais yield clear quartz, and the basalt geodes of Rio Grande do Sul are lined with amethyst.",
+            "latitude": -19,
+            "longitude": -44,
+            "color": "#7b5ea7"
+          }
+        },
+        "pakistan": {
+          "type": "site",
+          "settings": {
+            "title": "Pakistan",
+            "region": "Gilgit-Baltistan",
+            "minerals": "Aquamarine, Fluorite",
+            "text": "High-altitude pegmatites in the Shigar Valley and Nagar produce aquamarine, often growing alongside fluorite.",
+            "latitude": 36,
+            "longitude": 75,
+            "color": "#3d8f9e"
+          }
+        },
+        "libyan-desert": {
+          "type": "site",
+          "settings": {
+            "title": "Libyan Desert",
+            "region": "Great Sand Sea",
+            "minerals": "Libyan Desert Glass",
+            "text": "Natural silica glass about 29 million years old, found scattered between the dunes of the Great Sand Sea near the border of Libya and Egypt.",
+            "latitude": 25,
+            "longitude": 25,
+            "color": "#b8962e"
+          }
+        },
+        "morocco": {
+          "type": "site",
+          "settings": {
+            "title": "Morocco",
+            "region": "Mibladen, Midelt",
+            "minerals": "Vanadinite",
+            "text": "The old lead mines at Mibladen are the classic source of bright red, hexagonal vanadinite crystals.",
+            "latitude": 33,
+            "longitude": -5,
+            "color": "#b5452c"
+          }
+        },
+        "india": {
+          "type": "site",
+          "settings": {
+            "title": "India",
+            "region": "Feldspar country",
+            "minerals": "Moonstone, Labradorite",
+            "text": "Two feldspars known for their play of light: moonstone with its soft blue sheen and labradorite with its flash of colour.",
+            "latitude": 17,
+            "longitude": 79,
+            "color": "#4f6fa8"
+          }
+        }
+      },
+      "block_order": ["brazil", "morocco", "libyan-desert", "pakistan", "india"],
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

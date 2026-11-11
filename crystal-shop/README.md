@@ -56,6 +56,31 @@ use it, move this folder's contents to their own repository or branch.
 4. **Colors and fonts.** Theme settings → *Experiences* holds the palette for
    each experience and which one shows before a shopper has chosen.
 
+## Mining game (mineral side)
+
+`sections/mine.liquid` is a "mine your own" game: the shopper picks a dig site
+on a world map, breaks rocks, and uncovers real in-stock products from that
+site, each with its price and an add-to-cart button. Playing is free and
+nothing is bought or reserved until the shopper adds a find to the cart.
+Finds are kept in a field log in the shopper's browser.
+
+To switch it on:
+
+1. Create one collection per dig site (Brazil, Morocco, Libyan Desert,
+   Pakistan, India) and put that site's products in it. Set each product's
+   *Product type* to the mineral name (for example `Amethyst`); the game shows
+   it as the species.
+2. Create a page (for example "Mine") and give it the `mine` template.
+3. In the theme editor, open that page and pick the collection for each dig
+   site block. Sites, text, map position and colors are all editable, and new
+   sites can be added as blocks.
+4. On the home page's *Experience gateway* section, set the mineral panel's
+   "Or link to a page" to the Mine page.
+
+Only in-stock products appear, up to 50 per site. A site with no stock shows a
+"nothing in stock" note instead of a rock face. `preview/mine.html` is a
+static demo with sample specimens (placeholder names and prices).
+
 ## How the experience switch works
 
 - `layout/theme.liquid` sets `<html data-experience="…">` from the saved choice

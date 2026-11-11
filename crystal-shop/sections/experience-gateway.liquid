@@ -3,8 +3,8 @@
   Each panel links to a collection and stores the choice (assets/experience.js).
 {%- endcomment -%}
 {%- liquid
-  assign meta_url = section.settings.meta_collection.url | default: routes.all_products_collection_url
-  assign mineral_url = section.settings.mineral_collection.url | default: routes.all_products_collection_url
+  assign meta_url = section.settings.meta_link | default: section.settings.meta_collection.url | default: routes.all_products_collection_url
+  assign mineral_url = section.settings.mineral_link | default: section.settings.mineral_collection.url | default: routes.all_products_collection_url
 -%}
 <div class="gateway">
   <header class="gateway__intro">
@@ -74,6 +74,7 @@
     { "type": "text", "id": "subheading", "label": "Subheading", "default": "The same stones, seen two ways. You can switch at any time." },
     { "type": "header", "content": "Metaphysical panel" },
     { "type": "collection", "id": "meta_collection", "label": "Collection to open", "info": "Leave empty to open all products." },
+    { "type": "url", "id": "meta_link", "label": "Or link to a page", "info": "Used instead of the collection when set." },
     { "type": "image_picker", "id": "meta_image", "label": "Background image", "info": "Replaces the illustration." },
     { "type": "text", "id": "meta_eyebrow", "label": "Eyebrow", "default": "For intention and ritual" },
     { "type": "text", "id": "meta_title", "label": "Title", "default": "The Metaphysical Experience" },
@@ -81,6 +82,7 @@
     { "type": "text", "id": "meta_button", "label": "Button label", "default": "Enter the metaphysical shop" },
     { "type": "header", "content": "Mineral panel" },
     { "type": "collection", "id": "mineral_collection", "label": "Collection to open", "info": "Leave empty to open all products." },
+    { "type": "url", "id": "mineral_link", "label": "Or link to a page", "info": "Used instead of the collection when set. Point this at the mining game page." },
     { "type": "image_picker", "id": "mineral_image", "label": "Background image", "info": "Replaces the illustration." },
     { "type": "text", "id": "mineral_eyebrow", "label": "Eyebrow", "default": "For collectors and the curious" },
     { "type": "text", "id": "mineral_title", "label": "Title", "default": "The Mineral Experience" },

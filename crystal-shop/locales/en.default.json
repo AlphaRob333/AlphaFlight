@@ -74,5 +74,34 @@
   },
   "onboarding": {
     "product_title": "Your product"
+  },
+  "mine": {
+    "eyebrow": "Mine your own",
+    "site_number": "Site {{ number }}",
+    "back": "Back to the map",
+    "known_for": "Known for",
+    "browse": "Skip the dig and browse everything from this site",
+    "rock_face": "Rock face",
+    "new_dig": "Start a new dig",
+    "finds_heading": "Your finds from this site",
+    "clear_log": "Clear field log",
+    "rock": "Rock [n], untouched. Strike it.",
+    "rock_cracked": "Rock [n], cracked. Strike again.",
+    "rock_empty": "Rock [n], broken. Nothing inside.",
+    "rock_found": "Rock [n], broken. Found [title].",
+    "status_start": "[hidden] specimens are hidden in this rock face. Tap a rock to strike it.",
+    "status_progress": "Found [found] of [hidden].",
+    "status_done": "All [hidden] specimens found.",
+    "status_no_stock": "Nothing in stock from this site right now. Check back soon.",
+    "announce_found": "Found [title], [price].",
+    "announce_empty": "Just host rock.",
+    "site_count": "[n] found",
+    "log_total": "Field log: [n] specimens found.",
+    "log_empty": "Your field log is empty. Pick a site to start.",
+    "adding": "Adding…",
+    "added": "In your cart",
+    "add_error": "Could not add this to the cart. It may have just sold.",
+    "view_cart": "View cart",
+    "details": "Full details"
   }
 }
