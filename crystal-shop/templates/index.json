@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "gateway": { "type": "experience-gateway", "settings": {} },
+    "intro": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "One collection, two ways to see it",
+        "text": "<p>Every stone in the shop is listed both ways. Switch between the metaphysical and mineral experience at any time from the top of the page.</p>"
+      }
+    },
+    "featured": { "type": "featured-collection", "settings": {} }
+  },
+  "order": ["gateway", "intro", "featured"]
+}

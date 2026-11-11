@@ -1,0 +1,9 @@
+{%- comment -%} Two-way switch between experiences. State is synced by assets/experience.js. {%- endcomment -%}
+<div class="experience-toggle" role="group" aria-label="{{ 'experience.label' | t }}">
+  <button type="button" class="experience-toggle__btn" data-set-experience="metaphysical" aria-pressed="false">
+    {{ 'experience.metaphysical' | t }}
+  </button>
+  <button type="button" class="experience-toggle__btn" data-set-experience="mineral" aria-pressed="false">
+    {{ 'experience.mineral' | t }}
+  </button>
+</div>

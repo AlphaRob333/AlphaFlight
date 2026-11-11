@@ -1,0 +1,42 @@
+<header class="site-header">
+  <div class="site-header__inner page-width">
+    <a class="site-header__logo" href="{{ routes.root_url }}">
+      {%- if section.settings.logo -%}
+        {{ section.settings.logo | image_url: width: 360 | image_tag: alt: shop.name, loading: 'eager', style: 'height:2.25rem;width:auto' }}
+      {%- else -%}
+        {{ shop.name }}
+      {%- endif -%}
+    </a>
+
+    {%- if section.settings.menu.links.size > 0 -%}
+      <nav class="site-header__nav" aria-label="{{ 'general.menu' | t }}">
+        <ul role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li>
+              <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="site-header__tools">
+      {% render 'experience-toggle' %}
+      <a href="{{ routes.search_url }}">{{ 'general.search' | t }}</a>
+      <a href="{{ routes.cart_url }}">
+        {{ 'general.cart' | t }}
+        <span class="site-header__count">({{ cart.item_count }})</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+  ]
+}
+{% endschema %}

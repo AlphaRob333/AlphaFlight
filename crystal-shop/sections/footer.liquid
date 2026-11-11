@@ -1,0 +1,45 @@
+<footer class="site-footer">
+  <div class="page-width site-footer__inner">
+    {%- if section.settings.menu.links.size > 0 -%}
+      <nav aria-label="{{ 'footer.menu' | t }}">
+        <ul class="site-footer__menu" role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    {%- if section.settings.disclaimer != blank -%}
+      <p class="site-footer__note">{{ section.settings.disclaimer }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+      <ul class="site-footer__payments" role="list">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <p class="site-footer__copy">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ powered_by_link }}
+    </p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" },
+    {
+      "type": "textarea",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "Metaphysical descriptions reflect traditional beliefs and are shared for interest only. Crystals are not a substitute for medical or professional care."
+    },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true }
+  ]
+}
+{% endschema %}

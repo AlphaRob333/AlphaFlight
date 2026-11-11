@@ -1,0 +1,20 @@
+<article class="page-width page-width--narrow section-pad">
+  <header class="page-head">
+    <p class="label">
+      {{ article.published_at | time_tag: format: 'date' }} · {{ 'blog.by' | t: author: article.author }}
+    </p>
+    <h1>{{ article.title }}</h1>
+  </header>
+  {%- if article.image -%}
+    {{ article.image | image_url: width: 1400 | image_tag: loading: 'eager', sizes: '(min-width: 750px) 720px, 100vw', alt: article.image.alt }}
+  {%- endif -%}
+  <div class="rte">{{ article.content }}</div>
+</article>
+
+<script type="application/ld+json">
+  {{ article | structured_data }}
+</script>
+
+{% schema %}
+{ "name": "Article", "tag": "section", "settings": [] }
+{% endschema %}

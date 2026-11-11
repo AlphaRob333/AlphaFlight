@@ -1,0 +1,78 @@
+{
+  "general": {
+    "skip_to_content": "Skip to content",
+    "page": "Page {{ page }}",
+    "search": "Search",
+    "cart": "Cart",
+    "continue_shopping": "Continue shopping",
+    "menu": "Main menu"
+  },
+  "experience": {
+    "label": "Shopping experience",
+    "metaphysical": "Metaphysical",
+    "mineral": "Mineral"
+  },
+  "products": {
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out",
+    "from": "From {{ price }}",
+    "quantity": "Quantity",
+    "option": "Option",
+    "regular_price": "Regular price",
+    "metaphysical_heading": "Meaning and use",
+    "mineral_heading": "Specimen data",
+    "intention": "Intention",
+    "chakra": "Chakra",
+    "zodiac": "Zodiac",
+    "element": "Element",
+    "formula": "Formula",
+    "hardness": "Mohs hardness",
+    "crystal_system": "Crystal system",
+    "mineral_class": "Mineral class",
+    "locality": "Locality"
+  },
+  "collections": {
+    "all": "All collections",
+    "sort_by": "Sort by",
+    "empty": "No products in this collection yet.",
+    "view": "View collection"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "product": "Product",
+    "quantity": "Quantity",
+    "total": "Total",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "taxes_note": "Taxes and shipping are calculated at checkout.",
+    "update": "Update cart",
+    "checkout": "Check out"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search stones, intentions, localities",
+    "submit": "Search",
+    "results": "Results for “{{ terms }}”",
+    "no_results": "Nothing found for “{{ terms }}”. Try a different word."
+  },
+  "not_found": {
+    "title": "Page not found",
+    "text": "That page has moved or never existed."
+  },
+  "blog": {
+    "read_more": "Read more",
+    "by": "By {{ author }}"
+  },
+  "password": {
+    "title": "Opening soon",
+    "label": "Store password",
+    "submit": "Enter"
+  },
+  "footer": {
+    "menu": "Footer menu"
+  },
+  "onboarding": {
+    "product_title": "Your product"
+  }
+}

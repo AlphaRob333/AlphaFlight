@@ -1,0 +1,30 @@
+{%- comment -%}
+  Fonts and the two experience palettes, driven by theme settings.
+  `.scheme-*` lets a block wear one palette regardless of the active experience.
+{%- endcomment -%}
+{%- assign heading_font = settings.type_heading_font -%}
+{%- assign body_font = settings.type_body_font -%}
+{%- assign body_font_bold = body_font | font_modify: 'weight', 'bold' -%}
+{% style %}
+  {{ heading_font | font_face: font_display: 'swap' }}
+  {{ body_font | font_face: font_display: 'swap' }}
+  {{ body_font_bold | font_face: font_display: 'swap' }}
+
+  :root {
+    --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    --font-heading-weight: {{ heading_font.weight }};
+    --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+  }
+  [data-experience='metaphysical'],
+  .scheme-metaphysical {
+    --bg: {{ settings.meta_background }};
+    --text: {{ settings.meta_text }};
+    --accent: {{ settings.meta_accent }};
+  }
+  [data-experience='mineral'],
+  .scheme-mineral {
+    --bg: {{ settings.mineral_background }};
+    --text: {{ settings.mineral_text }};
+    --accent: {{ settings.mineral_accent }};
+  }
+{% endstyle %}

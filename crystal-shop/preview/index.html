@@ -1,0 +1,149 @@
+<!doctype html>
+<!--
+  Static preview of the home page only. It loads the theme's real CSS and JS from ../assets
+  so the look matches, but the markup here is a hand copy of sections/experience-gateway.liquid.
+  It is not uploaded to Shopify (see .shopifyignore).
+-->
+<html lang="en" data-experience="metaphysical">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crystal shop – home page preview</title>
+<script>
+  (function () {
+    try {
+      var v = localStorage.getItem('crystal_experience');
+      if (v === 'metaphysical' || v === 'mineral') document.documentElement.setAttribute('data-experience', v);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-heading-weight: 400;
+    --font-body: Assistant, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  [data-experience='metaphysical'], .scheme-metaphysical { --bg: #130f1e; --text: #ece6f5; --accent: #c9a4ff; }
+  [data-experience='mineral'], .scheme-mineral { --bg: #f3efe6; --text: #1b1d1a; --accent: #1f5f4a; }
+</style>
+<link rel="stylesheet" href="../assets/base.css">
+<script src="../assets/experience.js" defer></script>
+</head>
+<body class="template-index">
+<header class="site-header">
+  <div class="site-header__inner page-width">
+    <a class="site-header__logo" href="#">Your Shop Name</a>
+    <nav class="site-header__nav" aria-label="Main menu">
+      <ul role="list"><li><a href="#">Shop all</a></li><li><a href="#">Journal</a></li><li><a href="#">About</a></li></ul>
+    </nav>
+    <div class="site-header__tools">
+      <div class="experience-toggle" role="group" aria-label="Shopping experience">
+        <button type="button" class="experience-toggle__btn" data-set-experience="metaphysical" aria-pressed="false">Metaphysical</button>
+        <button type="button" class="experience-toggle__btn" data-set-experience="mineral" aria-pressed="false">Mineral</button>
+      </div>
+      <a href="#">Search</a>
+      <a href="#">Cart <span class="site-header__count">(0)</span></a>
+    </div>
+  </div>
+</header>
+<main id="main">
+<section class="section-gateway">
+<div class="gateway">
+  <header class="gateway__intro">
+    <p class="label">Your Shop Name</p>
+    <h1 class="gateway__heading">How would you like to explore?</h1>
+    <p class="gateway__sub">The same stones, seen two ways. You can switch at any time.</p>
+  </header>
+  <div class="gateway__panels">
+    <a class="gateway__panel gateway__panel--metaphysical scheme-metaphysical" href="#metaphysical" data-set-experience="metaphysical">
+      <svg class="gateway__art" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="art-meta-glow" cx="50%" cy="55%" r="50%">
+      <stop offset="0" stop-color="currentColor" stop-opacity=".45"/>
+      <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="art-meta-face" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="currentColor" stop-opacity=".55"/>
+      <stop offset="1" stop-color="currentColor" stop-opacity=".05"/>
+    </linearGradient>
+    <g id="art-meta-point" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M0-130-40-70v130l25 14h30l25-14V-70z" fill="url(#art-meta-face)"/>
+      <path d="M0-130-15-58h30zM-15-58V74M15-58V74M-40-70l25 12M40-70 15-58" fill="none" stroke-opacity=".7"/>
+    </g>
+  </defs>
+  <circle cx="160" cy="175" r="150" fill="url(#art-meta-glow)"/>
+  <g fill="none" stroke="currentColor" stroke-opacity=".25">
+    <circle cx="160" cy="175" r="118"/>
+    <circle cx="160" cy="175" r="142" stroke-dasharray="2 7"/>
+  </g>
+  <use href="#art-meta-point" transform="translate(104 212) rotate(-22) scale(.62)"/>
+  <use href="#art-meta-point" transform="translate(218 214) rotate(20) scale(.68)"/>
+  <use href="#art-meta-point" transform="translate(160 180)"/>
+  <g fill="currentColor">
+    <path d="M52 62l2.5 7.5L62 72l-7.5 2.5L52 82l-2.5-7.5L42 72l7.5-2.500z"/>
+    <path d="M270 92l1.800 5.200L277 99l-5.200 1.800L270 106l-1.800-5.200L263 99l5.200-1.800z"/>
+    <circle cx="246" cy="44" r="1.600"/><circle cx="84" cy="118" r="1.400"/><circle cx="286" cy="170" r="1.400"/><circle cx="34" cy="188" r="1.600"/>
+  </g>
+  <path d="M168 22a14 14 0 1 0 0 28 11 11 0 1 1 0-28z" fill="currentColor"/>
+</svg>
+
+      <div class="gateway__body">
+        <p class="label">For intention and ritual</p>
+        <h2 class="gateway__title">The Metaphysical Experience</h2>
+        <p class="gateway__text">Shop by intention, chakra and zodiac sign. Each stone is listed with its traditional meanings and ways to work with it.</p>
+        <ul class="gateway__facets" role="list"><li>Intention</li><li>Chakra</li><li>Zodiac</li></ul>
+        <span class="button">Enter the metaphysical shop</span>
+      </div>
+    </a>
+    <a class="gateway__panel gateway__panel--mineral scheme-mineral" href="#mineral" data-set-experience="mineral">
+      <svg class="gateway__art" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="art-min-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" stroke-opacity=".45"/>
+    </pattern>
+  </defs>
+  <g transform="translate(150 172)" stroke="currentColor" stroke-width="1.500" stroke-linejoin="round" fill="none">
+    <path d="M15-58 40-70v130l-25 14z" fill="url(#art-min-hatch)"/>
+    <path d="M0-130-40-70v130l25 14h30l25-14V-70z"/>
+    <path d="M0-130-15-58h30zM-15-58V74M15-58V74"/>
+  </g>
+  <g stroke="currentColor" stroke-width="1" fill="none">
+    <path d="M222 42v202M216 42h12M216 244h12"/>
+    <path d="M110 268h80M110 262v12M190 262v12"/>
+    <path d="M140 84 96 62H34M124 196 92 214H34"/>
+  </g>
+  <g fill="currentColor" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" letter-spacing=".5">
+    <text x="232" y="148">c-axis</text>
+    <text x="150" y="290" text-anchor="middle">a</text>
+    <text x="34" y="54">r · apex</text>
+    <text x="34" y="206">m · prism</text>
+    <text x="150" y="314" text-anchor="middle">FIG. 1 — QUARTZ</text>
+  </g>
+</svg>
+
+      <div class="gateway__body">
+        <p class="label">For collectors and the curious</p>
+        <h2 class="gateway__title">The Mineral Experience</h2>
+        <p class="gateway__text">Shop by species, locality and crystal system. Each specimen is listed with its chemistry, hardness and origin.</p>
+        <ul class="gateway__facets" role="list"><li>Formula</li><li>Locality</li><li>Mohs hardness</li></ul>
+        <span class="button">Enter the mineral shop</span>
+      </div>
+    </a>
+  </div>
+</div>
+</section>
+<section>
+  <div class="page-width page-width--narrow section-pad rich-text">
+    <h2>One collection, two ways to see it</h2>
+    <div class="rte"><p>Every stone in the shop is listed both ways. Switch between the metaphysical and mineral experience at any time from the top of the page.</p></div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="page-width site-footer__inner">
+    <p class="site-footer__note">Metaphysical descriptions reflect traditional beliefs and are shared for interest only. Crystals are not a substitute for medical or professional care.</p>
+    <p class="site-footer__copy">&copy; 2026 Your Shop Name.</p>
+  </div>
+</footer>
+</body>
+</html>

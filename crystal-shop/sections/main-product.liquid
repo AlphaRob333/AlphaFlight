@@ -1,0 +1,147 @@
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign mf = product.metafields.custom
+-%}
+<div class="page-width section-pad product">
+  <div class="product__media">
+    {%- if product.featured_media -%}
+      <div class="product__main-image">
+        {{
+          product.featured_media
+          | image_url: width: 1400
+          | image_tag: loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', widths: '480, 720, 1000, 1400', alt: product.featured_media.alt
+        }}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <ul class="product__thumbs" role="list">
+          {%- for media in product.media offset: 1 -%}
+            <li>
+              {{ media | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '25vw', alt: media.alt }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    {%- else -%}
+      <div class="product__main-image">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+    {%- endif -%}
+  </div>
+
+  <div class="product__info">
+    {%- if product.vendor != blank and section.settings.show_vendor -%}
+      <p class="label">{{ product.vendor }}</p>
+    {%- endif -%}
+    <h1>{{ product.title }}</h1>
+
+    <p class="product__price" data-product-price>
+      {{ variant.price | money }}
+      {%- if variant.compare_at_price > variant.price %} <s>{{ variant.compare_at_price | money }}</s>{% endif -%}
+    </p>
+
+    {%- form 'product', product, class: 'product__form' -%}
+      {%- if product.has_only_default_variant -%}
+        <input type="hidden" name="id" value="{{ variant.id }}">
+      {%- else -%}
+        <div class="field">
+          <label for="variant-{{ section.id }}">{{ 'products.option' | t }}</label>
+          <select id="variant-{{ section.id }}" name="id" data-variant-select>
+            {%- for v in product.variants -%}
+              <option
+                value="{{ v.id }}"
+                data-price="{{ v.price | money | escape }}"
+                {% if v.id == variant.id %}selected{% endif %}
+                {% unless v.available %}disabled{% endunless %}
+              >
+                {{ v.title }}{% unless v.available %} – {{ 'products.sold_out' | t }}{% endunless %}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      {%- endif -%}
+
+      <div class="field field--qty">
+        <label for="qty-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+        <input id="qty-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric">
+      </div>
+
+      <button type="submit" name="add" class="button button--full" {% unless product.available %}disabled{% endunless %}>
+        {%- if product.available -%}
+          {{ 'products.add_to_cart' | t }}
+        {%- else -%}
+          {{ 'products.sold_out' | t }}
+        {%- endif -%}
+      </button>
+    {%- endform -%}
+
+    {%- comment -%} Only the block matching the shopper's experience is shown (base.css). {%- endcomment -%}
+    <section class="specs only-metaphysical" aria-labelledby="specs-meta-{{ section.id }}">
+      <h2 class="label" id="specs-meta-{{ section.id }}">{{ 'products.metaphysical_heading' | t }}</h2>
+      <dl>
+        {%- liquid
+          assign l = 'products.intention' | t
+          render 'spec-row', label: l, value: mf.intention.value
+          assign l = 'products.chakra' | t
+          render 'spec-row', label: l, value: mf.chakra.value
+          assign l = 'products.zodiac' | t
+          render 'spec-row', label: l, value: mf.zodiac.value
+          assign l = 'products.element' | t
+          render 'spec-row', label: l, value: mf.element.value
+        -%}
+      </dl>
+      {%- if mf.metaphysical_notes.value != blank -%}
+        <div class="rte">{{ mf.metaphysical_notes | metafield_tag }}</div>
+      {%- endif -%}
+    </section>
+
+    <section class="specs only-mineral" aria-labelledby="specs-mineral-{{ section.id }}">
+      <h2 class="label" id="specs-mineral-{{ section.id }}">{{ 'products.mineral_heading' | t }}</h2>
+      <dl>
+        {%- liquid
+          assign l = 'products.formula' | t
+          render 'spec-row', label: l, value: mf.mineral_formula.value
+          assign l = 'products.hardness' | t
+          render 'spec-row', label: l, value: mf.mohs_hardness.value
+          assign l = 'products.crystal_system' | t
+          render 'spec-row', label: l, value: mf.crystal_system.value
+          assign l = 'products.mineral_class' | t
+          render 'spec-row', label: l, value: mf.mineral_class.value
+          assign l = 'products.locality' | t
+          render 'spec-row', label: l, value: mf.locality.value
+        -%}
+      </dl>
+      {%- if mf.specimen_notes.value != blank -%}
+        <div class="rte">{{ mf.specimen_notes | metafield_tag }}</div>
+      {%- endif -%}
+    </section>
+
+    {%- if product.description != blank -%}
+      <div class="rte product__description">{{ product.description }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+
+{% javascript %}
+  document.addEventListener('change', function (event) {
+    var select = event.target.closest('[data-variant-select]');
+    if (!select) return;
+    var option = select.options[select.selectedIndex];
+    var price = select.closest('.product').querySelector('[data-product-price]');
+    if (price && option.dataset.price) price.textContent = option.dataset.price;
+    var url = new URL(location.href);
+    url.searchParams.set('variant', select.value);
+    history.replaceState({}, '', url);
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false }
+  ]
+}
+{% endschema %}

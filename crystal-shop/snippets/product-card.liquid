@@ -1,0 +1,41 @@
+{%- comment -%}
+  Product card. Accepts: product
+  The sub-line swaps with the active experience (see .only-* rules in base.css).
+{%- endcomment -%}
+{%- assign mf = product.metafields.custom -%}
+<article class="card">
+  <a class="card__link" href="{{ product.url }}">
+    <div class="card__media">
+      {%- if product.featured_media -%}
+        {{
+          product.featured_media
+          | image_url: width: 720
+          | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 50vw', widths: '240, 360, 540, 720', alt: product.featured_media.alt
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+    <h3 class="card__title">{{ product.title }}</h3>
+  </a>
+  {%- if mf.intention.value != blank -%}
+    <p class="card__meta only-metaphysical">{{ mf.intention.value }}</p>
+  {%- endif -%}
+  {%- if mf.mineral_formula.value != blank or mf.locality.value != blank -%}
+    <p class="card__meta label only-mineral">
+      {{- mf.mineral_formula.value -}}
+      {%- if mf.mineral_formula.value != blank and mf.locality.value != blank %} · {% endif -%}
+      {{- mf.locality.value -}}
+    </p>
+  {%- endif -%}
+  <p class="card__price">
+    {%- if product.available == false -%}
+      {{ 'products.sold_out' | t }}
+    {%- elsif product.price_varies -%}
+      {{ 'products.from' | t: price: product.price_min | money }}
+    {%- else -%}
+      {{ product.price | money }}
+      {%- if product.compare_at_price > product.price %} <s>{{ product.compare_at_price | money }}</s>{% endif -%}
+    {%- endif -%}
+  </p>
+</article>

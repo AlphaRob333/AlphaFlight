@@ -1,0 +1,45 @@
+<div class="page-width section-pad">
+  <header class="page-head">
+    <h1>
+      {%- if search.performed -%}
+        {{ 'search.results' | t: terms: search.terms }}
+      {%- else -%}
+        {{ 'search.title' | t }}
+      {%- endif -%}
+    </h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <label class="visually-hidden" for="search-{{ section.id }}">{{ 'search.title' | t }}</label>
+      <input id="search-{{ section.id }}" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}">
+      <button type="submit" class="button">{{ 'search.submit' | t }}</button>
+    </form>
+  </header>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      {%- if search.results_count == 0 -%}
+        <p>{{ 'search.no_results' | t: terms: search.terms }}</p>
+      {%- else -%}
+        <ul class="grid" role="list">
+          {%- for item in search.results -%}
+            <li>
+              {%- if item.object_type == 'product' -%}
+                {% render 'product-card', product: item %}
+              {%- else -%}
+                <article class="card">
+                  <a class="card__link" href="{{ item.url }}"><h3 class="card__title">{{ item.title }}</h3></a>
+                </article>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination">{{ paginate | default_pagination }}</nav>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Search", "tag": "section", "settings": [] }
+{% endschema %}

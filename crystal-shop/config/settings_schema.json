@@ -1,0 +1,50 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Crystal Paths",
+    "theme_version": "1.0.0",
+    "theme_author": "Crystal Shop",
+    "theme_documentation_url": "https://shopify.dev/docs/storefronts/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Experiences",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shoppers pick an experience on the home page. Their choice is remembered and changes the look of the store and which details show on product pages."
+      },
+      {
+        "type": "select",
+        "id": "default_experience",
+        "label": "Experience shown before a shopper chooses",
+        "options": [
+          { "value": "metaphysical", "label": "Metaphysical" },
+          { "value": "mineral", "label": "Mineral" }
+        ],
+        "default": "metaphysical"
+      },
+      { "type": "header", "content": "Metaphysical colors" },
+      { "type": "color", "id": "meta_background", "label": "Background", "default": "#130f1e" },
+      { "type": "color", "id": "meta_text", "label": "Text", "default": "#ece6f5" },
+      { "type": "color", "id": "meta_accent", "label": "Accent", "default": "#c9a4ff" },
+      { "type": "header", "content": "Mineral colors" },
+      { "type": "color", "id": "mineral_background", "label": "Background", "default": "#f3efe6" },
+      { "type": "color", "id": "mineral_text", "label": "Text", "default": "#1b1d1a" },
+      { "type": "color", "id": "mineral_accent", "label": "Accent", "default": "#1f5f4a" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      { "type": "font_picker", "id": "type_heading_font", "label": "Headings", "default": "playfair_display_n4" },
+      { "type": "font_picker", "id": "type_body_font", "label": "Body", "default": "assistant_n4" }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      { "type": "image_picker", "id": "favicon", "label": "Favicon image", "info": "Scaled down to 32 x 32px" }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+{%- paginate blog.articles by 12 -%}
+  <div class="page-width page-width--narrow section-pad">
+    <header class="page-head"><h1>{{ blog.title }}</h1></header>
+    <ul class="articles" role="list">
+      {%- for article in blog.articles -%}
+        <li>
+          <p class="label">{{ article.published_at | time_tag: format: 'date' }}</p>
+          <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+          <div class="rte">{{ article.excerpt_or_content | strip_html | truncatewords: 40 }}</div>
+          <a href="{{ article.url }}">{{ 'blog.read_more' | t }}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- if paginate.pages > 1 -%}
+      <nav class="pagination">{{ paginate | default_pagination }}</nav>
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{ "name": "Blog", "tag": "section", "settings": [] }
+{% endschema %}

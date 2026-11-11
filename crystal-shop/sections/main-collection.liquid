@@ -1,0 +1,59 @@
+{%- paginate collection.products by section.settings.per_page -%}
+  <div class="page-width section-pad">
+    <header class="page-head">
+      <h1>{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <div class="rte">{{ collection.description }}</div>
+      {%- endif -%}
+    </header>
+
+    {%- if collection.products.size > 0 -%}
+      <div class="toolbar">
+        <div class="field field--inline">
+          <label for="sort-{{ section.id }}">{{ 'collections.sort_by' | t }}</label>
+          <select id="sort-{{ section.id }}" data-sort-select>
+            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>
+                {{ option.name }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      </div>
+
+      <ul class="grid" role="list">
+        {%- for product in collection.products -%}
+          <li>{% render 'product-card', product: product %}</li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination">{{ paginate | default_pagination }}</nav>
+      {%- endif -%}
+    {%- else -%}
+      <p>{{ 'collections.empty' | t }}</p>
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% javascript %}
+  document.addEventListener('change', function (event) {
+    var select = event.target.closest('[data-sort-select]');
+    if (!select) return;
+    var url = new URL(location.href);
+    url.searchParams.set('sort_by', select.value);
+    url.searchParams.delete('page');
+    location.assign(url);
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "per_page", "min": 12, "max": 48, "step": 12, "label": "Products per page", "default": 24 }
+  ]
+}
+{% endschema %}

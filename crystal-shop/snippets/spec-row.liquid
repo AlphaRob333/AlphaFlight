@@ -1,0 +1,7 @@
+{%- comment -%} Renders one row of a spec list when the value is present. Accepts: label, value {%- endcomment -%}
+{%- if value != blank -%}
+  <div class="specs__row">
+    <dt>{{ label }}</dt>
+    <dd>{{ value }}</dd>
+  </div>
+{%- endif -%}
