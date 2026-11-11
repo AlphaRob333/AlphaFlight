@@ -19,6 +19,8 @@
   var live = root.querySelector('[data-mine-live]');
   var log = readLog();
   var sites = {};
+  var engine = window.CrystalMine3D;
+  var use3d = !!(engine && engine.supported());
 
   root.querySelectorAll('[data-mine-site]').forEach(function (el) {
     var specimens = [];
@@ -34,6 +36,9 @@
       finds: el.querySelector('[data-finds]'),
       findsWrap: el.querySelector('[data-finds-wrap]'),
       newDig: el.querySelector('[data-new-dig]'),
+      rock: el.dataset.rock,
+      color: el.dataset.color,
+      stage: null,
       built: false,
       hidden: 0,
       found: 0,
@@ -264,10 +269,27 @@
       rock._number = i + 1;
       rock._strength = 2 + (Math.random() < 0.4 ? 1 : 0);
       rock._specimen = slots.indexOf(i) === -1 ? null : picks[slots.indexOf(i)];
+      rock._index = i;
       rock.setAttribute('aria-label', text(strings.rock, { n: rock._number }));
       site.face.appendChild(rock);
     }
     setStatus(site);
+    start3d(site);
+  }
+
+  // Draw the rock face in 3D when the browser can; otherwise the flat tiles stay.
+  function start3d(site) {
+    if (!use3d) return;
+    try {
+      if (!site.stage) site.stage = engine.createStage(site.face, { rock: site.rock, color: site.color });
+      site.stage.reset(ROCKS);
+      site.stage.activate();
+      site.face.classList.add('mine__face--3d');
+    } catch (e) {
+      use3d = false;
+      site.stage = null;
+      site.face.classList.remove('mine__face--3d');
+    }
   }
 
   function strike(site, rock) {
@@ -281,10 +303,12 @@
 
     if (hits < rock._strength) {
       rock.setAttribute('aria-label', text(strings.rock_cracked, { n: rock._number }));
+      if (site.stage) site.stage.strike(rock._index, hits);
       return;
     }
 
     var specimen = rock._specimen;
+    if (site.stage) site.stage.breakOpen(rock._index, specimen);
     rock.setAttribute('aria-disabled', 'true');
 
     if (!specimen) {
@@ -296,7 +320,7 @@
 
     rock.dataset.state = 'found';
     rock.setAttribute('aria-label', text(strings.rock_found, { n: rock._number, title: specimen.title }));
-    if (specimen.image) {
+    if (specimen.image && !site.stage) {
       var img = el('img', 'mine__rock-image');
       img.src = specimen.image;
       img.alt = '';
@@ -307,7 +331,14 @@
     log[site.id] = log[site.id] || [];
     if (log[site.id].indexOf(specimen.id) === -1) log[site.id].push(specimen.id);
     saveLog();
-    addCard(site, specimen, true);
+    // In 3D, let the crystal appear in the rock before its card shows up.
+    if (site.stage) {
+      setTimeout(function () {
+        addCard(site, specimen, true);
+      }, 700);
+    } else {
+      addCard(site, specimen, true);
+    }
     setStatus(site);
     updateCounts();
     announce(text(strings.announce_found, { title: specimen.title, price: specimen.price }));
@@ -322,6 +353,7 @@
     mapView.hidden = !!site;
     Object.keys(sites).forEach(function (key) {
       sites[key].el.hidden = key !== id;
+      if (key !== id && sites[key].stage) sites[key].stage.deactivate();
     });
 
     if (site) {
@@ -330,6 +362,8 @@
           addCard(site, s, false);
         });
         startDig(site);
+      } else if (site.stage) {
+        site.stage.activate();
       }
       if (moveFocus) site.el.querySelector('h2').focus();
     } else if (moveFocus) {
@@ -365,6 +399,13 @@
       return;
     }
 
+    var soundToggle = event.target.closest('[data-sound-toggle]');
+    if (soundToggle && engine) {
+      engine.sound.setMuted(!engine.sound.muted);
+      syncSound();
+      return;
+    }
+
     if (event.target.closest('[data-clear-log]')) {
       log = {};
       saveLog();
@@ -375,6 +416,15 @@
       updateCounts();
     }
   });
+
+  function syncSound() {
+    root.querySelectorAll('[data-sound-toggle]').forEach(function (button) {
+      button.hidden = !use3d;
+      button.setAttribute('aria-pressed', String(!engine.sound.muted));
+      button.textContent = engine.sound.muted ? strings.sound_off : strings.sound_on;
+    });
+  }
+  if (engine) syncSound();
 
   window.addEventListener('hashchange', function () {
     route(true);

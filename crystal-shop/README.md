@@ -77,6 +77,17 @@ To switch it on:
 4. On the home page's *Experience gateway* section, set the mineral panel's
    "Or link to a page" to the Mine page.
 
+The rock face is drawn in real-time 3D (`assets/mine-3d.js`, using the bundled
+three.js library in `assets/three.min.js`, MIT licence): fractured rock that
+cracks and breaks apart, dust and debris, and a crystal model matched to each
+find's mineral (quartz, amethyst, aquamarine, fluorite, Libyan Desert Glass,
+vanadinite, moonstone, labradorite; anything else gets a generic crystal in
+the site color). The mineral is read from the product type and title. Each
+dig site block has a *Host rock* setting that picks the rock's look. Sound
+effects are generated in the browser and can be switched off by the shopper.
+Browsers without WebGL fall back to flat tiles, and the game stays playable
+by keyboard and screen reader either way.
+
 Only in-stock products appear, up to 50 per site. A site with no stock shows a
 "nothing in stock" note instead of a rock face. `preview/mine.html` is a
 static demo with sample specimens (placeholder names and prices).

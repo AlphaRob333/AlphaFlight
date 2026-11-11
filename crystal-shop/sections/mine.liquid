@@ -5,6 +5,9 @@
   they can then buy at the listed price. Logic lives in assets/mine.js.
 {%- endcomment -%}
 {{ 'mine.css' | asset_url | stylesheet_tag }}
+{%- comment -%} three.js draws the 3D rock face; the game falls back to flat tiles without it. {%- endcomment -%}
+<script src="{{ 'three.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'mine-3d.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'mine.js' | asset_url }}" defer="defer"></script>
 
 <div
@@ -68,6 +71,8 @@
       class="mine__site page-width"
       id="site-{{ block.id }}"
       data-mine-site="{{ block.id }}"
+      data-rock="{{ block.settings.rock }}"
+      data-color="{{ block.settings.color }}"
       style="--site: {{ block.settings.color }};"
       aria-labelledby="site-title-{{ block.id }}"
       hidden
@@ -95,7 +100,10 @@
         <div class="mine__dig" data-dig>
           <div class="mine__face" data-face role="group" aria-label="{{ 'mine.rock_face' | t }}"></div>
           <p class="mine__status" data-status></p>
-          <button type="button" class="button button--secondary" data-new-dig hidden>{{ 'mine.new_dig' | t }}</button>
+          <div class="mine__dig-actions">
+            <button type="button" class="button button--secondary" data-new-dig hidden>{{ 'mine.new_dig' | t }}</button>
+            <button type="button" class="mine__text-button" data-sound-toggle aria-pressed="true" hidden>{{ 'mine.sound_on' | t }}</button>
+          </div>
         </div>
       </div>
 
@@ -157,6 +165,8 @@
       "add_error": {{ 'mine.add_error' | t | json }},
       "view_cart": {{ 'mine.view_cart' | t | json }},
       "details": {{ 'mine.details' | t | json }},
+      "sound_on": {{ 'mine.sound_on' | t | json }},
+      "sound_off": {{ 'mine.sound_off' | t | json }},
       "hardness": {{ 'products.hardness' | t | json }}
     }
   </script>
@@ -184,7 +194,21 @@
         { "type": "collection", "id": "collection", "label": "Collection", "info": "In-stock products in this collection are what shoppers can find here." },
         { "type": "number", "id": "latitude", "label": "Latitude", "info": "Between -58 and 80. South is negative.", "default": 0 },
         { "type": "number", "id": "longitude", "label": "Longitude", "info": "Between -180 and 180. West is negative.", "default": 0 },
-        { "type": "color", "id": "color", "label": "Site color", "default": "#7b5ea7" }
+        { "type": "color", "id": "color", "label": "Site color", "default": "#7b5ea7" },
+        {
+          "type": "select",
+          "id": "rock",
+          "label": "Host rock",
+          "info": "The kind of rock shoppers break in the 3D dig.",
+          "options": [
+            { "value": "basalt", "label": "Basalt (dark)" },
+            { "value": "granite", "label": "Granite (pale)" },
+            { "value": "sandstone", "label": "Sandstone (desert)" },
+            { "value": "limestone", "label": "Limestone (tan)" },
+            { "value": "slate", "label": "Slate (blue-grey)" }
+          ],
+          "default": "basalt"
+        }
       ]
     }
   ],

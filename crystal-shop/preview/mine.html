@@ -21,6 +21,8 @@
 <link rel="stylesheet" href="../assets/base.css">
 <link rel="stylesheet" href="../assets/mine.css">
 <script src="../assets/experience.js" defer></script>
+<script src="../assets/three.min.js" defer></script>
+<script src="../assets/mine-3d.js" defer></script>
 <script src="../assets/mine.js" defer></script>
 </head>
 <body class="template-page">
@@ -62,7 +64,7 @@
     </div>
   </div>
 
-  <section class="mine__site page-width" id="site-brazil" data-mine-site="brazil" style="--site: #7b5ea7;" aria-labelledby="site-title-brazil" hidden>
+  <section class="mine__site page-width" id="site-brazil" data-mine-site="brazil" data-rock="basalt" data-color="#7b5ea7" style="--site: #7b5ea7;" aria-labelledby="site-title-brazil" hidden>
     <button type="button" class="mine__text-button mine__back" data-back>&larr; Back to the map</button>
     <div class="mine__site-layout">
       <div class="mine__site-info">
@@ -75,7 +77,10 @@
       <div class="mine__dig" data-dig>
         <div class="mine__face" data-face role="group" aria-label="Rock face"></div>
         <p class="mine__status" data-status></p>
-        <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+        <div class="mine__dig-actions">
+          <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+          <button type="button" class="mine__text-button" data-sound-toggle aria-pressed="true" hidden>Sound: on</button>
+        </div>
       </div>
     </div>
     <div class="mine__finds-wrap" data-finds-wrap hidden>
@@ -84,7 +89,7 @@
     </div>
     <script type="application/json" data-specimens>[{"id": 1001, "variantId": 10010, "title": "Clear quartz point", "url": "#", "price": "$28.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23e9e6df%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Quartz", "formula": "SiO₂", "hardness": "7", "locality": "Minas Gerais, Brazil"}, {"id": 1002, "variantId": 10020, "title": "Quartz cluster", "url": "#", "price": "$64.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23dcd8cf%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Quartz", "formula": "SiO₂", "hardness": "7", "locality": "Minas Gerais, Brazil"}, {"id": 1003, "variantId": 10030, "title": "Amethyst geode section", "url": "#", "price": "$85.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%238e6bbf%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Amethyst", "formula": "SiO₂", "hardness": "7", "locality": "Rio Grande do Sul, Brazil"}, {"id": 1004, "variantId": 10040, "title": "Amethyst cluster", "url": "#", "price": "$42.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%237b5ea7%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Amethyst", "formula": "SiO₂", "hardness": "7", "locality": "Rio Grande do Sul, Brazil"}, {"id": 1005, "variantId": 10050, "title": "Amethyst point", "url": "#", "price": "$18.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23a384d6%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Amethyst", "formula": "SiO₂", "hardness": "7", "locality": "Rio Grande do Sul, Brazil"}]</script>
   </section>
-  <section class="mine__site page-width" id="site-morocco" data-mine-site="morocco" style="--site: #b5452c;" aria-labelledby="site-title-morocco" hidden>
+  <section class="mine__site page-width" id="site-morocco" data-mine-site="morocco" data-rock="limestone" data-color="#b5452c" style="--site: #b5452c;" aria-labelledby="site-title-morocco" hidden>
     <button type="button" class="mine__text-button mine__back" data-back>&larr; Back to the map</button>
     <div class="mine__site-layout">
       <div class="mine__site-info">
@@ -97,7 +102,10 @@
       <div class="mine__dig" data-dig>
         <div class="mine__face" data-face role="group" aria-label="Rock face"></div>
         <p class="mine__status" data-status></p>
-        <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+        <div class="mine__dig-actions">
+          <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+          <button type="button" class="mine__text-button" data-sound-toggle aria-pressed="true" hidden>Sound: on</button>
+        </div>
       </div>
     </div>
     <div class="mine__finds-wrap" data-finds-wrap hidden>
@@ -106,7 +114,7 @@
     </div>
     <script type="application/json" data-specimens>[{"id": 1006, "variantId": 10060, "title": "Vanadinite on barite", "url": "#", "price": "$58.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23c9452b%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Vanadinite", "formula": "Pb₅(VO₄)₃Cl", "hardness": "3–4", "locality": "Mibladen, Morocco"}, {"id": 1007, "variantId": 10070, "title": "Vanadinite cluster", "url": "#", "price": "$34.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23b5452c%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Vanadinite", "formula": "Pb₅(VO₄)₃Cl", "hardness": "3–4", "locality": "Mibladen, Morocco"}, {"id": 1008, "variantId": 10080, "title": "Vanadinite cabinet specimen", "url": "#", "price": "$190.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23d65a36%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Vanadinite", "formula": "Pb₅(VO₄)₃Cl", "hardness": "3–4", "locality": "Mibladen, Morocco"}]</script>
   </section>
-  <section class="mine__site page-width" id="site-libyan-desert" data-mine-site="libyan-desert" style="--site: #b8962e;" aria-labelledby="site-title-libyan-desert" hidden>
+  <section class="mine__site page-width" id="site-libyan-desert" data-mine-site="libyan-desert" data-rock="sandstone" data-color="#b8962e" style="--site: #b8962e;" aria-labelledby="site-title-libyan-desert" hidden>
     <button type="button" class="mine__text-button mine__back" data-back>&larr; Back to the map</button>
     <div class="mine__site-layout">
       <div class="mine__site-info">
@@ -119,7 +127,10 @@
       <div class="mine__dig" data-dig>
         <div class="mine__face" data-face role="group" aria-label="Rock face"></div>
         <p class="mine__status" data-status></p>
-        <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+        <div class="mine__dig-actions">
+          <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+          <button type="button" class="mine__text-button" data-sound-toggle aria-pressed="true" hidden>Sound: on</button>
+        </div>
       </div>
     </div>
     <div class="mine__finds-wrap" data-finds-wrap hidden>
@@ -128,7 +139,7 @@
     </div>
     <script type="application/json" data-specimens>[{"id": 1009, "variantId": 10090, "title": "Libyan Desert Glass, 12 g", "url": "#", "price": "$48.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23e2cf7a%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Libyan Desert Glass", "formula": "SiO₂ (glass)", "hardness": "6", "locality": "Great Sand Sea"}, {"id": 1010, "variantId": 10100, "title": "Libyan Desert Glass, 31 g", "url": "#", "price": "$110.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23d8c15f%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Libyan Desert Glass", "formula": "SiO₂ (glass)", "hardness": "6", "locality": "Great Sand Sea"}]</script>
   </section>
-  <section class="mine__site page-width" id="site-pakistan" data-mine-site="pakistan" style="--site: #3d8f9e;" aria-labelledby="site-title-pakistan" hidden>
+  <section class="mine__site page-width" id="site-pakistan" data-mine-site="pakistan" data-rock="granite" data-color="#3d8f9e" style="--site: #3d8f9e;" aria-labelledby="site-title-pakistan" hidden>
     <button type="button" class="mine__text-button mine__back" data-back>&larr; Back to the map</button>
     <div class="mine__site-layout">
       <div class="mine__site-info">
@@ -141,7 +152,10 @@
       <div class="mine__dig" data-dig>
         <div class="mine__face" data-face role="group" aria-label="Rock face"></div>
         <p class="mine__status" data-status></p>
-        <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+        <div class="mine__dig-actions">
+          <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+          <button type="button" class="mine__text-button" data-sound-toggle aria-pressed="true" hidden>Sound: on</button>
+        </div>
       </div>
     </div>
     <div class="mine__finds-wrap" data-finds-wrap hidden>
@@ -150,7 +164,7 @@
     </div>
     <script type="application/json" data-specimens>[{"id": 1011, "variantId": 10110, "title": "Aquamarine crystal on matrix", "url": "#", "price": "$140.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%238fd0d6%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Aquamarine", "formula": "Be₃Al₂Si₆O₁₈", "hardness": "7.5–8", "locality": "Shigar Valley, Pakistan"}, {"id": 1012, "variantId": 10120, "title": "Aquamarine crystal", "url": "#", "price": "$75.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23a9dfe2%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Aquamarine", "formula": "Be₃Al₂Si₆O₁₈", "hardness": "7.5–8", "locality": "Shigar Valley, Pakistan"}, {"id": 1013, "variantId": 10130, "title": "Green fluorite octahedron", "url": "#", "price": "$36.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%237fc49a%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Fluorite", "formula": "CaF₂", "hardness": "4", "locality": "Gilgit-Baltistan, Pakistan"}, {"id": 1014, "variantId": 10140, "title": "Pink fluorite on muscovite", "url": "#", "price": "$120.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23e3a5bd%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Fluorite", "formula": "CaF₂", "hardness": "4", "locality": "Nagar, Pakistan"}]</script>
   </section>
-  <section class="mine__site page-width" id="site-india" data-mine-site="india" style="--site: #4f6fa8;" aria-labelledby="site-title-india" hidden>
+  <section class="mine__site page-width" id="site-india" data-mine-site="india" data-rock="slate" data-color="#4f6fa8" style="--site: #4f6fa8;" aria-labelledby="site-title-india" hidden>
     <button type="button" class="mine__text-button mine__back" data-back>&larr; Back to the map</button>
     <div class="mine__site-layout">
       <div class="mine__site-info">
@@ -163,7 +177,10 @@
       <div class="mine__dig" data-dig>
         <div class="mine__face" data-face role="group" aria-label="Rock face"></div>
         <p class="mine__status" data-status></p>
-        <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+        <div class="mine__dig-actions">
+          <button type="button" class="button button--secondary" data-new-dig hidden>Start a new dig</button>
+          <button type="button" class="mine__text-button" data-sound-toggle aria-pressed="true" hidden>Sound: on</button>
+        </div>
       </div>
     </div>
     <div class="mine__finds-wrap" data-finds-wrap hidden>
@@ -173,7 +190,7 @@
     <script type="application/json" data-specimens>[{"id": 1015, "variantId": 10150, "title": "Rainbow moonstone, polished", "url": "#", "price": "$22.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23cfd9ee%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Moonstone", "formula": "(Na,K)AlSi₃O₈", "hardness": "6–6.5", "locality": "India"}, {"id": 1016, "variantId": 10160, "title": "Moonstone palm stone", "url": "#", "price": "$16.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%23dfe5f2%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Moonstone", "formula": "(Na,K)AlSi₃O₈", "hardness": "6–6.5", "locality": "India"}, {"id": 1017, "variantId": 10170, "title": "Labradorite slab", "url": "#", "price": "$45.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%234f6fa8%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Labradorite", "formula": "(Ca,Na)(Al,Si)₄O₈", "hardness": "6–6.5", "locality": "India"}, {"id": 1018, "variantId": 10180, "title": "Labradorite freeform", "url": "#", "price": "$30.00", "image": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%2090%22%3E%3Crect%20width%3D%22120%22%20height%3D%2290%22%20fill%3D%22%23f3efe6%22/%3E%3Cpath%20d%3D%22M60%2010%2082%2034%2074%2080H46L38%2034z%22%20fill%3D%22%235d7fb5%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22M60%2010%2052%2038h16zM52%2038%2046%2080M68%2038l6%2042%22%20fill%3D%22none%22%20stroke%3D%22%231b1d1a%22%20stroke-width%3D%221%22%20opacity%3D%22.6%22/%3E%3C/svg%3E", "species": "Labradorite", "formula": "(Ca,Na)(Al,Si)₄O₈", "hardness": "6–6.5", "locality": "India"}]</script>
   </section>
   <div class="visually-hidden" aria-live="polite" data-mine-live></div>
-  <script type="application/json" data-mine-strings>{"rock": "Rock [n], untouched. Strike it.", "rock_cracked": "Rock [n], cracked. Strike again.", "rock_empty": "Rock [n], broken. Nothing inside.", "rock_found": "Rock [n], broken. Found [title].", "status_start": "[hidden] specimens are hidden in this rock face. Tap a rock to strike it.", "status_progress": "Found [found] of [hidden].", "status_done": "All [hidden] specimens found.", "status_no_stock": "Nothing in stock from this site right now. Check back soon.", "announce_found": "Found [title], [price].", "announce_empty": "Just host rock.", "site_count": "[n] found", "log_total": "Field log: [n] specimens found.", "log_empty": "Your field log is empty. Pick a site to start.", "adding": "Adding…", "added": "In your cart", "add_error": "Could not add this to the cart. It may have just sold.", "view_cart": "View cart", "details": "Full details", "add": "Add to cart", "hardness": "Mohs hardness"}</script>
+  <script type="application/json" data-mine-strings>{"rock": "Rock [n], untouched. Strike it.", "rock_cracked": "Rock [n], cracked. Strike again.", "rock_empty": "Rock [n], broken. Nothing inside.", "rock_found": "Rock [n], broken. Found [title].", "status_start": "[hidden] specimens are hidden in this rock face. Tap a rock to strike it.", "status_progress": "Found [found] of [hidden].", "status_done": "All [hidden] specimens found.", "status_no_stock": "Nothing in stock from this site right now. Check back soon.", "announce_found": "Found [title], [price].", "announce_empty": "Just host rock.", "site_count": "[n] found", "log_total": "Field log: [n] specimens found.", "log_empty": "Your field log is empty. Pick a site to start.", "adding": "Adding…", "added": "In your cart", "add_error": "Could not add this to the cart. It may have just sold.", "view_cart": "View cart", "details": "Full details", "sound_on": "Sound: on", "sound_off": "Sound: off", "add": "Add to cart", "hardness": "Mohs hardness"}</script>
 </div>
 </section>
 </main>

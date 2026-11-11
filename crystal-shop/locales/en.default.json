@@ -102,6 +102,8 @@
     "added": "In your cart",
     "add_error": "Could not add this to the cart. It may have just sold.",
     "view_cart": "View cart",
-    "details": "Full details"
+    "details": "Full details",
+    "sound_on": "Sound: on",
+    "sound_off": "Sound: off"
   }
 }
