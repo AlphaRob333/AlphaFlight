@@ -148,9 +148,11 @@
     body.appendChild(button);
     body.appendChild(message);
 
-    var details = el('a', 'mine__find-link', strings.details);
-    details.href = specimen.url;
-    body.appendChild(details);
+    if (specimen.url) {
+      var details = el('a', 'mine__find-link', strings.details);
+      details.href = specimen.url;
+      body.appendChild(details);
+    }
 
     card.appendChild(body);
     site.finds.insertBefore(card, isNew ? site.finds.firstChild : null);
